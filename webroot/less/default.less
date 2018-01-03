@@ -1,0 +1,121 @@
+@import "mixin.less";
+
+* {
+    .margin(0);
+    .padding(0);
+}
+fieldset legend {
+    .font-size(1.5em);
+    .margin(15px 0 0 0);
+    .color(@gray-color);
+}
+#debug-screen {
+    .background-color(#ffef00);
+    .border(solid 1px #ccc);
+    .margin(15px 0);
+    .font-size(1em);
+}
+div.alert {
+    .font-size(1em);
+    .text-align(center);
+}
+.modal .modal-top {
+    .margin-top(30px);
+}
+button.close {
+    .font-size(1.2em);
+}
+.icon-right {
+    .position(relative);
+
+    i {
+        .position(absolute);
+        .bottom(10px);
+        .right(11px);
+        .color(#777);
+    }
+}
+.icon-left {
+    .position(relative);
+
+    i {
+        .position(absolute);
+        .bottom(9.5px);
+        .left(11px);
+        .color(#777); 
+    }
+    input {
+        .padding-left(33px);
+    }
+}
+#main-nav {
+    .background-color(white);
+    .box-shadow();
+    .height(70px);
+
+    .navbar-header button {
+        .margin(18px 15px 0 0);
+    }
+    ul {
+        .background-color(white);
+        .padding(0 4% 0 0);
+
+        li{
+            &:hover{
+                a{
+                    .color(@orange-color);
+                }
+            }
+            a{
+                .padding(25px 15px);
+                .font-weight(600);
+
+                &:focus{
+                    .color(@orange-color);
+                }
+            }
+        }
+        li.active a {
+            .color(@orange-color);
+            .background-color(white);
+        }
+    }
+}
+#footer{
+    .background-color(#333);
+    .color(white);
+    .text-align(center);
+    .display(inline-block);
+    .width(100%);
+
+    .contact div{
+        .margin(55px 0);
+
+        a{
+            .display(inline-block);
+            .color(white);
+            .text-decoration(none);
+            .padding(15px);
+
+            &:hover{
+                .color(@orange-color);
+
+                i{
+                    .rotate-icons(1s, perspective(400px) translate(0, -3px) rotateY(360deg));
+                }
+            }
+            &:focus{
+                .color(@orange-color);
+            }
+            p{
+                .margin(0);
+                .font-size(1.2em);
+
+                i{
+                    .display(block);
+                    .font-size(1.8em);
+                }
+            }
+        }
+    }
+}

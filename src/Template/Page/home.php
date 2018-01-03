@@ -77,7 +77,17 @@
                             <div class='icon-right'>
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite seu CNPJ',
-                                        'required' => true
+                                        'required' => true,
+                                        'name' => 'cnpj' 
+                                    ]) 
+                                ?>
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class='icon-right'>
+                                <?= $this->Form->input('', [
+                                        'placeholder' => 'Digite seu usuário',
+                                        'required' => true,
+                                        'name' => 'login'
                                     ]) 
                                 ?>
                                 <i class="fas fa-user"></i>
@@ -86,7 +96,8 @@
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite sua senha',
                                         'type' => 'password',
-                                        'required' => true
+                                        'required' => true,
+                                        'name' => 'senha'
                                     ]) 
                                 ?>
                                 <i class="fas fa-key"></i>

@@ -10,15 +10,18 @@ $(document).ready(function(){
             dataType: 'json',
             beforeSend: function() {
                 $button.disable();
-               
             }
         }).always(function(data, status) {
+            $button.enable();
+
             if (status === 'success') {
                 if (data['redirect']) {
                     $(location).attr('href', data['redirect']);
                 }
                 else {
-                    alert(data['message']);
+                    $('#login #message-box').append(
+                        bootstrapAlert(data['status'], data['message'])
+                    );
                 }
             }
             else {
@@ -26,6 +29,25 @@ $(document).ready(function(){
             }
         });
     });
+
+    function bootstrapAlert(type, message)
+    {
+        var alert = '<div class="alert alert-%alert-type% alert-dismissable" role="alert">' +
+                        '<button type="button" data-dismiss="alert" class="close" aria-label="Close">' +
+                            '<i class="fa fa-times" aria-hidden="true"></i>' +
+                        '</button>' +
+                        '<i class="fa fa-check-circle" aria-hidden="true"></i> ' + message +
+                    '</div>';
+
+        switch(type) {
+            case 'success':
+                return alert.replace('%alert-type%', 'success');
+                break;
+            case 'error':
+                return alert.replace('%alert-type%', 'danger');
+                break;
+        }
+    }
 
     $.fn.extend({
         disable: function() 

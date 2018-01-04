@@ -71,9 +71,7 @@
                     </div>
                     <div class='modal-body'>
                         <?= $this->Form->start([]) ?>
-                            <div>
-                                <?= $this->Flash->showMessage() ?>
-                            </div>
+                            <div id='message-box'></div>
                             <div class='icon-right'>
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite seu CNPJ',

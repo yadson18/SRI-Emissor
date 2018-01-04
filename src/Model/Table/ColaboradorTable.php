@@ -1,8 +1,9 @@
 <?php  
 	namespace App\Model\Table;
 
-	use App\Model\Entity\Colaborador;
 	use Simple\ORM\Components\Validator;
+	use App\Model\Entity\Colaborador;
+	use Simple\ORM\TableRegistry;
 	use Simple\ORM\Table;
 
 	class ColaboradorTable extends Table
@@ -20,8 +21,13 @@
 
 		public function login(Colaborador $colaborador)
 		{
-			if (isset($colaborador->login) && isset($colaborador->senha)) {
-				return $this->find(['*'])
+			if (isset($colaborador->login) && 
+				isset($colaborador->senha) &&
+				isset($colaborador->cnpj)
+			) {
+				$colaborador = $this->find([
+						'cod_colaborador', 'nome', 'funcao', 'login', 'ativo', 'cod_cadastro'
+					])
 					->where([
 						'login =' => $colaborador->login, 'and',
 						'senha =' => $colaborador->senha

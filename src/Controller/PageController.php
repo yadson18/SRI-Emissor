@@ -10,6 +10,6 @@
 
 		public function home()
 		{ 
-			$this->setTitle('Home');
+			$this->setTitle('Home');		
 		}
 	}

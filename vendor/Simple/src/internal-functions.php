@@ -17,6 +17,28 @@
 		}
 	}
 
+	function mask(string $mask, string $value)
+	{
+		$mask = str_split($mask);
+		$value = str_split($value);
+
+		foreach ($mask as $index => $char) {
+			if ($char === '#' && !empty($value)) {
+				$mask[$index] = array_shift($value);
+			}
+		}
+
+		return implode($mask);
+	}
+
+	function unmask(string $value)
+	{
+		return str_replace([
+	    	'[',']','>','<','}','{',')','(',':',';','/',
+	    	',','!','?','*','%','~','^','`','@','-','\\','.'
+	    ], '', $value);
+	}
+
 	function minutesTo(string $conversionType, int $minutes)
 	{
 		switch ($conversionType) {
@@ -86,22 +108,23 @@
 
 	function debug($data)
 	{
-		echo "<pre id='debug-screen'>";
+		echo '<pre id="debug-screen">';
 		var_dump($data);
-		echo "</pre>";
+		echo '</pre>';
 	}
 
 	function removeSpecialChars(string $value) 
 	{
 		$invalid = [
-			'a' => ["á","à","â","ã","ä"],
-			'e' => ["é","è","ê"],
-			'i' => ["í","ì"],
-			'o' => ["ó","ò","ô","õ","ö"],
-			'u' => ["ú","ù","ü"],
+			'a' => ['á','à','â','ã','ä'],
+			'e' => ['é','è','ê'],
+			'i' => ['í','ì'],
+			'o' => ['ó','ò','ô','õ','ö'],
+			'u' => ['ú','ù','ü'],
 			'c' => ['ç'],
 			'' => [
-	    		"[","]",">","<","}","{",")","(",":",";",",","!","?","*","%","~","^","`","@"
+	    		'[',']','>','<','}','{',')','(',':',';',
+	    		',','!','?','*','%','~','^','`','@'
 	    	]
 		];
 

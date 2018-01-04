@@ -7,17 +7,27 @@
 		{
 			return $this->alowedMethods($method, ['login']);
 		}
-
+		
 		public function login()
 		{
 			$colaborador = $this->Colaborador->newEntity();
 
 			if ($this->request->is('POST')) {
-				$colaborador = $this->Colaborador->patchEntity(
+				$result = $this->Colaborador->login($this->Colaborador->patchEntity(
 					$colaborador, $this->request->getData()
-				);
+				));
 
-				$this->Colaborador->login($colaborador);
+				if ($result['status'] === 'success') {
+					$this->Auth->set($result['user']);
+
+					$this->Ajax->response('login', ['redirect' => '/User/logged']);
+				}
+				else {
+					$this->Ajax->response('login', $result);
+				}
+			}
+			else {
+				return $this->redirect('default');
 			}
 		}
 	}

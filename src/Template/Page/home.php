@@ -103,14 +103,17 @@
                                 <i class="fas fa-key"></i>
                             </div>
                             <div class='form-group'>
-                                <?= $this->Form->button("Entrar <i class='fas fa-sign-in-alt'></i>", [
+                                <?= $this->Form->button(
+                                    "<span>Entrar</span> <i class='fas fa-sign-in-alt'></i>", [
                                         'class' => 'btn btn-success btn-block',
-                                        'type' => 'button'
+                                        'type' => 'button',
+                                        'id' => 'enter'
                                     ]) 
                                 ?>
                             </div>
                             <div class='form-group'>
-                                <?= $this->Form->button("Fechar <i class='fas fa-times'></i>", [
+                                <?= $this->Form->button(
+                                    "Fechar <i class='fas fa-times'></i>", [
                                         'class' => 'btn btn-danger btn-block',
                                         'data-dismiss' => 'modal',
                                         'type' => 'button'

@@ -5,10 +5,10 @@
 	{
 		private $response;
 
-		public function response(array $data)
+		public function response(string $key, $data)
 		{
-			if (!empty($data)) {
-				$this->response = $data;
+			if (!empty($key) && !empty($data) && !is_resource($data)) {
+				$this->response[$key] = json_encode($data, JSON_UNESCAPED_UNICODE);
 			}
 			else {
 				$this->response = [

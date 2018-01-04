@@ -3,7 +3,7 @@
 
 	use Simple\ORM\Entity;
 
-	class Page extends Entity
+	class Cadastro extends Entity
 	{
-
+		
 	}

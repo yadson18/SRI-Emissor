@@ -4,6 +4,7 @@
 	use Simple\ORM\Components\Validator;
 	use App\Model\Entity\Colaborador;
 	use Simple\ORM\TableRegistry;
+	
 	use Simple\ORM\Table;
 
 	class ColaboradorTable extends Table
@@ -21,20 +22,48 @@
 
 		public function login(Colaborador $colaborador)
 		{
-			if (isset($colaborador->login) && 
-				isset($colaborador->senha) &&
+			if (isset($colaborador->login) && isset($colaborador->senha) &&
 				isset($colaborador->cnpj)
 			) {
-				$colaborador = $this->find([
-						'cod_colaborador', 'nome', 'funcao', 'login', 'ativo', 'cod_cadastro'
-					])
-					->where([
-						'login =' => $colaborador->login, 'and',
-						'senha =' => $colaborador->senha
-					])
-					->fetch('class');
+				$register = TableRegistry::get('Cadastro')->validateRegister(
+					$colaborador->cnpj
+				);
+
+				if ($register) {
+					if ($register->status !== 8) {
+						$user = $this->find(['cod_colaborador', 'nome', 'funcao'])->where([
+							'cod_cadastro =' => $register->cod_cadastro, 'and',
+							'login =' => $colaborador->login, 'and',
+							'senha =' => $colaborador->senha
+						])->fetch('class');
+
+						if ($user) {
+							$user->cadastro = $register;
+
+							return [
+								'status' => 'success',
+								'user' => $user
+							];
+						}
+						return [
+							'status' => 'error',
+							'message' => 'Usuário ou senha incorreto, tente novamente.'
+						];
+					}
+					return [
+						'status' => 'error',
+						'message' => 'Desculpe, este contrato foi cancelado, renove-o para continuar usando.'
+					];
+				}
+				return [
+					'status' => 'error',
+					'message' => 'Nenhum contrato foi encontrado com o CNPJ informado.'
+				];
 			}
-			return false;
+			return [
+				'status' => 'error',
+				'message' => 'Os campos CNPJ, usuário e senha, são obrigatórios.'
+			];
 		}
 
 		protected function defaultValidator(Validator $validator)

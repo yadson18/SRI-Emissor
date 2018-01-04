@@ -31,5 +31,6 @@
 			else if (isset($this->session->getData('Auth')->$index)) {
 				return $this->session->getData('Auth')->$index;
 			}
+			return false;
 		}
 	}

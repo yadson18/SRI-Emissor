@@ -8,11 +8,11 @@
 
 		<?= $this->Html->css('bootstrap.min.css') ?>
 		<?= $this->Html->css('fontawesome-all.min.css') ?>
-
 		<?= $this->Html->less('mixin.less') ?>
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
+		<?= $this->Html->script('page-home.js') ?>
 
 		<?= $this->Html->less('home.less') ?>
 		<?= $this->Html->script('less.min.js') ?>

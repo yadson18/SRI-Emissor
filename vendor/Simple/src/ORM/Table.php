@@ -45,15 +45,15 @@
 			return Table::ENTITY_NAMESPACE . $entityName;
 		}
 
-		protected function setBelongsTo(string $fieldName, array $options)
+		protected function setBelongsTo(string $tableName, array $options)
 		{
-			$this->belongsTo[$fieldName] = $options;
+			$this->belongsTo[$tableName] = $options;
 		}
 
-		protected function getBelongsTo(string $fieldName)
+		protected function getBelongsTo(string $tableName)
 		{	
-			if (isset($this->belongsTo[$fieldName])) {
-				return $this->belongsTo[$fieldName];
+			if (isset($this->belongsTo[$tableName])) {
+				return $this->belongsTo[$tableName];
 			}
 			return false;
 		}
@@ -87,7 +87,7 @@
 			return false;
 		}
 
-		public function get($key)
+		public function get($key, array $contain = [])
 		{
 			if (!empty($key) && !empty($this->getTable())) {
 				if ($key === 'all') {
@@ -95,6 +95,30 @@
 							->fetch('all');
 				}
 				else if (!empty($this->getPrimaryKey())) {
+					if (isset($contain['contain']) && !empty($contain['contain'])) {
+						$condition = [
+							$this->getTable() . '.' . $this->getPrimaryKey() . ' = ' => $key
+						];
+						$tables = [$this->getTable()];
+						
+						foreach ($contain['contain'] as $table) {
+							$belongs = $this->getBelongsTo($table);
+
+							if (!empty($belongs) && isset($belongs['key']) &&
+								isset($belongs['foreignKey'])
+							) {
+								$tables[] = $table;
+								$condition[] = 'and ' . 
+									$this->getTable() . '.' . $belongs['key'] . ' = ' . 
+									$table . '.' . $belongs['foreignKey'];
+
+							}
+						}
+						return $this->select(['*'])
+							->from($tables)
+							->where($condition)
+							->fetch('class');
+					}
 					return $this->find(['*'])
 						->where([$this->getPrimaryKey() . ' = ' => $key])
 						->fetch('class');

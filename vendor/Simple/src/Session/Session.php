@@ -80,7 +80,7 @@
 				
 				if (($currentTime - $sessionTimeCreated) >= $time) {
 					session_regenerate_id(); 
-					$_SESSION[]['created'] = date('H:i');
+					$_SESSION['newSession']['created'] = date('H:i');
 				}
 			}
 		}

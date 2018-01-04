@@ -19,7 +19,7 @@ $(document).ready(function(){
                     $(location).attr('href', data['redirect']);
                 }
                 else {
-                    $('#login #message-box').append(
+                    $('#login #message-box').empty().append(
                         bootstrapAlert(data['status'], data['message'])
                     );
                 }

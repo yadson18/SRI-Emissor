@@ -11,6 +11,7 @@
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
+		<?= $this->Html->script('jquery.mask.js') ?>
 		<?= $this->Html->script('internal-functions.js') ?>
 		<?= $this->Html->script('presentation.js') ?>
 
@@ -51,41 +52,45 @@
 		<div class='content'>
 			<?= $this->fetch('content') ?>
 		</div>
-		<footer id='footer' class='col-sm-12'>
-			<div class='contact'>
-			    <div class='col-sm-3'>
-			        <a href='#' target='blank'>
-			            <p>
-			                <i class='fas fa-map-marker-alt' aria-hidden='true'></i>
-			                Find Us
-			            </p> 
-			        </a>
-			    </div>
-			    <div class='col-sm-3'>
-			        <a href='https://www.facebook.com/' target='blank'>
-			            <p>
-			                <i class='fab fa-facebook-square' aria-hidden='true'></i>
-			                Facebook
-			            </p> 
-			        </a>
-			    </div>
-			    <div class='col-sm-3'>
-			    	<a>
-			    		<p>
-			    			<i class='fas fa-envelope' aria-hidden='true'></i>
-			    			email@email.com
-			    		</p>
-			    	</a>
-			    </div>
-			    <div class='col-sm-3'>
-			    	<a>
-			    		<p>
-			    			<i class='fas fa-phone-square' aria-hidden='true'></i>
-			            	(81) 99999-9999
-			    		</p>
-			    	</a>
-			    </div>
-			</div>
-		</footer>
+		<?php if ($this->fetch('controllerName') === 'Page'): ?>
+			<?php if ($this->fetch('viewName') === 'index'): ?>
+				<footer id='footer' class='col-sm-12'>
+					<div class='contact'>
+					    <div class='col-sm-3'>
+					        <a href='#' target='blank'>
+					            <p>
+					                <i class='fas fa-map-marker-alt' aria-hidden='true'></i>
+					                Find Us
+					            </p> 
+					        </a>
+					    </div>
+					    <div class='col-sm-3'>
+					        <a href='https://www.facebook.com/' target='blank'>
+					            <p>
+					                <i class='fab fa-facebook-square' aria-hidden='true'></i>
+					                Facebook
+					            </p> 
+					        </a>
+					    </div>
+					    <div class='col-sm-3'>
+					    	<a>
+					    		<p>
+					    			<i class='fas fa-envelope' aria-hidden='true'></i>
+					    			email@email.com
+					    		</p>
+					    	</a>
+					    </div>
+					    <div class='col-sm-3'>
+					    	<a>
+					    		<p>
+					    			<i class='fas fa-phone-square' aria-hidden='true'></i>
+					            	(81) 99999-9999
+					    		</p>
+					    	</a>
+					    </div>
+					</div>
+				</footer>
+			<?php endif ?>
+		<?php endif ?>
 	</body>
 </html>

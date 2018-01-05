@@ -31,4 +31,11 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('input[name=cnpj]').mask('00.000.000/0000-00', {
+        placeholder: '__.___.___/____-__',
+        clearIfNotMatch: true,
+        optional: false,
+        translation: {'0': {pattern: /[0-9]/}}
+    });
 });

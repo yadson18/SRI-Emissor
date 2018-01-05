@@ -3,9 +3,9 @@
 
 	class PageController extends AppController
 	{
-		public function isAuthorized(string $method)
+		public function isAuthorized()
 		{
-			return $this->alowedMethods($method, ['index', 'home']);
+			return $this->allow(['index']);
 		}
 
 		public function index()

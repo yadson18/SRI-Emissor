@@ -8,12 +8,13 @@
 
 		<?= $this->Html->css('bootstrap.min.css') ?>
 		<?= $this->Html->css('fontawesome-all.min.css') ?>
-		<?= $this->Html->less('mixin.less') ?>
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
+		<?= $this->Html->script('internal-functions.js') ?>
 		<?= $this->Html->script('presentation.js') ?>
 
+		<?= $this->Html->less('mixin.less') ?>
 		<?= $this->Html->less('presentation.less') ?>
 		<?= $this->Html->script('less.min.js') ?>
 	</head>
@@ -31,9 +32,17 @@
 		        <div class='collapse navbar-collapse' id='responsive-menu'>
 		            <ul class='nav navbar-nav navbar-right'>
 		            	<li>
-		            		<a href='#' data-toggle='modal' data-target='#login'>
-		            			Fazer Login <i class="fas fa-sign-in-alt"></i> 
-		            		</a>
+		            		<?php if ($this->fetch('controllerName') === 'Page'): ?>
+			            		<?php if ($this->fetch('viewName') === 'index'): ?>
+				            		<a href='#' data-toggle='modal' data-target='#login'>
+				            			Fazer Login <i class="fas fa-sign-in-alt"></i> 
+				            		</a>
+				            	<?php else: ?>
+				            		<a href='/Colaborador/logout'>
+				            			Sair <i class="fas fa-sign-out-alt"></i> 
+				            		</a>
+			            		<?php endif ?>
+		            		<?php endif ?>
 		            	</li>
 		            </ul>
 		        </div>

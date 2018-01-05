@@ -27,7 +27,6 @@
 				$mask[$index] = array_shift($value);
 			}
 		}
-
 		return implode($mask);
 	}
 
@@ -66,7 +65,6 @@
 				}
 			}
 		}
-
 		return $result;
 	}
 
@@ -81,7 +79,6 @@
 
 		if (is_array($pieces)) {
 			$result = array_pop($pieces);
-
 			return (!empty($result)) ? $result : array_pop($pieces);
 		}
 		return $pieces;
@@ -92,7 +89,6 @@
 		while ($replaces) {
 			$value = replace($value, key($replaces), array_shift($replaces));
 		}
-
 		return $value;
 	}
 
@@ -134,6 +130,5 @@
 				array_map('mb_strtoupper', $invalidValues), strtoupper($replaceTo), $value
 			);
 		}
-		
 		return $value;
 	}

@@ -1,6 +1,6 @@
 <div class="alert alert-info alert-dismissable" role="alert">
 	<button type="button" data-dismiss="alert" class="close" aria-label="Close">
-		<i class="fa fa-times" aria-hidden="true"></i>
+		<i class="fas fa-times"></i>
 	</button>
-	<i class="fa fa-info-circle" aria-hidden="true"></i> <?= $message ?>
+	<i class="fas fa-info-circle"></i> <?= $message ?>
 </div>

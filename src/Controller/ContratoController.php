@@ -3,8 +3,8 @@
 
 	class ContratoController extends AppController
 	{
-		public function isAuthorized(string $method)
+		public function isAuthorized()
 		{
-			return $this->alowedMethods($method, []);
+			return $this->allow([]);
 		}
 	}

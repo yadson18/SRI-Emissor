@@ -22,8 +22,9 @@
 
 		public function login(Colaborador $colaborador)
 		{
-			if (isset($colaborador->login) && isset($colaborador->senha) &&
-				isset($colaborador->cnpj)
+			if (isset($colaborador->login) && !empty($colaborador->login) &&
+				isset($colaborador->senha) && !empty($colaborador->senha) &&
+				isset($colaborador->cnpj) && !empty($colaborador->cnpj)
 			) {
 				$register = TableRegistry::get('Cadastro')->validateRegister(
 					$colaborador->cnpj

@@ -65,19 +65,20 @@
 
 			if (!empty($header) && isset($header->controller)) {
 				$controller = new Builder('App\\Controller\\' . $header->controller . 'Controller');
+				$templatePath = TEMPLATE . $header->controller . DS;
+				if ($controller->canInvokeMethod('isAuthorized') &&
+					$controller->canInvokeMethod('initialize') &&
+					$controller->canInvokeMethod($header->view)
+				) {
+					$controller->invoke('initialize', [$this->getRequest(), $view]);
 
-				if ($controller->invoke('isAuthorized', [$header->view])) {
-					if ($controller->canInvokeMethod('initialize') &&
-						$controller->canInvokeMethod($header->view)
-					) {
-						$controller->invoke('initialize', [$this->getRequest(), $view]);
+					if ($controller->invoke('isAuthorized')) {
 						$result = $controller->invoke($header->view, $header->args);
-						$templatePath = TEMPLATE . $header->controller . DS;
 
 						if (isset($result['redirect'])) {
 							Router::location($result['redirect']);
 						}
-						else if (is_file($templatePath . $header->view . '.php')) {
+						else if(is_file($templatePath . $header->view . '.php')){
 							if ($controller->canUseAttribute('Ajax') &&
 								call_user_func([
 									$controller->useAttribute('Ajax'), 'notEmptyResponse'
@@ -103,11 +104,11 @@
 						}
 					}
 					else {
-						$this->setCode(400);
+						$this->setCode(401);
 					}
 				}
 				else {
-					$this->setCode(401);
+					$this->setCode(400);
 				}
 			}
 			else {
@@ -118,7 +119,6 @@
 				$view->setContentType('error');
 				$view->setTemplatePath(TEMPLATE . 'Error' . DS);
 			}
-
 			return (object) [
 				'code' => $this->getCode(),
 				'status' => $this->getStatus(),

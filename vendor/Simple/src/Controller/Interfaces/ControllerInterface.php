@@ -20,7 +20,7 @@
 
 		public function initializeTables();
 
-		public function alowedMethods(string $method, array $methods);
+		public function allow(array $methods);
 
-		public function isAuthorized(string $method);
+		public function isAuthorized();
 	}

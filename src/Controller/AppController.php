@@ -36,10 +36,19 @@
 		 * @return 
 		 *		boolean
 		 */
-		public function alowedMethods(string $method, array $methods)
+		public function allow(array $methods)
         {
-            if (in_array($method, $methods)) {
+        	$view = $this->request->getHeader()->view;
+
+        	if (in_array($view, $methods)) {
                 return true;
+            }
+            else if (is_callable([$this->Auth, 'getUser']) &&
+            	!empty(call_user_func([$this->Auth, 'getUser'])) &&
+            	is_callable([$this->Auth, 'isAuthorized']) &&
+            	in_array($view, call_user_func([$this->Auth, 'isAuthorized']))
+        	) {
+            	return true;
             }
             return false;
         }

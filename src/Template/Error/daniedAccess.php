@@ -4,5 +4,5 @@
 </div>
 <p id="action">
 	Make sure the url you typed is correct or
-	<a href="/Example/home" class="btn btn-success btn-lg">Click here to make login</a>
+	<a href="/Page/index" class="btn btn-success btn-lg">Click here to make login</a>
 </p>

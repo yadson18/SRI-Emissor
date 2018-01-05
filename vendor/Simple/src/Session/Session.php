@@ -38,7 +38,6 @@
 		public function destroy()
 		{
 			if ($this->sessionCreated()) {
-				$this->start();
 				session_destroy();
 			}
 		}

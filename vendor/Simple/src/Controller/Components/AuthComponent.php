@@ -1,36 +1,28 @@
 <?php 
 	namespace Simple\Controller\Components;
 
-	use Simple\ORM\Interfaces\EntityInterface;
-	use Simple\Session\Session;
-
-	class AuthComponent
+	use Simple\Auth\Auth;
+	
+	class AuthComponent extends Auth
 	{
-		private $session;
-
 		public function __construct()
 		{
-			$this->session = new Session();
+			parent::__construct();
+			
+			$this->initialize([
+				'login' => [
+					'controller' => 'Page', 
+					'view' => 'home'
+				],
+				'logout' => [
+					'controller' => 'Page', 
+					'view' => 'index'
+				]
+			]);
 		}
 
-		public function set(EntityInterface $entity)
+		public function isAuthorized()
 		{
-			$this->session->setData('Auth', $entity);
-		}
-
-		public function unset()
-		{
-			$this->session->removeData('Auth');
-		}	
-
-		public function get(string $index = null)
-		{
-			if (empty($index)) {
-				return $this->session->getData('Auth');
-			}
-			else if (isset($this->session->getData('Auth')->$index)) {
-				return $this->session->getData('Auth')->$index;
-			}
-			return false;
+			return $this->allow(['home', 'logout']);
 		}
 	}

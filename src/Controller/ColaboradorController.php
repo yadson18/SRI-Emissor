@@ -20,7 +20,7 @@
 				if ($result['status'] === 'success') {
 					$this->Auth->set($result['user']);
 
-					$this->Ajax->response('login', ['redirect' => '/User/logged']);
+					$this->Ajax->response('login', ['redirect' => '/Page/home']);
 				}
 				else {
 					$this->Ajax->response('login', $result);

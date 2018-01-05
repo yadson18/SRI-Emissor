@@ -9,5 +9,5 @@
  	 *		(@string) view - View name.
 	 */
 	Router::configRoutes([
-		'default' => ['controller' => 'Page', 'view' => 'home']
+		'default' => ['controller' => 'Page', 'view' => 'index']
 	]);

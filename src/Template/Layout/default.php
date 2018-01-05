@@ -12,9 +12,9 @@
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
-		<?= $this->Html->script('page-home.js') ?>
+		<?= $this->Html->script('presentation.js') ?>
 
-		<?= $this->Html->less('home.less') ?>
+		<?= $this->Html->less('presentation.less') ?>
 		<?= $this->Html->script('less.min.js') ?>
 	</head>
 	<body>	

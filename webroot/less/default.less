@@ -49,19 +49,20 @@ button.close {
     }
 }
 #main-nav {
-    .background-color(#333);
+    .background-color(white);
     .border-radius(0);
     .margin-bottom(0);
     .border(none);
+    .box-shadow();
+    .z-index(500);
+    .position(relative);
 
     ul {
         .padding(0 4% 0 0);
-        .background-color(#333);
 
         li {
             a {
-                .color(white);
-                .padding(25px 15px);
+                .padding(30px 15px);
                 .font-weight(600);
 
                 &:hover {
@@ -104,7 +105,8 @@ button.close {
                 .color(@orange-color);
 
                 i {
-                    .rotate-icons(1s, perspective(400px) translate(0, -3px) rotateY(360deg));
+                    .animation-name(rotate);
+                    .animation-duration(1s);
                 }
             }
             &:focus {
@@ -121,4 +123,20 @@ button.close {
             }
         }
     }
+}
+
+/* Animations */
+.box-up() {
+    .transition(0.5s);
+    .box-shadow(3px 3px 8px gray);
+}
+@keyframes rotate {
+        0% {
+            .opacity(0);
+            .transform(perspective(0) rotateY(0deg));
+        } 
+        100% {
+            .opacity(1);
+            .transform(perspective(400px) rotateY(360deg));
+        }
 }

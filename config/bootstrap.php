@@ -9,16 +9,16 @@
 	/**
 	 * Verifying if intl extension is enabled.
 	 */
-	if (!extension_loaded('intl')) {
+	/*if (!extension_loaded('intl')) {
 	    trigger_error('You must enable the intl extension.', E_USER_ERROR);
-	}
+	}*/
 	
 	/**
 	 * Verifying if intl extension is enabled.
 	 */
-	if (!extension_loaded('mbstring')) {
+	/*if (!extension_loaded('mbstring')) {
 	    trigger_error('You must enable the mbstring extension.', E_USER_ERROR);
-	}
+	}*/
 
 	require_once SIMPLE . 'internal-functions.php';
 	require_once CONFIG . 'app-config.php';

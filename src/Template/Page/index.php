@@ -3,9 +3,9 @@
         <h1 class='title'>SRI Emissor</h1>
         <h3>Emissão de NFe e muito mais.</h3>
     </div>
-    <div class='features' id='features'>
+    <div class='features row' id='features'>
         <h1 class='title'>Funcionalidades</h1>
-        <div class='row'>
+        <div>
             <div class='col-sm-4'>
                 <div class='thumbnail'>
                     <div class='icon'>

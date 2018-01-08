@@ -19,7 +19,9 @@
 
 		public function validateRegister(string $cnpj)
 		{
-			$cadastro = $this->find(['cod_cadastro', 'razao', 'ativo', 'status', 'cod_reg_trib'])
+			$cadastro = $this->find([
+					'cod_cadastro', 'razao', 'cnpj', 'ativo', 'status', 'cod_reg_trib'
+				])
 				->from(['cadastro', 'contrato'])
 				->where([
 					'cnpj =' => unmask($cnpj), 'and',

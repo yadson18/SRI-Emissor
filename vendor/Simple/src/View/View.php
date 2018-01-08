@@ -50,10 +50,10 @@
 				case 'title': 
 					return $this->getTitle(); 
 				break;
-				case 'controllerName': 
+				case 'controller': 
 					return $this->getControllerName(); 
 				break;
-				case 'viewName': 
+				case 'view': 
 					return $this->getTemplate(); 
 				break;
 				case 'appName': 

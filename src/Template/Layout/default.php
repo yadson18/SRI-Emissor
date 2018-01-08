@@ -13,14 +13,22 @@
 		<?= $this->Html->script('bootstrap.min.js') ?>
 		<?= $this->Html->script('jquery.mask.js') ?>
 		<?= $this->Html->script('internal-functions.js') ?>
-		<?= $this->Html->script('presentation.js') ?>
 
 		<?= $this->Html->less('mixin.less') ?>
-		<?= $this->Html->less('presentation.less') ?>
+		<?= $this->Html->script(
+				strtolower($this->fetch('controller')) . '-' . 
+				strtolower($this->fetch('view')) . '.js'
+			) 
+		?>
+		<?= $this->Html->less(
+				strtolower($this->fetch('controller')) . '-' . 
+				strtolower($this->fetch('view')) . '.less'
+			) 
+		?>
 		<?= $this->Html->script('less.min.js') ?>
 	</head>
 	<body>	
-		<nav class='navbar navbar-default navbar-fixed-top' id='main-nav'>
+		<nav class='navbar navbar-inverse' id='main-nav'>
 		    <div class='container-fluid'>
 		        <div class='navbar-header'>
 		            <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#responsive-menu' aria-expanded='false'>
@@ -31,66 +39,112 @@
 		            </button>
 		        </div>
 		        <div class='collapse navbar-collapse' id='responsive-menu'>
-		            <ul class='nav navbar-nav navbar-right'>
-		            	<li>
-		            		<?php if ($this->fetch('controllerName') === 'Page'): ?>
-			            		<?php if ($this->fetch('viewName') === 'index'): ?>
-				            		<a href='#' data-toggle='modal' data-target='#login'>
-				            			Fazer Login <i class="fas fa-sign-in-alt"></i> 
-				            		</a>
-				            	<?php else: ?>
-				            		<a href='/Colaborador/logout'>
-				            			Sair <i class="fas fa-sign-out-alt"></i> 
-				            		</a>
-			            		<?php endif ?>
-		            		<?php endif ?>
-		            	</li>
-		            </ul>
+		        	<?php 
+		            	if ($this->fetch('controller') === 'Page' &&
+		            		$this->fetch('view') === 'index'
+		            	): 
+		            ?>
+		            	<ul class='nav navbar-nav navbar-right'>
+		            		<li>
+		            			<a href='#' data-toggle='modal' data-target='#login'>
+				            		Fazer Login <i class='fas fa-sign-in-alt'></i> 
+				            	</a>
+		            		</li>
+		            	</ul>
+		        	<?php else: ?>
+		        		<ul class='nav navbar-nav navbar-right'>
+		        			<li class='dropdown'>
+						        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+						        	<i class='fas fa-user'></i>
+		            				Bem-vindo <?= $authName ?> <span class='caret'></span>
+						        </a>
+						        <ul class='dropdown-menu'>
+						          	<li>
+						          		<a href='#'>
+						          			Modificar Senha <i class='fas fa-key'></i>
+						          		</a>
+						          	</li>
+						          	<li>															
+						          		<a href='/Colaborador/logout'>
+						          			Sair <i class='fas fa-sign-out-alt'></i> 
+						          		</a>
+						          	</li>
+						        </ul>
+						    </li>
+						</ul>
+			        	<ul class='nav navbar-nav'>
+			        		<li>
+			        			<a href="#">Home</a>
+			        		</li>
+			        		<li>
+			        			<a href="#">Destinatários</a>
+			        		</li>
+			        		<li>
+			        			<li class='dropdown'>
+							        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+							        	Produtos <span class='caret'></span>
+							        </a>
+							        <ul class='dropdown-menu'>
+							          	<li>
+							          		<a href='#'>Enviar Carga</a>
+							          	</li>
+							          	<li>												
+							          		<a href='/Colaborador/logout'>Grupos</a>
+							          	</li>
+							        </ul>
+							    </li>
+			        		</li>
+			        		<li><a href="#">NF-e</a></li>
+			        		<li><a href="#">Gerencial</a></li>
+			        	</ul>
+			        <?php endif; ?>
 		        </div>
 		    </div>
 		</nav>
 		<div class='content'>
 			<?= $this->fetch('content') ?>
 		</div>
-		<?php if ($this->fetch('controllerName') === 'Page'): ?>
-			<?php if ($this->fetch('viewName') === 'index'): ?>
-				<footer id='footer' class='col-sm-12'>
-					<div class='contact'>
-					    <div class='col-sm-3'>
-					        <a href='#' target='blank'>
-					            <p>
-					                <i class='fas fa-map-marker-alt' aria-hidden='true'></i>
-					                Find Us
-					            </p> 
-					        </a>
-					    </div>
-					    <div class='col-sm-3'>
-					        <a href='https://www.facebook.com/' target='blank'>
-					            <p>
-					                <i class='fab fa-facebook-square' aria-hidden='true'></i>
-					                Facebook
-					            </p> 
-					        </a>
-					    </div>
-					    <div class='col-sm-3'>
-					    	<a>
-					    		<p>
-					    			<i class='fas fa-envelope' aria-hidden='true'></i>
-					    			email@email.com
-					    		</p>
-					    	</a>
-					    </div>
-					    <div class='col-sm-3'>
-					    	<a>
-					    		<p>
-					    			<i class='fas fa-phone-square' aria-hidden='true'></i>
-					            	(81) 99999-9999
-					    		</p>
-					    	</a>
-					    </div>
+		<?php 
+			if ($this->fetch('controller') === 'Page' &&
+				$this->fetch('view') === 'index'
+			): 
+		?>
+			<footer id='footer' class='col-sm-12'>
+				<div class='contact'>
+					<div class='col-sm-3'>
+					    <a href='#' target='blank'>
+					        <p>
+					            <i class='fas fa-map-marker-alt' aria-hidden='true'></i> 
+					            Find Us
+					        </p> 
+					    </a>
 					</div>
-				</footer>
-			<?php endif ?>
+					<div class='col-sm-3'>
+					    <a href='https://www.facebook.com/' target='blank'>
+					        <p>
+					            <i class='fab fa-facebook-square' aria-hidden='true'></i> 
+					            Facebook
+					        </p> 
+					    </a>
+					</div>
+					<div class='col-sm-3'>
+					 	<a>
+					    	<p>
+					    		<i class='fas fa-envelope' aria-hidden='true'></i>
+					    		email@email.com
+					    	</p>
+					    </a>
+					</div>
+					<div class='col-sm-3'>
+					   	<a>
+					    	<p>
+					    		<i class='fas fa-phone-square' aria-hidden='true'></i>
+					            (81) 99999-9999
+					    	</p>
+					    </a>
+					</div>
+				</div>
+			</footer>
 		<?php endif ?>
 	</body>
 </html>

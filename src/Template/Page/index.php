@@ -1,4 +1,4 @@
-<div id='presentation' class='col-md-12 col-sm-12 col-xs-12'>
+<div id='presentation' class='col-sm-12'>
     <div class='banner'>
         <h1 class='title'>SRI Emissor</h1>
         <h3>Emissão de NFe e muito mais.</h3>

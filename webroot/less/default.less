@@ -49,29 +49,32 @@ button.close {
     }
 }
 #main-nav {
-    .background-color(white);
-    .box-shadow();
-    .height(70px);
+    .background-color(#333);
+    .border-radius(0);
+    .margin-bottom(0);
+    .border(none);
 
-    .navbar-header button {
-        .margin(18px 15px 0 0);
-    }
     ul {
-        .background-color(white);
         .padding(0 4% 0 0);
+        .background-color(#333);
 
-        li{
-            &:hover{
-                a{
-                    .color(@orange-color);
-                }
-            }
-            a{
+        li {
+            a {
+                .color(white);
                 .padding(25px 15px);
                 .font-weight(600);
 
-                &:focus{
+                &:hover {
                     .color(@orange-color);
+                }
+                &:focus {
+                    .color(@orange-color);
+                }
+            }
+            ul li a {
+                &:hover {
+                    .color(@orange-color);
+                    .background-color(#333);
                 }
             }
         }
@@ -88,30 +91,30 @@ button.close {
     .display(inline-block);
     .width(100%);
 
-    .contact div{
+    .contact div {
         .margin(55px 0);
 
-        a{
+        a {
             .display(inline-block);
             .color(white);
             .text-decoration(none);
             .padding(15px);
 
-            &:hover{
+            &:hover {
                 .color(@orange-color);
 
-                i{
+                i {
                     .rotate-icons(1s, perspective(400px) translate(0, -3px) rotateY(360deg));
                 }
             }
-            &:focus{
+            &:focus {
                 .color(@orange-color);
             }
-            p{
+            p {
                 .margin(0);
                 .font-size(1.2em);
 
-                i{
+                i {
                     .display(block);
                     .font-size(1.8em);
                 }

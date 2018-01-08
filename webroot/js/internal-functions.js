@@ -1,4 +1,51 @@
 $.fn.extend({
+    notEmpty: function()
+    {
+        var tagName = $(this).prop('tagName');
+
+        if (tagName === 'INPUT' || tagName === 'SELECT' ||
+            tagName === 'TEXTAREA'
+        ) {
+            return ($(this).val().replace(/[ ]/g, '') !== '') ? true : false;
+        }
+        return ($(this).text().replace(/[ ]/g, '') !== '') ? true : false;
+    },
+    inputAlert: function(type) 
+    {
+        function addAlertClass($element, className)
+        {
+            var classesToReplace = [
+                'has-error', 'has-success', 'has-warning', 'has-none'
+            ];
+
+            $.each(classesToReplace, function(index, className) {
+                $element.removeClass(className);
+            });
+            $element.addClass(className);
+        }
+
+        return this.each(function() {
+            var $parentDiv = $(this).closest('div');
+                
+
+            if ($parentDiv && type) {
+                switch(type) {
+                    case 'success':
+                        addAlertClass($parentDiv, 'has-success');
+                        break;
+                    case 'error':
+                        addAlertClass($parentDiv, 'has-error');
+                        break;
+                    case 'warning':
+                        addAlertClass($parentDiv, 'has-warning');
+                        break;
+                    case 'none':
+                        addAlertClass($parentDiv, 'has-none');
+                        break;
+                }
+            }
+        });
+    },
     bootstrapAlert: function(alertType, message)
     {
         var $alert, $content;
@@ -41,30 +88,27 @@ $.fn.extend({
                 break;
         }
 
-        return this.each(function() {
-            $(this).empty().append($alert);
-        });
+        $(this).find('.alert').remove();
+        $(this).append($alert); 
     },
     redirect: function(location) 
     {
         if (location['controller'] && location['view']) {
-            return this.each(function() {
-                $(this).attr(
-                    'href', '/' + location['controller'] + '/' + location['view']
-                    );
-            });
+            $(this).attr(
+                'href', '/' + location['controller'] + '/' + location['view']
+            );
         }
     },
     disable: function() 
     {
-        return this.each(function() {
-            $(this).prop('disabled', true);
+        return this.each(function() { 
+            $(this).prop('disabled', true); 
         });
     },
     enable: function() 
     {
-        return this.each(function() {
-            $(this).prop('disabled', false);
+        return this.each(function() { 
+            $(this).prop('disabled', false); 
         });
     },
     formToJSON: function() 
@@ -73,8 +117,8 @@ $.fn.extend({
         array = $(this).serializeArray();
         json = {};
 
-        $.each(array, function() {
-            json[this.name] = this.value || '';
+        $.each(array, function() { 
+            json[this.name] = this.value || ''; 
         });
 
         return json;

@@ -1,8 +1,8 @@
-<div id="info">
-	<h1><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h1>
-	<p>You don't have permission to access this page.</p>
+<div id='info'>
+	<h1 class='text-center'><i class='fas fa-exclamation-triangle'></i></h1>
+	<p>Você não tem permissão para acessar essa página.</p>
 </div>
-<p id="action">
-	Make sure the url you typed is correct or
-	<a href="/Page/index" class="btn btn-success btn-lg">Click here to make login</a>
+<p id='action'>
+	Verifique se a URL foi digitada corretamente ou
+	<a href='/Page/index' class='btn btn-success btn-lg'>Clique aqui para fazer o login</a>
 </p>

@@ -1,8 +1,4 @@
 <div id='presentation' class='col-sm-12'>
-    <div class='banner'>
-        <h1 class='title'>SRI Emissor</h1>
-        <h3>Emissão de NFe e muito mais.</h3>
-    </div>
     <div class='features row' id='features'>
         <h1 class='title'>Funcionalidades</h1>
         <div>

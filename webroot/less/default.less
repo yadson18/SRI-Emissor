@@ -49,41 +49,45 @@ button.close {
     }
 }
 #main-nav {
-    .background-color(white);
+    .background-color(#f7a13c);
+    .box-shadow(inset 0 0 20px #bd3905);
     .border-radius(0);
     .margin-bottom(0);
-    .border(none);
-    .box-shadow();
-    .z-index(500);
-    .position(relative);
+    .border(solid 1px #f7a13c);
 
-    ul {
-        .padding(0 4% 0 0);
+    ul > li {
+        a {
+            .color(white);
+            .padding(30px 15px);
+            .font-weight(600);
 
-        li {
-            a {
-                .padding(30px 15px);
-                .font-weight(600);
-
-                &:hover {
-                    .color(@orange-color);
-                }
-                &:focus {
-                    .color(@orange-color);
-                }
+            &:hover {
+                .color(@orange-color);
+                .background-color(white);
             }
-            ul li a {
-                &:hover {
-                    .color(@orange-color);
-                    .background-color(#333);
-                }
+            &:focus {
+                .color(@orange-color);
+                .background-color(white);
             }
         }
-        li.active a {
-            .color(@orange-color);
-            .background-color(white);
+        ul {
+            .background-color(#f7a13c);
+            .padding(0);
+
+            li a {
+                .padding(15px);
+
+                &:hover {
+                    .color(@orange-color);
+                    .background-color(white);
+                }
+            }
         }
     }
+    ul li.active a {
+        .color(@orange-color);
+        .background-color(white);
+    }            
 }
 #footer{
     .background-color(#333);
@@ -132,11 +136,9 @@ button.close {
 }
 @keyframes rotate {
         0% {
-            .opacity(0);
             .transform(perspective(0) rotateY(0deg));
         } 
         100% {
-            .opacity(1);
             .transform(perspective(400px) rotateY(360deg));
         }
 }

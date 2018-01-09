@@ -25,7 +25,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning'>
+	    				<a href='#' class='btn btn-warning form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>
@@ -50,7 +50,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning'>
+	    				<a href='#' class='btn btn-warning form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>
@@ -75,7 +75,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning'>
+	    				<a href='#' class='btn btn-warning form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>
@@ -100,7 +100,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning'>
+	    				<a href='#' class='btn btn-warning form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>

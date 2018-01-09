@@ -68,7 +68,7 @@
 				'path' => '/BD/SRICASH.FDB',  
 				'user' => 'SYSDBA',
 				'password' => 'masterkey',
-				'encoding' => 'UTF8'
+				'encoding' => ''
 			],
 			'SRICASH2' => [
 				'driver' => 'Firebird',
@@ -76,7 +76,7 @@
 				'path' => '/BD/SRICASH2.FDB',  
 				'user' => 'SYSDBA',
 				'password' => 'masterkey',
-				'encoding' => 'UTF8'
+				'encoding' => ''
 			]
 		])
 

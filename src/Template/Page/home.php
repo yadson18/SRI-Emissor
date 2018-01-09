@@ -2,8 +2,8 @@
 	<h2 class='page-header text-capitalize'>
 		Dashboard:
 	    <small>
-	       	<?= strtolower($authRazao) ?> -
-	       	<?= mask('##.###.###/####-##', $authCnpj) ?>
+	       	<?= strtolower($usuarioRazao) ?> -
+	       	<?= mask('##.###.###/####-##', $usuarioCnpj) ?>
 	    </small>
     </h2>
     <div id='cards'>
@@ -18,10 +18,12 @@
 	    					<strong>Emitidas</strong>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					Hoje <span class='badge'>0</span>
+	    					Hoje 
+	    					<span class='badge'><?= $nfeEmitidas->hoje ?></span>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					No mês <span class='badge'>0</span>
+	    					Total 
+	    					<span class='badge'><?= $nfeEmitidas->total ?></span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
@@ -93,10 +95,16 @@
 	    					<strong>Cadastrados</strong>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					Hoje <span class='badge'>0</span>
+	    					Hoje 
+	    					<span class='badge'>
+	    						<?= $produtosCadastrados->hoje ?>
+	    					</span>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					No mês <span class='badge'>0</span>
+	    					Total 
+	    					<span class='badge'>
+	    						<?= $produtosCadastrados->total ?>
+	    					</span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>

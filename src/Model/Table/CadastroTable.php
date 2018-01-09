@@ -17,7 +17,7 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function validateRegister(string $cnpj)
+		public function validarCadastro(string $cnpj)
 		{
 			$cadastro = $this->find([
 					'cod_cadastro', 'razao', 'cnpj', 'ativo', 'status', 'cod_reg_trib'
@@ -32,6 +32,17 @@
 				return $cadastro;
 			}
 			return false;	
+		}
+
+		public function listarAtivos()
+		{
+			return $this->find([
+					'cod_cadastro', 'cnpj', 'razao', 'fantasia', 'estado', 
+					'cidade', 'cep', 'endereco', 'bairro'
+				])
+				->orderBy(['razao'])
+				->where(['ativo =' => 'T'])
+				->fetch('all');
 		}
 
 		protected function defaultValidator(Validator $validator)

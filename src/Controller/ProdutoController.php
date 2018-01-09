@@ -1,7 +1,7 @@
 <?php 
 	namespace App\Controller;
 
-	class ContratoController extends AppController
+	class ProdutoController extends AppController
 	{
 		public function isAuthorized()
 		{

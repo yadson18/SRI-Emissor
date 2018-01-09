@@ -6,6 +6,7 @@
 
 	abstract class Auth {
 		private $session;
+		private $authorizedMethods;
 
 		public function __construct()
 		{
@@ -58,6 +59,14 @@
 
 		protected function allow(array $methods = [])
 		{
-			return $methods;
+			$this->authorizedMethods = $methods;
+		}
+
+		public function checkAuthorization(string $method)
+		{
+			if (in_array($method, $this->authorizedMethods)) {
+				return true;
+			}
+			return false;
 		}
 	}

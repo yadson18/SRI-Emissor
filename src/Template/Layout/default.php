@@ -52,32 +52,12 @@
 		            		</li>
 		            	</ul>
 		        	<?php else: ?>
-		        		<ul class='nav navbar-nav navbar-right'>
-		        			<li class='dropdown'>
-						        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-						        	<i class='fas fa-user'></i>
-		            				Bem-vindo <?= $authName ?> <span class='caret'></span>
-						        </a>
-						        <ul class='dropdown-menu'>
-						          	<li>
-						          		<a href='#'>
-						          			Modificar Senha <i class='fas fa-key'></i>
-						          		</a>
-						          	</li>
-						          	<li>															
-						          		<a href='/Colaborador/logout'>
-						          			Sair <i class='fas fa-sign-out-alt'></i> 
-						          		</a>
-						          	</li>
-						        </ul>
-						    </li>
-						</ul>
 			        	<ul class='nav navbar-nav'>
 			        		<li>
-			        			<a href="#">Home</a>
+			        			<a href='/Page/home'>Home</a>
 			        		</li>
 			        		<li>
-			        			<a href="#">Destinatários</a>
+			        			<a href='/Cadastro/index'>Destinatários</a>
 			        		</li>
 			        		<li>
 			        			<li class='dropdown'>
@@ -94,14 +74,34 @@
 							        </ul>
 							    </li>
 			        		</li>
-			        		<li><a href="#">NF-e</a></li>
-			        		<li><a href="#">Gerencial</a></li>
+			        		<li><a href='#'>NF-e</a></li>
+			        		<li><a href='#'>Gerencial</a></li>
 			        	</ul>
+			        	<ul class='nav navbar-nav navbar-right'>
+		        			<li class='dropdown'>
+						        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+						        	<i class='fas fa-user'></i>
+		            				Bem-vindo <?= $usuarioNome ?> <span class='caret'></span>
+						        </a>
+						        <ul class='dropdown-menu'>
+						          	<li>
+						          		<a href='#'>
+						          			Modificar Senha <i class='fas fa-key'></i>
+						          		</a>
+						          	</li>
+						          	<li>															
+						          		<a href='/Colaborador/logout'>
+						          			Sair <i class='fas fa-sign-out-alt'></i> 
+						          		</a>
+						          	</li>
+						        </ul>
+						    </li>
+						</ul>
 			        <?php endif; ?>
 		        </div>
 		    </div>
 		</nav>
-		<div class='content'>
+		<div class='content col-sm-12'>
 			<?= $this->fetch('content') ?>
 		</div>
 		<?php 

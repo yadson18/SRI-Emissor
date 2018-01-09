@@ -1,5 +1,7 @@
 @import 'default.less';
 
+.default-styles();
+
 .content #presentation {
 	.features {	
 		.padding(20px);
@@ -10,10 +12,10 @@
 		}
 		.thumbnail {
 			.border(solid 1px #ccc);
-			.box-shadow(1px 1px 5px 1px #ccc);
+			.box-shadow(2px 2px 5px 0 gray);
 
 			&:hover {
-				.box-up();
+				.box-shadow(4px 4px 12px 0 gray);
 
 				.icon i{
 					.animation-name(rotate);

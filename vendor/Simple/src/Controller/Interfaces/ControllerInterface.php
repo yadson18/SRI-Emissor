@@ -23,4 +23,6 @@
 		public function allow(array $methods);
 
 		public function isAuthorized();
+
+		public function beforeFilter();
 	}

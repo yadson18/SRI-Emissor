@@ -43,10 +43,4 @@ $(document).ready(function(){
             else { $button.find('span').text('Entrar'); }
         });
     });
-
-    $('input[name=cnpj]').mask('00.000.000/0000-00', {
-        clearIfNotMatch: true,
-        optional: false,
-        translation: {'0': {pattern: /[0-9]/}}
-    });
 });

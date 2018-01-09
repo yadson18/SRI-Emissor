@@ -124,3 +124,19 @@ $.fn.extend({
         return json;
     }
 });
+
+$(document).ready(function(){
+    var maskOptions = {
+        clearIfNotMatch: true,
+        reverse: true,
+        optional: false,
+        translation: { '0': { pattern: /[0-9]/ } }
+    };
+
+    $('.cnpjCpfMask').mask(function(value) {
+        return (value.length === 11) ? '000.000.000-00' : '00.000.000/0000-00';
+    });
+    $('.cnpjMask').mask('00.000.000/0000-00', maskOptions);
+    $('.cpfMask').mask('000.000.000-00', maskOptions);
+    $('.cepMask').mask('00000-000', maskOptions);
+});

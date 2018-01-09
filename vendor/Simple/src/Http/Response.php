@@ -71,7 +71,10 @@
 					$controller->canInvokeMethod($header->view)
 				) {
 					$controller->invoke('initialize', [$this->getRequest(), $view]);
-
+				
+					if ($controller->canInvokeMethod('beforeFilter')) {
+						$controller->invoke('beforeFilter');
+					}
 					if ($controller->invoke('isAuthorized')) {
 						$result = $controller->invoke($header->view, $header->args);
 

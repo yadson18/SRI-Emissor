@@ -4,7 +4,6 @@
 	use Simple\ORM\Components\Validator;
 	use App\Model\Entity\Colaborador;
 	use Simple\ORM\TableRegistry;
-	
 	use Simple\ORM\Table;
 
 	class ColaboradorTable extends Table
@@ -26,24 +25,24 @@
 				isset($colaborador->senha) && !empty($colaborador->senha) &&
 				isset($colaborador->cnpj) && !empty($colaborador->cnpj)
 			) {
-				$register = TableRegistry::get('Cadastro')->validateRegister(
+				$cadastro = TableRegistry::get('Cadastro')->validarCadastro(
 					$colaborador->cnpj
 				);
 
-				if ($register) {
-					if ($register->status !== 8) {
-						$user = $this->find(['cod_colaborador', 'nome', 'funcao'])->where([
-							'cod_cadastro =' => $register->cod_cadastro, 'and',
+				if ($cadastro) {
+					if ($cadastro->status !== 8) {
+						$usuario = $this->find(['cod_colaborador', 'nome', 'funcao'])->where([
+							'cod_cadastro =' => $cadastro->cod_cadastro, 'and',
 							'login =' => $colaborador->login, 'and',
 							'senha =' => $colaborador->senha
 						])->fetch('class');
 
-						if ($user) {
-							$user->cadastro = $register;
+						if ($usuario) {
+							$usuario->cadastro = $cadastro;
 
 							return [
 								'status' => 'success',
-								'user' => $user
+								'user' => $usuario
 							];
 						}
 						return [

@@ -5,7 +5,7 @@
 
 	class Firebird extends PDODriver
 	{
-		private static $dsn = 'firebird:dbname=%host%:%path%; charset=%encode%';
+		private static $dsn = 'firebird:dbname=%host%:%path%;charset=%encode%';
 
 		public function __construct(array $configs)
 		{

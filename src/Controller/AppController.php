@@ -45,11 +45,22 @@
             }
             else if (is_callable([$this->Auth, 'getUser']) &&
             	!empty(call_user_func([$this->Auth, 'getUser'])) &&
-            	is_callable([$this->Auth, 'isAuthorized']) &&
-            	in_array($view, call_user_func([$this->Auth, 'isAuthorized']))
+            	is_callable([$this->Auth, 'checkAuthorization']) &&
+            	call_user_func_array([$this->Auth, 'checkAuthorization'], [$view])
         	) {
             	return true;
             }
             return false;
         }
+		
+		public abstract function beforeFilter();
+
+		public function nomeUsuarioLogado()
+		{
+			$usuario = $this->Auth->getUser();
+
+			if ($usuario) {
+				return $usuario->nome;
+			}
+		}
 	}

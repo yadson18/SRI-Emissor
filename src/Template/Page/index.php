@@ -71,6 +71,7 @@
                             <div class='icon-right'>
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite seu CNPJ',
+                                        'class' => 'cnpjMask form-control',
                                         'required' => true,
                                         'name' => 'cnpj' 
                                     ]) 

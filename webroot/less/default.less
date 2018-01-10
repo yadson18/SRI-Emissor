@@ -5,6 +5,9 @@
         .margin(0);
         .padding(0);
     }
+    html, body {
+        .font-family(sans-serif, Helvetica Neue, Helvetica, Arial;);
+    }
     fieldset legend {
         .font-size(1.5em);
         .margin(15px 0 0 0);
@@ -50,7 +53,13 @@
         }
     }
     .table {
+        .font-size(13px);
+
         tbody tr, thead tr {
+            th {
+                .background-color(#ddd);
+                .border-color(#ccc);
+            }
             td, th {
                 .text-align(center);
                 .vertical-align(middle);
@@ -72,6 +81,7 @@
     }
     .fixed-height {
         .height(30em);
+        .border(solid 1px #ccc);
     }
     #main-nav {
         .background-color(#f7a13c);
@@ -85,9 +95,10 @@
         }
         ul > li {
             a {
+                .font-family(Montserrat, sans-serif;);
+                .font-weight(bold);
                 .color(white);
                 .padding(30px 15px);
-                .font-weight(600);
 
                 &:hover {
                     .color(@orange-color);
@@ -145,8 +156,10 @@
                     .color(@orange-color);
                 }
                 p {
+                    .font-family(Montserrat, sans-serif;);
+                    .font-size(1.1em);
+                    .font-weight(bold);
                     .margin(0);
-                    .font-size(1.2em);
 
                     i {
                         .display(block);

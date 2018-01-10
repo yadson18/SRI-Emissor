@@ -2,10 +2,11 @@
 <html lang='pt-br'>
 	<head>
 		<title><?= $this->fetch('appName') . $this->fetch('title') ?></title>
-		
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
+
 		<?= $this->Html->encoding() ?>
 
+		<?= $this->Html->font('Montserrat') ?>
 		<?= $this->Html->css('bootstrap.min.css') ?>
 		<?= $this->Html->css('fontawesome-all.min.css') ?>
 		

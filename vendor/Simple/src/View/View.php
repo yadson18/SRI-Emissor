@@ -97,12 +97,12 @@
 
 		protected function getContent()
 		{
-			return html_entity_decode($this->content);
+			return $this->content;
 		}
 
 		protected function setContent(string $content)
 		{
-			$this->content = htmlentities($content);
+			$this->content = $content;
 		}
 
 		protected function renderContent(string $layout)
@@ -125,6 +125,7 @@
 				}
 
 				$this->setContent(ob_get_clean());
+
 				require_once View::LAYOUT . $layout;
 			}
 		}
@@ -160,12 +161,12 @@
 
 		public function setViewVars(array $viewVars)
 		{
-			$this->viewVars = $viewVars;
+			$this->viewVars = serialize($viewVars);
 		}
 
 		protected function getViewVars()
 		{
-			return $this->viewVars;
+			return unserialize($this->viewVars);
 		}
 
 		public function setControllerName(string $controller)

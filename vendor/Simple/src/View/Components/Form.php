@@ -16,7 +16,7 @@
                 'options' => ['class' => 'form-control'],
                 'tag' => '<select %options%>%tags%</select>'
             ],
-            'option' => ['tag' => '<option value="%value%">%name%</option>'],  
+            'option' => ['tag' => '<option value="%value%" %selected%>%name%</option>'],  
             'label' => ['tag' => '<label>%name%</label>'],
             'formStart' => ['tag' => '<form %options%>'],
             'formEnd' => ['tag' => '</form>']
@@ -41,7 +41,14 @@
                 $optionsTags = '';
 
                 foreach ($options['options'] as $name => $value) {
-                    $optionsTags .= $this->option($name, $value);
+                    if (isset($options['selected']) &&
+                        $value === $options['selected']
+                    ) {
+                        $optionsTags .= $this->option($name, $value, 'selected');
+                    }
+                    else {
+                        $optionsTags .= $this->option($name, $value);
+                    }
                 }
                 unset($options['options']);
 
@@ -59,9 +66,10 @@
 
         }
 
-        protected function option($name, $value)
+        protected function option($name, $value, string $selected = null)
         {
             return $this->replaceProperties('option', [
+                '%selected%' => ($selected) ? 'selected' : '',
                 '%value%' => $value,
                 '%name%' => $name
             ]);

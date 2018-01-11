@@ -12,7 +12,7 @@
 
 		public function setTitle(string $title);
 		
-		public function setViewVars(array $viewVars);
+		public function setViewVars(array $viewVars, array $options = []);
 
 		public function redirect($route);
 

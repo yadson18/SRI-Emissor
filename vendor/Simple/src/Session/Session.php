@@ -52,7 +52,9 @@
 
 		protected function start()
 		{
-			if (isset(static::$sessionConfigs['cookieLifeTime'])) {
+			if (!$this->sessionCreated() && 
+				isset(static::$sessionConfigs['cookieLifeTime'])
+			) {
 				session_start([
 					'cookie_lifetime' => static::$sessionConfigs['cookieLifeTime']
 				]);

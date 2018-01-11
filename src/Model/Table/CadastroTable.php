@@ -12,7 +12,7 @@
 
 			$this->setTable('CADASTRO');
 
-			$this->setPrimaryKey('cnpj');
+			$this->setPrimaryKey('cod_cadastro');
 
 			$this->setBelongsTo('', []);
 		}

@@ -4,6 +4,7 @@
 	use Simple\Controller\Interfaces\ControllerInterface;
 	use Simple\Controller\Component;
 	use Simple\ORM\TableRegistry;
+	use Simple\Session\Session;
 	use Simple\Routing\Router;
 	use Simple\Http\Request;
 	use Simple\View\View;
@@ -39,8 +40,20 @@
 			$this->view->setTitle($title);
 		}
 
-		public function setViewVars(array $viewVars)
+		public function setViewVars(array $viewVars, array $options = [])
 		{
+			/*if (!empty($options)) {
+				$session = new Session();
+
+				foreach ($options as $variable => $value) {
+					if (is_string($variable)) {
+						# code...
+					}
+				}
+
+				debug($session);
+				exit;
+			}*/
 			$this->view->setViewVars($viewVars);
 		}
 

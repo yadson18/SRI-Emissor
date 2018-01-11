@@ -1,4 +1,17 @@
-<?php 
+<?php
+	function arrayToFormOptions(array $data)
+	{
+		$result = array_map(function($value) {
+			$value = (is_array($value)) ? array_shift($value) : $value;
+
+			if (!is_array($value)) {
+				return $value;
+			}
+		}, $data);
+
+		return array_combine($result, $result);
+	} 
+
 	function removeNamespace($object)
 	{
 		return splitNamespace(get_class($object));
@@ -107,6 +120,11 @@
 		echo '<pre id="debug-screen">';
 		var_dump($data);
 		echo '</pre>';
+	}
+
+	function sanitize($data)
+	{
+		return removeSpecialChars(unmask($data));
 	}
 
 	function removeSpecialChars(string $value) 

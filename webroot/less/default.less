@@ -5,15 +5,9 @@
         .margin(0);
         .padding(0);
     }
-    .btn-lg, .btn, .form-control {
-        .border-radius(2px);
-    }
-    .modal-content {
-        .border-radius(4px);
-    }
-    html, body {
-        .font-family(sans-serif, Helvetica Neue, Helvetica, Arial;);
-    }
+    .btn-lg, .btn, .form-control { .border-radius(2px); }
+    .modal-content { .border-radius(4px); }
+    html, body { .font-family(sans-serif, Helvetica Neue, Helvetica, Arial;); }
     fieldset legend {
         .font-size(1.5em);
         .margin(15px 0 0 0);
@@ -25,40 +19,35 @@
         .margin(15px 0);
         .font-size(1em);
     }
-    div.alert {
-        .text-align(center);
-    }
-    .close {
-        .font-size(1.2em);
-    }
-    .data-not-found {
-        .margin-top(15em);
-    }
-    .modal .modal-top {
-        .margin-top(30px);
-    }
+    div.alert { .text-align(center); }
+    .close { .font-size(1.2em); }
+    .data-not-found { .margin-top(12em); }
+    .modal .modal-top { .margin-top(30px); }
+    .form-group.icon-right i { .right(1.8em); }
+    .icon-right i { .right(1em); }
     .icon-right {
         .position(relative);
 
         i {
             .position(absolute);
             .bottom(10px);
-            .right(11px);
             .color(#777);
         }
+        i.success { .color(#5cb85c); }
+        i.danger { .color(#c9302c); }
     }
+    .icon-left i { .left(1.8em); }
     .icon-left {
         .position(relative);
 
         i {
             .position(absolute);
             .bottom(9.5px);
-            .left(11px);
             .color(#777); 
         }
-        input {
-            .padding-left(33px);
-        }
+        i.success { .color(#5cb85c); }
+        i.danger { .color(#c9302c); }
+        input { .padding-left(30px); }
     }
     .table {
         .font-size(13px);
@@ -81,9 +70,7 @@
                     .height(30px);
                     .padding(0 0);
                 }
-                a.action-btn i {
-                    .margin-top(7px);
-                }
+                a.action-btn i { .margin-top(7px); }
             }
         }
     }
@@ -98,9 +85,7 @@
         .margin-bottom(0);
         .border(solid 1px #f7a13c);
 
-        .container-fluid {
-            .box-shadow(1px 1px 5px gray);
-        }
+        .container-fluid { .box-shadow(1px 1px 5px gray); }
         ul > li {
             a {
                 .font-family(Montserrat, sans-serif;);
@@ -160,9 +145,7 @@
                         .animation-duration(1s);
                     }
                 }
-                &:focus {
-                    .color(@orange-color);
-                }
+                &:focus { .color(@orange-color); }
                 p {
                     .font-family(Montserrat, sans-serif;);
                     .font-size(1.1em);
@@ -180,11 +163,7 @@
 
     /* Animations */
     @keyframes rotate {
-            0% {
-                .transform(perspective(0) rotateY(0deg));
-            } 
-            100% {
-                .transform(perspective(400px) rotateY(360deg));
-            }
+        0% { .transform(perspective(0) rotateY(0deg)); } 
+        100% { .transform(perspective(400px) rotateY(360deg)); }
     }
 }

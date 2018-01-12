@@ -126,17 +126,100 @@ $.fn.extend({
 });
 
 $(document).ready(function(){
-    var maskOptions = {
+    function validateCpfCnpj(input, type)
+    {
+        if (typeof input === 'object') {
+            var $form = input.closest('form'); 
+                $div = input.closest('div');
+                $messageBox = $('form .message-box');
+                classes = '';
+
+            if (input.prop('class').indexOf('cnpjMask') !== -1 &&
+                input.val().length === 18 ||
+                input.prop('class').indexOf('cpfMask') !== -1 &&
+                input.val().length === 14
+            ) {
+                $div.addClass('icon-right').find('i').remove();
+
+                if (type === 'success') {
+                    $div.removeClass('has-error');
+                    classes = 'fa-check success';
+                }
+                else if (type === 'error') {
+                    $div.addClass('has-error');
+                    classes = 'fa-times danger'; 
+                }
+
+               /* $form.submit(function(event) { 
+                    if (type === 'success') {
+                        event = null;
+                        return;
+                    }
+
+                    event.preventDefault(); 
+                    $messageBox.bootstrapAlert('error', 'CNPJ ou CPF inválido.');
+                });*/
+
+                $div.append($('<i></i>', { class: 'fas ' + classes }));
+            }
+        }
+    }
+
+    var defaultMaskConfigs = {
         clearIfNotMatch: true,
         reverse: true,
         optional: false,
         translation: { '0': { pattern: /[0-9]/ } }
     };
+    cnpj = { mask: '00.000.000/0000-00', size: 14 };
+    cpf = { mask: '000.000.000-00', size: 11 };
 
-    $('.cnpjCpfMask').mask(function(value) {
-        return (value.length === 11) ? '000.000.000-00' : '00.000.000/0000-00';
+    $('.cnpjCpfMask').mask(function(value) { 
+        return (value.length === cpf.size) ? cpf.mask : cnpj.mask;
     });
-    $('.cnpjMask').mask('00.000.000/0000-00', maskOptions);
-    $('.cpfMask').mask('000.000.000-00', maskOptions);
-    $('.cepMask').mask('00000-000', maskOptions);
+
+    $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
+
+    $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
+
+    $('.cnpjMask, .cpfMask').not('#login .cnpjMask').cpfcnpj({
+        mask: false,
+        validate: 'cpfcnpj',
+        event: 'change',
+        ifValid: function (input) { validateCpfCnpj(input, 'success'); },
+        ifInvalid: function (input) { validateCpfCnpj(input, 'error'); }  
+    });
+
+    $('.cepMask').mask('00000-000', defaultMaskConfigs);
+
+    $('input').on('change', function() { $(this).val($(this).val().toUpperCase()); });
+
+    $('select[name=estado]').on('change', function() {
+        $.ajax({
+            url: '/Ibge/municipiosUF',
+            data: { sigla: $(this).val() },
+            dataType: 'json',
+            method: 'POST'
+        })
+        .always(function(data, status) {
+            if (status === 'success') {
+                var $cidadesSelect = $('select[name=cidade]');
+                    $options = [];
+                    municipio = null; 
+
+                $.each(data, function(index, value) {
+                    municipio = value['nome_municipio'];
+                    $options.push($('<option></option>', {
+                        value: municipio, 
+                        text: municipio
+                    }));
+                });
+                
+                $cidadesSelect.empty().append($options);
+            }   
+            else {
+                console.log('Error: não foi possível completar a requisição.');
+            }
+        });
+    });
 });

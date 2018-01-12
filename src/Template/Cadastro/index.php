@@ -49,8 +49,8 @@
 			    </tbody>
 			<?php else: ?>
 		</table>
-			<div class='text-center'>
-				<p>Nada a ser exibido. <i class='far fa-frown'></i></p>
+			<div class='text-center data-not-found'>
+				<h4>Nada a ser exibido. <i class='far fa-frown'></i></h4>
 			</div>		    	
 		<?php endif; ?>
 	</div>
@@ -64,7 +64,7 @@
                         </button>
                         <h4 class='modal-title text-center'>Excluir Destinatário</h4>
                     </div>
-                    <div class='modal-body'>
+                    <div class='modal-body text-center'>
                         <h4>Deseja realmente excluir este destinatário?</h4>
                     </div>
                     <div class='modal-footer'>

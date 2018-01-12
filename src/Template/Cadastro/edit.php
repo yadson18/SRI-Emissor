@@ -6,11 +6,17 @@
 				'id' => 'form-edit'
 			]) 
 		?>
-			<?= $this->Flash->showMessage() ?>
+			<div class='form-header text-center'>
+				<h4>Modificar Destinatário</h4>
+			</div>
+			<div class='col-sm-12 message-box'><?= $this->Flash->showMessage() ?></div>
 			<div class='col-sm-12'>
 				<div class='row'>
 					<div class='form-group col-sm-6'>
 						<?= $this->Form->input(strtoupper($cadastroTipo) , [
+								'placeholder' => ($cadastroTipo === 'cnpj') 
+									? 'EX: 53.965.649/0001-03' 
+									: 'EX: 095.726.241-80',
 								'class' => $cadastroTipo . 'Mask form-control',
 								'value' => $cadastro->cnpj,
 								'required' => true,
@@ -21,11 +27,13 @@
 					<?php if($cadastroTipo === 'cnpj'): ?>
 						<div class='form-group col-sm-6'>
 							<?= $this->Form->input('Inscrição Estadual', [
-									'class' => 'form-control text-uppercase',
 									'value' => ($cadastro->estadual) 
 										? $cadastro->estadual 
 										: 'Não Informado',
+									'class' => 'form-control text-uppercase',
+									'placeholder' => 'EX: ISENTO', 
 									'name' => 'estadual',
+									'maxlength' => 20,
 									'required' => true
 								]) 
 							?>
@@ -35,8 +43,10 @@
 			</div>
 			<div class='form-group col-sm-6'>
 				<?= $this->Form->input('Razão Social', [
+						'placeholder' => 'EX: FRUTAS E VERDURAS LTDA',
 						'class' => 'form-control text-uppercase',
 						'value' => $cadastro->razao,
+						'maxlength' => 60,
 						'required' => true,
 						'name' => 'razao'
 					]) 
@@ -44,8 +54,10 @@
 			</div>
 			<div class='form-group col-sm-6'>
 				<?= $this->Form->input('Fantasia', [
+						'placeholder' => 'EX: FRUTAS E VERDURAS',
 						'class' => 'form-control text-uppercase',
 						'value' => $cadastro->fantasia,
+						'maxlength' => 40,
 						'required' => true
 					]) 
 				?>
@@ -53,6 +65,7 @@
 			<div class='form-group col-sm-4'>
 				<?= $this->Form->input('CEP', [
 						'class' => 'cepMask form-control',
+						'placeholder' => 'EX: 50000-000',
 						'value' => $cadastro->cep,
 						'required' => true
 					]) 
@@ -77,7 +90,9 @@
 			<div class='form-group col-md-5 col-sm-6'>	
 				<?= $this->Form->input('Bairro', [
 						'class' => 'form-control text-uppercase',
+						'placeholder' => 'EX: CENTRO',
 						'value' => $cadastro->bairro,
+						'maxlength' => 30,
 						'required' => true
 					]) 
 				?>
@@ -85,8 +100,10 @@
 			<div class='form-group col-md-5 col-sm-6'>	
 				<?= $this->Form->input('Endereço', [
 						'class' => 'form-control text-uppercase',
+						'placeholder' => 'EX: RUA CARLOS AFONSO',
 						'value' => $cadastro->endereco,
 						'name' => 'endereco',
+						'maxlength' => 40,
 						'required' => true
 					]) 
 				?>
@@ -95,16 +112,20 @@
 				<?= $this->Form->input('Número', [
 						'class' => 'form-control text-uppercase',
 						'value' => $cadastro->nrend1,
+						'placeholder' => 'EX: S/N',
 						'required' => true,
+						'maxlength' => 12,
 						'name' => 'nrend1'
 					]) 
 				?> 
 			</div>
 			<div class='form-group col-md-5 col-sm-8'>	 
 				<?= $this->Form->input('Complemento', [
+						'placeholder' => 'EX: EMPRESARIAL ABC, 22',
 						'class' => 'form-control text-uppercase',
 						'value' => $cadastro->complementar,
 						'name' => 'complementar',
+						'maxlength' => 40,
 						'required' => true
 					]) 
 				?>
@@ -123,15 +144,19 @@
 					]) 
 				?>
 			</div>
-			<div class='form-group col-sm-5'>
-				<a href='/Cadastro/index' class='btn btn-primary btn-block'>
-					<i class='fas fa-angle-double-left'></i> Retornar
-				</a>
-			</div>
-			<div class='form-group col-sm-7'>
-				<button class='btn btn-success btn-block'>
-					Salvar <i class='fas fa-save'></i>
-				</button>
+			<div class='row'>
+				<div class='col-sm-12'>
+					<div class='form-group col-sm-5'>
+						<a href='/Cadastro/index' class='btn btn-primary btn-block'>
+							<i class='fas fa-angle-double-left'></i> Retornar
+						</a>
+					</div>
+					<div class='form-group col-sm-7'>
+						<button class='btn btn-success btn-block'>
+							Salvar <i class='fas fa-save'></i>
+						</button>
+					</div>
+				</div>
 			</div>
 		<?= $this->Form->end() ?>
 	<?php else: ?>

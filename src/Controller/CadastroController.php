@@ -29,13 +29,6 @@
 
 			if (!empty($cod_cadastro)) {
 				$cadastro = $this->Cadastro->get((int) $cod_cadastro);
-
-				if (!empty($cadastro) && !empty($estados) &&
-					isset($cadastro->estado) && !empty($cadastro->estado)
-				) {
-					$cadastroTipo = (strlen($cadastro->cnpj) === 14) ? 'cnpj' : 'cpf';
-					$municipios = $ibge->municipiosUF($cadastro->estado);
-				}
 				
 				if ($this->request->is('POST')) {
 					$data = array_map('sanitize', $this->request->getData());
@@ -53,6 +46,13 @@
 						$this->Flash->error('Não foi possível atualizar os dados do destinatário.');
 					}
 				}
+			}
+
+			if (!empty($cadastro) && !empty($estados) &&
+				isset($cadastro->estado) && !empty($cadastro->estado)
+			) {
+				$cadastroTipo = (strlen($cadastro->cnpj) === 14) ? 'cnpj' : 'cpf';
+				$municipios = $ibge->municipiosUF($cadastro->estado);
 			}
 
 			$this->setTitle('Modificar Destinatário');

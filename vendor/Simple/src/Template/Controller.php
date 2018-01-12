@@ -7,4 +7,9 @@
 		{
 			return $this->allow([]);
 		}
+
+		public function beforeFilter()
+		{
+			$this->Auth->isAuthorized([]);
+		}
 	}

@@ -29,7 +29,7 @@
                     '%options%' => $this->mountOptions($this->mixOptions(
                         'input', array_merge([
                             'name' => strtolower($labelName),
-                            'id' => strtolower($labelName)
+                            'id' => (!empty($labelName)) ? strtolower($labelName) : '',
                         ], $options)
                     ))
                 ]);
@@ -58,7 +58,7 @@
                         '%options%' => $this->mountOptions($this->mixOptions(
                             'select', array_merge([
                                 'name' => strtolower($labelName),
-                                'id' => strtolower($labelName)
+                                'id' => ($labelName) ? strtolower($labelName) : '',
                             ], $options)
                         ))
                     ]);
@@ -81,7 +81,7 @@
                 '%name%' => $buttonName,
                 '%options%' => $this->mountOptions($this->mixOptions(
                     'button', array_merge([
-                        'id' => strtolower($buttonName)
+                        'id' => ($buttonName) ? strtolower($buttonName) : '',
                     ], $options)
                 ))
             ]);
@@ -121,7 +121,7 @@
             $elementOptions = '';
 
             foreach ($options as $attribute => $value) {
-                if (is_string($attribute)) {
+                if (is_string($attribute) && is_bool($value) || !empty($value)) {
                     $elementOptions .= ' ' . $attribute . '="' . $value . '"';
                 }
             }

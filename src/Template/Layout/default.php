@@ -13,6 +13,7 @@
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
 		<?= $this->Html->script('jquery.mask.js') ?>
+		<?= $this->Html->script('jquery.cpfcnpj.min.js') ?>
 		<?= $this->Html->script('internal-functions.js') ?>
 
 		<?= $this->Html->less('mixin.less') ?>

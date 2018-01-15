@@ -126,43 +126,38 @@ $.fn.extend({
 });
 
 $(document).ready(function(){
-    function validateCpfCnpj(input, type)
+    function validateCpfCnpj(input, status)
     {
-        if (typeof input === 'object') {
-            var $form = input.closest('form'); 
-                $div = input.closest('div');
-                $messageBox = $('form .message-box');
-                classes = '';
+        var $div = input.closest('div');
+            $messageBox = $('form .message-box');
+            classes = '';
 
-            if (input.prop('class').indexOf('cnpjMask') !== -1 &&
-                input.val().length === 18 ||
-                input.prop('class').indexOf('cpfMask') !== -1 &&
-                input.val().length === 14
-            ) {
-                $div.addClass('icon-right').find('i').remove();
+        $div.addClass('icon-right').find('i').remove();
+        
+        if (input.prop('class').indexOf('cnpjMask') !== -1 &&
+            input.val().length === 18 ||
+            input.prop('class').indexOf('cpfMask') !== -1 &&
+            input.val().length === 14
+        ) { 
+            if (status === 'success') {   
+                classes = 'fa-check success';
+                $div.removeClass('has-error');
+            } 
+            else {
+                classes = 'fa-times danger';
+                $div.addClass('has-error');
 
-                if (type === 'success') {
-                    $div.removeClass('has-error');
-                    classes = 'fa-check success';
+                if (input.val().length === 18) {
+                    $messageBox.bootstrapAlert('error', 'Digite um CNPJ válido.');
                 }
-                else if (type === 'error') {
-                    $div.addClass('has-error');
-                    classes = 'fa-times danger'; 
+                else {
+                    $messageBox.bootstrapAlert('error', 'Digite um CPF válido.');
                 }
 
-               /* $form.submit(function(event) { 
-                    if (type === 'success') {
-                        event = null;
-                        return;
-                    }
-
-                    event.preventDefault(); 
-                    $messageBox.bootstrapAlert('error', 'CNPJ ou CPF inválido.');
-                });*/
-
-                $div.append($('<i></i>', { class: 'fas ' + classes }));
             }
         }
+
+        $div.append($('<i></i>', { class: 'fas ' + classes }));
     }
 
     var defaultMaskConfigs = {
@@ -188,6 +183,13 @@ $(document).ready(function(){
         event: 'change',
         ifValid: function (input) { validateCpfCnpj(input, 'success'); },
         ifInvalid: function (input) { validateCpfCnpj(input, 'error'); }  
+    });
+
+    $('form').on('submit', function() {
+        if ($(this).find('div.has-error').length === 0) {
+            return true;
+        }
+        return false;
     });
 
     $('.cepMask').mask('00000-000', defaultMaskConfigs);

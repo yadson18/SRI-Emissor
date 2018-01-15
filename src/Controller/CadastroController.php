@@ -96,8 +96,28 @@
 			]);
 		}
 
+		public function delete($cod_cadastro = null)
+		{
+			if (!empty($cod_cadastro)) {
+				$cadastro = $this->Cadastro->get((int) $cod_cadastro);
+
+				if ($cadastro) {
+					if ($this->Cadastro->remove($cadastro)) {
+						$this->Flash->success('O destinatário foi removido com sucesso.');
+					}
+					else {
+						$this->Flash->error('Não foi possível remover o destinatário.');
+					}
+				}
+				else {
+					$this->Flash->error('Não foi possível remover, o destinatário não existe.');
+				}
+			}
+			return $this->redirect(['controller' => 'Cadastro', 'view' => 'index']);
+		}
+
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'edit', 'add']);
+			$this->Auth->isAuthorized(['index', 'edit', 'add', 'delete']);
 		}
 	}

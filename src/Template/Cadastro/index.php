@@ -6,6 +6,9 @@
 		</a>
 	</h2>
 	<div class='table-responsive fixed-height'>
+		<div>
+			<?= $this->Flash->showMessage() ?>
+		</div>
 		<table class='table table-bordered'>
 		    <thead>
 		      	<tr>
@@ -40,7 +43,7 @@
 									<a class='btn btn-primary action-btn' href=/Cadastro/edit/<?= $cadastro['cod_cadastro'] ?>>
 										<i class='fas fa-pencil-alt'></i>
 									</a>
-									<button class='btn btn-danger action-btn' data-toggle='modal' data-target='#delete'>
+									<button class='btn btn-danger action-btn delete' data-toggle='modal' data-target='#delete' value=<?= $cadastro['cod_cadastro'] ?>>
 										<i class='fas fa-trash-alt'></i>
 									</button>
 								</td>
@@ -68,10 +71,10 @@
                         <h4>Deseja realmente excluir este destinatário?</h4>
                     </div>
                     <div class='modal-footer'>
-                    	<button class='btn btn-success'>
+                    	<a class='btn btn-success'>
                     		Sim <i class='fas fa-check'></i>
-                    	</button>
-                    	<button data-dismiss='modal' class='btn btn-danger'>
+                    	</a>
+                    	<button data-dismiss='modal' class='btn btn-danger exit'>
                     		Não <i class='fas fa-times'></i>
                     	</button>
                     </div>

@@ -159,9 +159,9 @@
 						'selected' => $cadastro->cod_reg_trib,
 						'name' => 'cod_reg_trib',
 						'options' => [
-							'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => 2,
-							'SIMPLES NACIONAL' => 1,
-							'REGIME NORMAL' => 3
+							'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => '2',
+							'SIMPLES NACIONAL' => '1',
+							'REGIME NORMAL' => '3'
 						],
 						'required' => true
 					]) 

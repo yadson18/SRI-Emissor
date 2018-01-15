@@ -19,6 +19,37 @@
 			]);
 		}
 
+		public function add()
+		{
+			$cadastro = $this->Cadastro->newEntity();
+			$ibge = TableRegistry::get('Ibge');
+			$estados = $ibge->siglaEstados();
+			$municipios = null;
+
+			if ($estados && isset($estados[0]['sigla'])) {
+				$municipios = $ibge->municipiosUF($estados[0]['sigla']);
+			}
+			if ($this->request->is('POST')) {
+				$data = array_map('sanitize', $this->request->getData());
+				$cadastro = $this->Cadastro->patchEntity($cadastro, $data);
+				$cadastro->ativo = 'T';
+
+				if ($this->Cadastro->save($cadastro)) {
+					$this->Flash->success('O destinatário foi adicionado com sucesso.');
+				}
+				else {
+					$this->Flash->error('Não foi possível adicionar o destinatário.');
+				}
+			}
+
+			$this->setTitle('Adicionar Destinatário');
+			$this->setViewVars([
+				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'estados' => $estados,
+				'municipios' => $municipios
+			]);
+		}
+
 		public function edit($cod_cadastro = null)
 		{
 			$ibge = TableRegistry::get('Ibge');
@@ -67,6 +98,6 @@
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'edit']);
+			$this->Auth->isAuthorized(['index', 'edit', 'add']);
 		}
 	}

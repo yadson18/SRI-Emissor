@@ -65,7 +65,7 @@
 			'SRICASH' => [
 				'driver' => 'Firebird',
 				'host' => 'localhost',		 
-				'path' => '/BD/SRICASH.FDB',  
+				'path' => '/var/SRI/DADOSVR/SRICASH.FDB',  
 				'user' => 'SYSDBA',
 				'password' => 'masterkey',
 				'encoding' => 'utf-8'
@@ -73,7 +73,7 @@
 			'SRICASH2' => [
 				'driver' => 'Firebird',
 				'host' => 'localhost',		 
-				'path' => '/BD/SRICASH2.FDB',  
+				'path' => '/var/SRI/DADOSVR/SRICASH2.FDB',  
 				'user' => 'SYSDBA',
 				'password' => 'masterkey',
 				'encoding' => 'utf-8'

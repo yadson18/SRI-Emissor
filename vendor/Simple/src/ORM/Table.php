@@ -133,19 +133,19 @@
 				$primaryKey = $this->getPrimaryKey();
 
 				if (isset($entity->$primaryKey)) {
-					if (!$this->get($entity->$primaryKey)) {
-						return $this->insert($this->getTable())
-							->values((array) $entity)
+					if ($this->get($entity->$primaryKey)) {
+						$primaryKeyValue = $entity->$primaryKey;
+						unset($entity->$primaryKey);
+
+						return $this->update($this->getTable())
+							->set((array) $entity)
+							->where([$primaryKey . ' = ' => $primaryKeyValue])
 							->fetch('rowCount');
 					}
-					$primaryKeyValue = $entity->$primaryKey;
-					unset($entity->$primaryKey);
-
-					return $this->update($this->getTable())
-						->set((array) $entity)
-						->where([$primaryKey . ' = ' => $primaryKeyValue])
-						->fetch('rowCount');
 				}
+				return $this->insert($this->getTable())
+					->values((array) $entity)
+					->fetch('rowCount');
 			}
 			return false;
 		}

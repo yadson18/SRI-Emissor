@@ -1,9 +1,9 @@
 <div class='col-sm-12'>
 	<h2 class='page-header'>
 		Destinatários 
-		<button class='btn btn-success'>
+		<a href='/Cadastro/add' class='btn btn-success'>
 			Adicionar Novo <i class="fas fa-plus-circle"></i>
-		</button>
+		</a>
 	</h2>
 	<div class='table-responsive fixed-height'>
 		<table class='table table-bordered'>

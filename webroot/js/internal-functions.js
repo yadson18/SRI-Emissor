@@ -26,22 +26,13 @@ $.fn.extend({
 
         return this.each(function() {
             var $parentDiv = $(this).closest('div');
-                
 
             if ($parentDiv && type) {
                 switch(type) {
-                    case 'success':
-                        addAlertClass($parentDiv, 'has-success');
-                        break;
-                    case 'error':
-                        addAlertClass($parentDiv, 'has-error');
-                        break;
-                    case 'warning':
-                        addAlertClass($parentDiv, 'has-warning');
-                        break;
-                    case 'none':
-                        addAlertClass($parentDiv, 'has-none');
-                        break;
+                    case 'success': addAlertClass($parentDiv, 'has-success'); break;
+                    case 'error': addAlertClass($parentDiv, 'has-error'); break;
+                    case 'warning': addAlertClass($parentDiv, 'has-warning'); break;
+                    case 'none': addAlertClass($parentDiv, 'has-none'); break;
                 }
             }
         });
@@ -91,55 +82,48 @@ $.fn.extend({
         $(this).find('.alert').remove();
         $(this).append($alert); 
     },
-    redirect: function(location) 
+    redirect: function(redirect) 
     {
-        if (location['controller'] && location['view']) {
-            $(this).attr(
-                'href', '/' + location['controller'] + '/' + location['view']
-            );
+        if (redirect['controller'] && redirect['view']) {
+            $(this).attr('href', '/' + redirect['controller'] + '/' + redirect['view']);
         }
     },
     disable: function() 
     {
-        return this.each(function() { 
-            $(this).prop('disabled', true); 
-        });
+        return this.each(function() { $(this).prop('disabled', true); });
     },
     enable: function() 
     {
-        return this.each(function() { 
-            $(this).prop('disabled', false); 
-        });
+        return this.each(function() { $(this).prop('disabled', false); });
     },
     formToJSON: function() 
     {
-        var array, json;
-        array = $(this).serializeArray();
+        var array = $(this).serializeArray();
         json = {};
 
-        $.each(array, function() { 
-            json[this.name] = this.value || ''; 
-        });
+        $.each(array, function() { json[this.name] = this.value || ''; });
 
         return json;
     }
 });
 
 $(document).ready(function(){
-    function validateCpfCnpj(input, status)
+    function validateCpfCnpj($input, status)
     {
-        var $div = input.closest('div');
+        var $div = $input.closest('div');
             $messageBox = $('form .message-box');
             classes = '';
 
         $div.addClass('icon-right').find('i').remove();
-        
-        if (input.prop('class').indexOf('cnpjMask') !== -1 &&
-            input.val().length === 18 ||
-            input.prop('class').indexOf('cpfMask') !== -1 &&
-            input.val().length === 14
+
+        if ($input.prop('class').indexOf('cnpjMask') !== -1 &&
+            $input.val().length === 18 ||
+            $input.prop('class').indexOf('cpfMask') !== -1 &&
+            $input.val().length === 14
         ) { 
-            if (status === 'success') {   
+            if (status === 'success' && 
+                !(/^(.)\1+$/.test($input.cleanVal()))
+            ) {   
                 classes = 'fa-check success';
                 $div.removeClass('has-error');
             } 
@@ -147,7 +131,7 @@ $(document).ready(function(){
                 classes = 'fa-times danger';
                 $div.addClass('has-error');
 
-                if (input.val().length === 18) {
+                if ($input.val().length === 18) {
                     $messageBox.bootstrapAlert('error', 'Digite um CNPJ válido.');
                 }
                 else {
@@ -156,7 +140,6 @@ $(document).ready(function(){
 
             }
         }
-
         $div.append($('<i></i>', { class: 'fas ' + classes }));
     }
 
@@ -169,32 +152,94 @@ $(document).ready(function(){
     cnpj = { mask: '00.000.000/0000-00', size: 14 };
     cpf = { mask: '000.000.000-00', size: 11 };
 
+    $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
+    $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
+    $('.cepMask').mask('00000-000', defaultMaskConfigs);
+
     $('.cnpjCpfMask').mask(function(value) { 
         return (value.length === cpf.size) ? cpf.mask : cnpj.mask;
     });
 
-    $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
-
-    $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
-
     $('.cnpjMask, .cpfMask').not('#login .cnpjMask').cpfcnpj({
-        mask: false,
-        validate: 'cpfcnpj',
-        event: 'change',
-        ifValid: function (input) { validateCpfCnpj(input, 'success'); },
-        ifInvalid: function (input) { validateCpfCnpj(input, 'error'); }  
+        ifValid: function ($input) { validateCpfCnpj($input, 'success'); },
+        ifInvalid: function ($input) { validateCpfCnpj($input, 'error'); }  
     });
 
     $('form').on('submit', function() {
-        if ($(this).find('div.has-error').length === 0) {
-            return true;
-        }
-        return false;
+        return ($(this).find('div.has-error').length === 0) ? true : false;
     });
 
-    $('.cepMask').mask('00000-000', defaultMaskConfigs);
+    var destinatarie = (function() {
+        var cpf, cnpj, inscricaoEstadual;
 
-    $('input').on('change', function() { $(this).val($(this).val().toUpperCase()); });
+        return {
+            setCpf: function(cpfValue) {
+                if (cpfValue.length === 14) { cpf = cpfValue; }
+            },
+
+            getCpf: function() { return cpf; },
+
+            setCnpj: function(cnpjValue) {
+                if (cnpjValue.length === 18) { cnpj = cnpjValue; }
+            },
+
+            getCnpj: function() { return cnpj; },
+
+            setInscEstadual: function(inscEstadual) {
+                inscricaoEstadual = inscEstadual;
+            },
+            getInscEstadual: function() { return inscricaoEstadual; }
+        };
+    })();
+
+    $('#breadcrumb .destinatarie-type a').on('click', function() {
+        var $inputCnpjCpf = $('input[name=cnpj]');
+            $labelCnpjCpf = $inputCnpjCpf.closest('div').find('label');
+            $estadualDiv = $('div.estadual');
+            $estadualInput = $estadualDiv.find('input');
+
+        $('.destinatarie-type li').removeClass('active');
+        $(this).parent().addClass('active');
+
+        if ($(this).attr('id') === 'CPF') {
+            if (!destinatarie.getInscEstadual()) {
+                destinatarie.setInscEstadual($estadualInput.val());
+            }
+            if (!destinatarie.getCnpj()) {
+                destinatarie.setCnpj($inputCnpjCpf.val());
+            }
+
+            $inputCnpjCpf.removeClass('cnpjMask').addClass('cpfMask').attr({ 
+                    maxlength: 14, placeholder: 'EX: 095.726.241-80' 
+                })
+                .val(destinatarie.getCpf())
+                .mask(cpf.mask, defaultMaskConfigs).focusout();
+
+            $labelCnpjCpf.text('CPF');
+            $estadualDiv.addClass('hidden');
+            $estadualInput.removeAttr('name').attr({ required: false }).val('');
+        }
+        else {
+            if (!destinatarie.getCpf()) {
+                destinatarie.setCpf($inputCnpjCpf.val());
+            }
+
+            $inputCnpjCpf.removeClass('cpfMask').addClass('cnpjMask').attr({ 
+                    maxlength: 18, placeholder: 'EX: 53.965.649/0001-03' 
+                })
+                .val(destinatarie.getCnpj())
+                .mask(cnpj.mask, defaultMaskConfigs).focusout();
+
+            $labelCnpjCpf.text('CNPJ');
+            $estadualDiv.removeClass('hidden')
+            $estadualInput.attr({ name: 'estadual', required: true })
+                .val(destinatarie.getInscEstadual());
+        }
+    });
+
+    $('input').not('#login input').on('change', function() { 
+        $(this).val($(this).val().toUpperCase()); 
+    });
 
     $('select[name=estado]').on('change', function() {
         $.ajax({

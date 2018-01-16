@@ -10,8 +10,7 @@ $(document).ready(function(){
             data: $form.formToJSON(),
             method: 'POST',
             dataType: 'json',
-            beforeSend: function() 
-            {
+            beforeSend: function() {
                 $button.disable().find('span').text('Entrando...')
                     .parent().find('i').hide();
             }
@@ -40,7 +39,11 @@ $(document).ready(function(){
                     );
                 }
             }
-            else { $button.find('span').text('Entrar'); }
+            else { 
+                $('#login #message-box').bootstrapAlert(
+                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                );
+            }
         });
     });
 });

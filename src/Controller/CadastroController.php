@@ -10,12 +10,33 @@
 			return $this->allow([]);
 		}
 
-		public function index()
-		{
+		public function index($identify = null, $page = 1)
+		{	
+			$ativos = $this->Cadastro->contarAtivos();
+			$page = (empty($page) || !is_numeric($page)) ? 1 : ((int) $page);
+			$cadastros = null;
+
+			$this->Paginator->showPage($page)
+				->buttonsLink('/Cadastro/index/page/')
+				->itensTotalQuantity($ativos->quantidade)
+				->limit(150);
+			
+			if ($identify === 'page' && !empty($page)) {
+				$cadastros = $this->Cadastro->listarAtivos(
+					$this->Paginator->getListQuantity(), 
+					$this->Paginator->getStartPosition()
+				);
+			}
+			else {
+				$cadastros = $this->Cadastro->listarAtivos(
+					$this->Paginator->getListQuantity()
+				);
+			}
+			
 			$this->setTitle('Listagem');
 			$this->setViewVars([
 				'usuarioNome' => $this->nomeUsuarioLogado(),
-				'cadastros' => $this->Cadastro->listarAtivos()
+				'cadastros' => $cadastros
 			]);
 		}
 
@@ -96,28 +117,43 @@
 			]);
 		}
 
-		public function delete($cod_cadastro = null)
+		public function delete()
 		{
-			if (!empty($cod_cadastro)) {
-				$cadastro = $this->Cadastro->get((int) $cod_cadastro);
+			if ($this->request->is('POST')) {
+				$data = $this->request->getData();
 
-				if ($cadastro) {
-					if ($this->Cadastro->remove($cadastro)) {
-						$this->Flash->success('O destinatário foi removido com sucesso.');
+				if (isset($data['cod_cadastro']) && !empty($data['cod_cadastro'])) {
+					$cadastro = $this->Cadastro->get((int) $data['cod_cadastro']);
+
+					if ($cadastro) {
+						if ($this->Cadastro->remove($cadastro)) {
+							$this->Ajax->response('deleteCadastro', [
+								'status' => 'success',
+								'message' => 'O destinatário (' . $cadastro->razao . ') foi removido com sucesso.'
+							]);
+						}
+						else {
+							$this->Ajax->response('deleteCadastro', [
+								'status' => 'error',
+								'message' => 'Não foi possível remover o destinatário (' . $cadastro->razao . ').'
+							]);
+						}
 					}
 					else {
-						$this->Flash->error('Não foi possível remover o destinatário.');
+						$this->Ajax->response('deleteCadastro', [
+							'status' => 'error',
+							'message' => 'Não foi possível remover, o destinatário não existe.'
+						]);
 					}
 				}
-				else {
-					$this->Flash->error('Não foi possível remover, o destinatário não existe.');
-				}
 			}
-			return $this->redirect(['controller' => 'Cadastro', 'view' => 'index']);
+			else {
+				return $this->redirect(['controller' => 'Cadastro', 'view' => 'index']);
+			}
 		}
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'edit', 'add', 'delete']);
+			$this->Auth->isAuthorized(['index', 'edit', 'add', 'delete', 'paginate']);
 		}
 	}

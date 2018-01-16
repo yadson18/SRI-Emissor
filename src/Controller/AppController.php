@@ -24,6 +24,8 @@
 
 			$this->loadComponent('Flash');
 
+			$this->loadComponent('Paginator');
+
 			$this->loadComponent('Auth');
 		}	
 

@@ -34,15 +34,31 @@
 			return false;	
 		}
 
-		public function listarAtivos()
+		public function listarAtivos(int $quantity = null, int $skipTo = null)
 		{
-			return $this->find([
-					'cod_cadastro', 'cnpj', 'razao', 'fantasia', 'estado', 
-					'cidade', 'cep', 'endereco', 'bairro'
-				])
-				->orderBy(['razao'])
+			$cadastros = $this->find([
+				'cod_cadastro', 'cnpj', 'razao', 'fantasia', 'estado', 
+				'cidade', 'cep', 'endereco', 'bairro'
+			]);
+
+			if (!empty($quantity)) {
+				$cadastros->limit($quantity);
+			}
+			if (!empty($skipTo)) {
+				$cadastros->skip($skipTo);
+			}
+				
+			return $cadastros->orderBy(['razao'])
 				->where(['ativo =' => 'T'])
 				->fetch('all');
+		}
+
+		public function contarAtivos()
+		{
+			return $this->find([])
+				->count('cod_cadastro')->as('quantidade')
+				->where(['ativo =' => 'T'])
+				->fetch('class');
 		}
 
 		protected function defaultValidator(Validator $validator)

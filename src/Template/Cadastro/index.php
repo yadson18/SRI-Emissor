@@ -1,14 +1,12 @@
-<div class='col-sm-12'>
+<div class='col-sm-12' id='destinatarie'>
 	<h2 class='page-header'>
 		Destinatários 
 		<a href='/Cadastro/add' class='btn btn-success'>
 			Adicionar Novo <i class="fas fa-plus-circle"></i>
 		</a>
 	</h2>
+	<div id='message-box'></div>
 	<div class='table-responsive fixed-height'>
-		<div>
-			<?= $this->Flash->showMessage() ?>
-		</div>
 		<table class='table table-bordered'>
 		    <thead>
 		      	<tr>
@@ -25,7 +23,7 @@
 		        	<th>Ações</th>
 		      	</tr>
 		    </thead>
-		    <?php if($cadastros): ?>
+		    <?php if(!empty($cadastros)): ?>
 			    <tbody class='text-capitalize'>
 			    		<?php foreach($cadastros as $index => $cadastro): ?>
 				    		<tr>
@@ -50,12 +48,16 @@
 				      		</tr>
 				      	<?php endforeach; ?>
 			    </tbody>
-			<?php else: ?>
+			<?php endif; ?>
 		</table>
+		<?php if(empty($cadastros)): ?>
 			<div class='text-center data-not-found'>
 				<h4>Nada a ser exibido. <i class='far fa-frown'></i></h4>
 			</div>		    	
 		<?php endif; ?>
+	</div>
+	<div class='col-sm-12'>
+		<?= $this->Paginator->display(); ?>
 	</div>
 	<!-- Modal Confirmar Exclusão -->
         <div class='modal fade' id='delete' role='dialog'>
@@ -71,9 +73,9 @@
                         <h4>Deseja realmente excluir este destinatário?</h4>
                     </div>
                     <div class='modal-footer'>
-                    	<a class='btn btn-success'>
+                    	<button class='btn btn-success remove' data-dismiss='modal'>
                     		Sim <i class='fas fa-check'></i>
-                    	</a>
+                    	</button>
                     	<button data-dismiss='modal' class='btn btn-danger exit'>
                     		Não <i class='fas fa-times'></i>
                     	</button>

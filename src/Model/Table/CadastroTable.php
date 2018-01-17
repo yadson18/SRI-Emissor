@@ -64,7 +64,7 @@
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);
-			$validator->addRule('cod_cadastro')->notEmpty()->int()->size(4);
+			$validator->addRule('cod_cadastro')->notEmpty()->int()->size(5);
 			$validator->addRule('razao')->empty()->string()->size(60);
 			$validator->addRule('fantasia')->empty()->string()->size(40);
 			$validator->addRule('cnpj')->empty()->string()->size(20);

@@ -12,7 +12,7 @@
 
 			$this->setTable('PRODUTO');
 
-			$this->setPrimaryKey('cod_produto');
+			$this->setPrimaryKey('cod_interno');
 
 			$this->setBelongsTo('', []);
 		}
@@ -23,7 +23,36 @@
 			
 			return $this->find([])
 				->sum('case when data_cadastro = '. $dataDeHoje .' then 1 else 0 end')->as('hoje')
-				->count('cod_produto')->as('total')
+				->count('cod_interno')->as('total')
+				->where(['inativo =' => 'A'])
+				->fetch('class');
+		}
+
+		public function listarAtivos(int $quantity = null, int $skipTo = null)
+		{
+			$produtos = $this->find([
+					'cod_interno', 'cod_produto', 'produto.descricao', 
+					'icms_in', 'icms_out', 'st', 'cod_ncm', 'cest', 
+					'aliquota', 'unidades.descricao as unidade', 'venda'
+				])
+				->join(['left join unidades on (unidades.cod = produto.unidade)']);
+
+			if (!empty($quantity)) {
+				$produtos->limit($quantity);
+			}
+			if (!empty($skipTo)) {
+				$produtos->skip($skipTo);
+			}
+				
+			return $produtos->orderBy(['produto.descricao'])
+				->where(['inativo =' => 'A'])
+				->fetch('all');
+		}
+
+		public function contarAtivos()
+		{
+			return $this->find([])
+				->count('cod_interno')->as('quantidade')
 				->where(['inativo =' => 'A'])
 				->fetch('class');
 		}
@@ -31,7 +60,7 @@
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);
-			$validator->addRule('cod_interno')->notEmpty()->int()->size(4);
+			$validator->addRule('cod_interno')->notEmpty()->int()->size(7);
 			$validator->addRule('cod_produto')->notEmpty()->string()->size(14);
 			$validator->addRule('descricao')->empty()->string()->size(40);
 			$validator->addRule('cod_grupo')->notEmpty()->int()->size(4);

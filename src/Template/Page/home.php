@@ -2,7 +2,7 @@
 	<h2 class='page-header text-capitalize'>
 		Dashboard:
 	    <small>
-	       	<?= strtolower($usuarioRazao) ?> -
+	       	<?= mb_strtolower($usuarioRazao) ?> -
 	       	<?= mask('##.###.###/####-##', $usuarioCnpj) ?>
 	    </small>
     </h2>
@@ -19,11 +19,11 @@
 	    				</li>
 	    				<li class='list-group-item'>
 	    					Hoje 
-	    					<span class='badge'><?= $nfeEmitidas->hoje ?></span>
+	    					<span class='badge thousand'><?= $nfeEmitidas->hoje ?></span>
 	    				</li>
 	    				<li class='list-group-item'>
 	    					Total 
-	    					<span class='badge'><?= $nfeEmitidas->total ?></span>
+	    					<span class='badge thousand'><?= $nfeEmitidas->total ?></span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
@@ -45,10 +45,10 @@
 	    					<strong>Emitidas</strong>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					Hoje <span class='badge'>0</span>
+	    					Hoje <span class='badge thousand'>0</span>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					No mês <span class='badge'>0</span>
+	    					Total <span class='badge thousand'>0</span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
@@ -70,10 +70,10 @@
 	    					<strong>Emitidas</strong>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					Hoje <span class='badge'>0</span>
+	    					Hoje <span class='badge thousand'>0</span>
 	    				</li>
 	    				<li class='list-group-item'>
-	    					No mês <span class='badge'>0</span>
+	    					Total <span class='badge thousand'>0</span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
@@ -96,19 +96,19 @@
 	    				</li>
 	    				<li class='list-group-item'>
 	    					Hoje 
-	    					<span class='badge'>
+	    					<span class='badge thousand'>
 	    						<?= $produtosCadastrados->hoje ?>
 	    					</span>
 	    				</li>
 	    				<li class='list-group-item'>
 	    					Total 
-	    					<span class='badge'>
+	    					<span class='badge thousand'>
 	    						<?= $produtosCadastrados->total ?>
 	    					</span>
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning form-control'>
+	    				<a href='/Produto/index' class='btn btn-warning form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>

@@ -115,10 +115,10 @@
 		{
 			return '<div class="pull-right list-shown">
 				<p>
-					Página <strong>' . $this->getCurrentPage() . '</strong>
-					de <strong>' . $this->getTotalPages() . '</strong>,
-					listando <strong>' . $this->getShownQuantity() . '</strong>
-					itens de <strong>' . $this->getTotalQuantity() . '</strong>.
+					Página <strong class="thousand">' . $this->getCurrentPage() . '</strong>
+					de <strong class="thousand">' . $this->getTotalPages() . '</strong>,
+					listando <strong class="thousand">' . $this->getShownQuantity() . '</strong>
+					itens de <strong class="thousand">' . $this->getTotalQuantity() . '</strong>.
 				</p>
 			</div>';
 		}

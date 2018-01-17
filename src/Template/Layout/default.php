@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang='pt-br'>
 	<head>
-		<title><?= $this->fetch('appName') . $this->fetch('title') ?></title>
+		<title>
+			<?= $this->fetch('appName') ?> - <?= $this->fetch('title') ?>
+		</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
 
 		<?= $this->Html->encoding() ?>
@@ -61,20 +63,21 @@
 			        		<li>
 			        			<a href='/Cadastro/index'>Destinatários</a>
 			        		</li>
-			        		<li>
-			        			<li class='dropdown'>
-							        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-							        	Produtos <span class='caret'></span>
-							        </a>
-							        <ul class='dropdown-menu'>
-							          	<li>
-							          		<a href='#'>Enviar Carga</a>
-							          	</li>
-							          	<li>												
-							          		<a href='/Colaborador/logout'>Grupos</a>
-							          	</li>
-							        </ul>
-							    </li>
+			        		<li class='dropdown'>
+							    <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+							    	Produtos <span class='caret'></span>
+							    </a>
+							    <ul class='dropdown-menu'>
+							    	<li>
+							        	<a href='/Produto/index'>Cadastrados</a>
+							        </li>
+							        <li>
+							        	<a href='#'>Enviar Carga</a>
+							        </li>
+							        <li>												
+							          	<a href='#'>Grupos</a>
+							        </li>
+							    </ul>
 			        		</li>
 			        		<li><a href='#'>NF-e</a></li>
 			        		<li><a href='#'>Gerencial</a></li>

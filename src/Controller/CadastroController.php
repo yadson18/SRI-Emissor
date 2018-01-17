@@ -33,7 +33,7 @@
 				);
 			}
 			
-			$this->setTitle('Listagem');
+			$this->setTitle('Destinatários Cadastrados');
 			$this->setViewVars([
 				'usuarioNome' => $this->nomeUsuarioLogado(),
 				'cadastros' => $cadastros

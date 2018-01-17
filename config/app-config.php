@@ -23,7 +23,7 @@
 		 *		(false) Errors or warnings turn off.
 		 */
 		->set('App', [
-			'name' => 'SRI Emissor - ', 	 
+			'name' => 'SRI Emissor', 	 
 			'encoding' => 'utf-8',	 
 			'timezone' => 'UTC',	 
 			'locate' => 'pt-Br',		 

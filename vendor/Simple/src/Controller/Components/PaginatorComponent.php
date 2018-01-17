@@ -9,7 +9,7 @@
 
 		private $currentPage = 1;
 
-		private $buttonsPaginator;
+		private $buttonsQuantityShown = 8;
 
 		private $pageLink;
 
@@ -43,41 +43,80 @@
 
 		public function display()
 		{
-			return $this->text() . $this->buttons();
+			if ($this->getCurrentPage() <= $this->getTotalPages()) {
+				return $this->text() . $this->buttons();
+			}
+		}
+
+		protected function createPaginateBtn($name, $value, bool $active = false)
+		{
+			$class = ($active === true) ? 'active' : '';
+			$href = ($active !== true) ? 'href="' . $this->getButtonLink() . $value . '"' : '';
+
+			return '<li class="' . $class  . '">
+						<a ' . $href . '>' . $name . '</a>
+					</li>';
 		}
 
 		protected function buttons()
 		{
-			$buttonsPaginator = '<ul class="pagination pull-right">';
+			$buttonsQuantity = $this->getButtonsQuantityShown();
 			$currentPage = $this->getCurrentPage();
 			$totalPages = $this->getTotalPages();
-			$pagesToShow = $currentPage + 10;
+			$buttonsPaginator = '';
 
-			for ($page = 1; $page <= $totalPages; $page++) {
-				if ($page === $currentPage) {
-					$buttonsPaginator .= '
-						<li class="active"><a>' . $page . '</a></li>
-					';
+			$buttonsPaginator .= $this->createPaginateBtn(
+				($totalPages > $buttonsQuantity) ? 'Início' : 1, 1, 
+				($currentPage === 1) ? true : false
+			);
+
+			if ($totalPages > $buttonsQuantity) {
+				if ($currentPage < $buttonsQuantity) {
+					$before = 1;
+					$after = $buttonsQuantity + 1;
 				}
-				else {
-					$buttonsPaginator .= '
-						<li>
-							<a href="' . $this->getButtonLink() . $page . '">
-								' . $page . '
-							</a>
-						</li>
-					';
+				else if ($currentPage >= $buttonsQuantity) {
+					$before = $currentPage - ($buttonsQuantity - 2);
+
+					if (($currentPage + 1) < $totalPages) {
+						$after = $currentPage + 1;
+					}
+					else if (($currentPage + 1) > $totalPages) {
+						$before = $currentPage - $buttonsQuantity;
+						$after = $currentPage;
+					}
+					else {
+						$before = $currentPage - ($buttonsQuantity - 1);
+						$after = $currentPage;
+					}
 				}
 			}
+			else {
+				$before = 1;
+				$after = $totalPages;
+			}
 
-			return $buttonsPaginator . '</ul>';
+			for ($page = $before; $page <= $after; $page++) { 
+				if ($page !== 1 && $page !== $totalPages) {
+					$buttonsPaginator .= $this->createPaginateBtn(
+						$page, $page, ($page === $currentPage) ? true : false
+					);
+				}
+			}
+			$buttonsPaginator .= $this->createPaginateBtn(
+				($totalPages > $buttonsQuantity) ? 'Fim' : $totalPages, $totalPages, 
+				($currentPage === $totalPages) ? true : false
+			);
+
+			return '<ul class="pagination pull-right">' . $buttonsPaginator . '</ul>';
 		}
 
 		protected function text()
 		{
 			return '<div class="pull-right list-shown">
 				<p>
-					Página <strong>' . $this->getCurrentPage() . '</strong>,
+					Página <strong>' . $this->getCurrentPage() . '</strong>
+					de <strong>' . $this->getTotalPages() . '</strong>,
 					listando <strong>' . $this->getShownQuantity() . '</strong>
 					itens de <strong>' . $this->getTotalQuantity() . '</strong>.
 				</p>
@@ -92,6 +131,16 @@
 		public function getButtonLink()
 		{
 			return $this->pageLink;
+		}
+
+		protected function setButtonsQuantityShown(int $quantity)
+		{
+			$this->buttonsQuantityShown = $quantity;
+		}
+
+		public function getButtonsQuantityShown()
+		{
+			return $this->buttonsQuantityShown;
 		}
 
 		protected function setListQuantity(int $quantity)
@@ -145,7 +194,7 @@
 
 		public function getTotalPages()
 		{
-			return (int) round(
+			return (int) ceil(
 				$this->getTotalQuantity() / $this->getListQuantity()
 			);
 		}

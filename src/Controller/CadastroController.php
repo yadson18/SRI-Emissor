@@ -12,14 +12,14 @@
 
 		public function index($identify = null, $page = 1)
 		{	
+			$page = (is_numeric($page) && $page > 0) ? (int) $page : 1;
 			$ativos = $this->Cadastro->contarAtivos();
-			$page = (empty($page) || !is_numeric($page)) ? 1 : ((int) $page);
 			$cadastros = null;
 
 			$this->Paginator->showPage($page)
 				->buttonsLink('/Cadastro/index/page/')
 				->itensTotalQuantity($ativos->quantidade)
-				->limit(150);
+				->limit(100);
 			
 			if ($identify === 'page' && !empty($page)) {
 				$cadastros = $this->Cadastro->listarAtivos(
@@ -123,10 +123,16 @@
 				$data = $this->request->getData();
 
 				if (isset($data['cod_cadastro']) && !empty($data['cod_cadastro'])) {
-					$cadastro = $this->Cadastro->get((int) $data['cod_cadastro']);
+					$cadastro = $this->Cadastro->find([
+							'cod_cadastro', 'cnpj', 'razao'
+						])
+						->where(['cod_cadastro =' => (int) $data['cod_cadastro']])
+						->fetch('class');
 
 					if ($cadastro) {
-						if ($this->Cadastro->remove($cadastro)) {
+						$cadastro->ativo = 'F';
+						
+						if ($this->Cadastro->save($cadastro)) {
 							$this->Ajax->response('deleteCadastro', [
 								'status' => 'success',
 								'message' => 'O destinatário (' . $cadastro->razao . ') foi removido com sucesso.'

@@ -13,7 +13,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			method: 'POST'
 		})
-		.always(function(data, status, a) {
+		.always(function(data, status) {
 			var $div = $('#destinatarie');
 				$messageBox = $div.find('#message-box');
 

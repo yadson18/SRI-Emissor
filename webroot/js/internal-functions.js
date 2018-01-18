@@ -155,8 +155,10 @@ $(document).ready(function(){
     $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
     $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
     $('.cepMask').mask('00000-000', defaultMaskConfigs);
-    $('.money').mask('00.000.000,00', { reverse: true });
-    $('.thousand').mask('0.000.000', { reverse: true });
+    $('.date').mask('00/00/0000 00:00:00', { reverse: false });
+    $('.money').mask('000.000.000.000.000,00', { reverse: true });
+    $('.thousand').mask('000.000.000.000.000', { reverse: true });
+    $('.percent').mask('000.00', { reverse: true });
 
     $('.cnpjCpfMask').mask(function(value) { 
         return (value.length === cpf.size) ? cpf.mask : cnpj.mask;

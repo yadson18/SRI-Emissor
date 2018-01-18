@@ -93,8 +93,8 @@
 				<legend>Preço</legend>
 				<fieldset class='col-sm-12'>
 					<legend>Varejo</legend>
-					<div class='form-group col-md-2 col-sm-3'>
-						<?= $this->Form->input('Preço Compra', [
+					<div class='form-group col-md-3	col-sm-3'>
+						<?= $this->Form->input('Preço Compra (R$)', [
 								'placeholder' => 'EX: 10,50',
 								'class' => 'form-control money input-sm',
 								'value' => moneyFormat($produto->compra),
@@ -104,10 +104,10 @@
 							]) 
 						?>
 					</div>
-					<div class='form-group col-md-2 col-sm-3'>
-						<?= $this->Form->input('Markup', [
+					<div class='form-group col-md-3	col-sm-3'>
+						<?= $this->Form->input('Markup (%)', [
 								'placeholder' => 'EX: 40.00',
-								'class' => 'form-control input-sm',
+								'class' => 'form-control input-sm percent',
 								'value' => $produto->markup,
 								'maxlength' => 7,
 								'required' => true,
@@ -115,16 +115,16 @@
 							]) 
 						?>
 					</div>
-					<div class='form-group col-md-2 col-sm-3'>
-						<?= $this->Form->input('Preço Sugerido', [
+					<div class='form-group col-md-3	col-sm-3'>
+						<?= $this->Form->input('Preço Sugerido (R$)', [
 								'class' => 'form-control money input-sm',
 								'value' => '0,00',
 								'disabled' => true
 							]) 
 						?>
 					</div>
-					<div class='form-group col-md-2 col-sm-3'>
-						<?= $this->Form->input('Preço Varejo', [
+					<div class='form-group col-md-3	col-sm-3'>
+						<?= $this->Form->input('Preço Varejo (R$)', [
 								'placeholder' => 'EX: 15,55',
 								'class' => 'form-control money input-sm',
 								'value' => moneyFormat($produto->venda),
@@ -159,7 +159,7 @@
 						?>
 					</div>	
 					<div class='form-group col-md-3 col-sm-4'>
-						<?= $this->Form->input('Preço Atacarejo', [
+						<?= $this->Form->input('Preço Atacarejo (R$)', [
 								'placeholder' => 'EX: 12,99',
 								'class' => 'form-control money input-sm',
 								'value' => moneyFormat($produto->preco_vol),
@@ -169,28 +169,164 @@
 							]) 
 						?>
 					</div>	
-
-					<!-- 
-					cod_produto
-					data_inicio_prom
-					data_final_prom
-					preco_prom
-					descricao_promocao
-					cod_ncm
-					cstpc
-					cstpc_entrada
-					ali_pis_debito
-					ali_cofins_debito
+				</fieldset>
+				<fieldset class='col-sm-12'>
+					<legend>Promoção</legend>
+					<div class='form-group col-md-3 col-sm-4'>
+						<?= $this->Form->input('Início da Promoção', [
+								'placeholder' => 'EX: ' . date('d/m/Y H:i:s'),
+								'class' => 'form-control input-sm date',
+								'value' => date(
+									'd/m/Y H:i:s', strtotime($produto->data_inicio_prom)
+								),
+								'maxlength' => 10,
+								'required' => true,
+								'name' => 'data_inicio_prom'
+							]) 
+						?>
+					</div>	
+					<div class='form-group col-md-3 col-sm-4'>
+						<?= $this->Form->input('Fim da Promoção', [
+								'placeholder' => 'EX: ' . date('d/m/Y H:i:s'),
+								'class' => 'form-control input-sm date',
+								'value' => date(
+									'd/m/Y H:i:s', strtotime($produto->data_final_prom)
+								),
+								'maxlength' => 10,
+								'required' => true,
+								'name' => 'data_final_prom'
+							]) 
+						?>
+					</div>	
+					<div class='col-sm-12'>
+						<div class='row'>
+							<div class='form-group col-md-3 col-sm-4'>
+								<?= $this->Form->input('Preço Promoção (R$)', [
+										'placeholder' => 'EX: 12,99',
+										'class' => 'form-control money input-sm',
+										'value' => moneyFormat($produto->preco_prom),
+										'maxlength' => 10,
+										'required' => true,
+										'name' => 'preco_prom'
+									]) 
+								?>
+							</div>	
+							<div class='form-group col-md-7 col-sm-8'>
+								<?= $this->Form->input('Descrição Promoção', [
+										'placeholder' => 'EX: COMPRE 3 PAGUE 2',
+										'class' => 'form-control input-sm',
+										'value' => $produto->descricao_promocao,
+										'maxlength' => 10,
+										'required' => true,
+										'name' => 'descricao_promocao'
+									]) 
+								?>
+							</div>	
+						</div>
+					</div>
+				</fieldset>
+			</fieldset>
+			<fieldset class='col-sm-12'>
+				<legend>PIS/Cofins</legend>
+				<div class='col-sm-12'>
+					<div class='row'>
+						<div class='form-group col-md-3 col-sm-4'>
+							<?= $this->Form->input('Código NCM', [
+									'placeholder' => 'EX: 01051200',
+									'class' => 'form-control input-sm',
+									'value' => $produto->cod_ncm,
+									'maxlength' => 9,
+									'required' => true,
+									'name' => 'cod_ncm'
+								]) 
+							?>
+						</div>	
+						<div class='form-group col-md-7 col-sm-8'>
+							<?= $this->Form->input('Descrição NCM', [
+									'placeholder' => 'EX: DESCRIÇÃO',
+									'class' => 'form-control input-sm',
+									'value' => 'DESCRIÇÃO',
+									'disabled' => true,
+									'maxlength' => 9
+								]) 
+							?>
+						</div>	
+					</div>
+				</div>
+				<div class='col-sm-12'>
+					<div class='row'>
+						<?= $this->Form->input('', [
+								'class' => 'hidden',
+								'value' => $produto->cstpc,
+								'maxlength' => 1,
+								'required' => true,
+								'name' => 'cstpc'
+							]) 
+						?>
+						<?= $this->Form->input('', [
+								'class' => 'hidden',
+								'value' => $produto->cstpc_entrada,
+								'maxlength' => 1,
+								'required' => true,
+								'name' => 'cstpc_entrada'
+							]) 
+						?>	
+						<div class='form-group col-md-3 col-sm-4'>
+							<?= $this->Form->input('Código CST', [
+									'placeholder' => 'EX: 1',
+									'class' => 'form-control input-sm',
+									'value' => $produto->cstpc,
+									'maxlength' => 1,
+									'required' => true,
+									'name' => 'cstpc'
+								]) 
+							?>
+						</div>	
+						<div class='form-group col-md-7 col-sm-8'>
+							<?= $this->Form->input('Descrição CST', [
+									'placeholder' => 'EX: DESCRIÇÃO',
+									'class' => 'form-control input-sm',
+									'value' => 'DESCRIÇÃO',
+									'disabled' => true,
+									'maxlength' => 9
+								]) 
+							?>
+						</div>	
+					</div>
+				</div>
+				<div class='form-group col-md-3 col-sm-4'>
+					<?= $this->Form->input('Aliquota PIS', [
+							'placeholder' => 'EX: 6.0',
+							'class' => 'form-control input-sm',
+							'value' => $produto->ali_pis_debito,
+							'name' => 'ali_pis_debito',
+							'maxlength' => 7
+						]) 
+					?>
+				</div>
+				<div class='form-group col-md-3 col-sm-4'>
+					<?= $this->Form->input('Aliquota Cofins', [
+							'placeholder' => 'EX: 12.0',
+							'class' => 'form-control input-sm',
+							'value' => $produto->ali_cofins_debito,
+							'name' => 'ali_cofins_debito',
+							'maxlength' => 7
+						]) 
+					?>
+				</div>
+			</fieldset>
+			<fieldset class='col-sm-12'>
+				<legend>ICMS</legend>
+				<!-- 
 					st
 					cfop_in
 					cest
 					icms_in
 					icms_out 
-					-->
-				</fieldset>
+				-->
 			</fieldset>
 			<div class='row'>
-				<div class='col-sm-12'>
+				<div class='col-md-8 col-sm-12 col-xs-12 pull-right'>
 					<div class='form-group col-sm-5'>
 						<a href='/Produto/index' class='btn btn-primary btn-block'>
 							<i class='fas fa-angle-double-left'></i> Retornar

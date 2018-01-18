@@ -65,50 +65,52 @@
 			$totalPages = $this->getTotalPages();
 			$buttonsPaginator = '';
 
-			$buttonsPaginator .= $this->createPaginateBtn(
-				($totalPages > $buttonsQuantity) ? 'Início' : 1, 1, 
-				($currentPage === 1) ? true : false
-			);
+			if ($totalPages > 1) {
+				$buttonsPaginator .= $this->createPaginateBtn(
+					($totalPages > $buttonsQuantity) ? 'Início' : 1, 1, 
+					($currentPage === 1) ? true : false
+				);
 
-			if ($totalPages > $buttonsQuantity) {
-				if ($currentPage < $buttonsQuantity) {
+				if ($totalPages > $buttonsQuantity) {
+					if ($currentPage < $buttonsQuantity) {
+						$before = 1;
+						$after = $buttonsQuantity + 1;
+					}
+					else if ($currentPage >= $buttonsQuantity) {
+						$before = $currentPage - ($buttonsQuantity - 2);
+
+						if (($currentPage + 1) < $totalPages) {
+							$after = $currentPage + 1;
+						}
+						else if (($currentPage + 1) > $totalPages) {
+							$before = $currentPage - $buttonsQuantity;
+							$after = $currentPage;
+						}
+						else {
+							$before = $currentPage - ($buttonsQuantity - 1);
+							$after = $currentPage;
+						}
+					}
+				}
+				else {
 					$before = 1;
-					$after = $buttonsQuantity + 1;
+					$after = $totalPages;
 				}
-				else if ($currentPage >= $buttonsQuantity) {
-					$before = $currentPage - ($buttonsQuantity - 2);
 
-					if (($currentPage + 1) < $totalPages) {
-						$after = $currentPage + 1;
-					}
-					else if (($currentPage + 1) > $totalPages) {
-						$before = $currentPage - $buttonsQuantity;
-						$after = $currentPage;
-					}
-					else {
-						$before = $currentPage - ($buttonsQuantity - 1);
-						$after = $currentPage;
+				for ($page = $before; $page <= $after; $page++) { 
+					if ($page !== 1 && $page !== $totalPages) {
+						$buttonsPaginator .= $this->createPaginateBtn(
+							$page, $page, ($page === $currentPage) ? true : false
+						);
 					}
 				}
-			}
-			else {
-				$before = 1;
-				$after = $totalPages;
-			}
+				$buttonsPaginator .= $this->createPaginateBtn(
+					($totalPages > $buttonsQuantity) ? 'Fim' : $totalPages, $totalPages, 
+					($currentPage === $totalPages) ? true : false
+				);
 
-			for ($page = $before; $page <= $after; $page++) { 
-				if ($page !== 1 && $page !== $totalPages) {
-					$buttonsPaginator .= $this->createPaginateBtn(
-						$page, $page, ($page === $currentPage) ? true : false
-					);
-				}
+				return '<ul class="pagination pull-right">' . $buttonsPaginator . '</ul>';
 			}
-			$buttonsPaginator .= $this->createPaginateBtn(
-				($totalPages > $buttonsQuantity) ? 'Fim' : $totalPages, $totalPages, 
-				($currentPage === $totalPages) ? true : false
-			);
-
-			return '<ul class="pagination pull-right">' . $buttonsPaginator . '</ul>';
 		}
 
 		protected function text()

@@ -97,7 +97,7 @@
 						<?= $this->Form->input('Preço Compra', [
 								'placeholder' => 'EX: 10,50',
 								'class' => 'form-control money input-sm',
-								'value' => $produto->compra,
+								'value' => moneyFormat($produto->compra),
 								'maxlength' => 10,
 								'required' => true,
 								'name' => 'compra'
@@ -127,7 +127,7 @@
 						<?= $this->Form->input('Preço Varejo', [
 								'placeholder' => 'EX: 15,55',
 								'class' => 'form-control money input-sm',
-								'value' => $produto->venda,
+								'value' => moneyFormat($produto->venda),
 								'maxlength' => 10,
 								'required' => true,
 								'name' => 'venda'
@@ -162,7 +162,7 @@
 						<?= $this->Form->input('Preço Atacarejo', [
 								'placeholder' => 'EX: 12,99',
 								'class' => 'form-control money input-sm',
-								'value' => $produto->preco_vol,
+								'value' => moneyFormat($produto->preco_vol),
 								'maxlength' => 10,
 								'required' => true,
 								'name' => 'preco_vol'

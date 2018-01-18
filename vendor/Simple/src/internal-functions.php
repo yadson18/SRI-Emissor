@@ -17,6 +17,14 @@
 		}
 	}
 
+	function moneyFormat($number)
+	{
+		if (is_numeric($number)) {
+			return number_format($number, 2, '.', '');
+		}
+		return $number;
+	}
+
 	function mask(string $mask, string $value)
 	{
 		$mask = str_split($mask);

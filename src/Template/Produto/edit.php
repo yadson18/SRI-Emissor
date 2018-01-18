@@ -1,4 +1,4 @@
-<div class='col-sm-10 col-sm-offset-1'>
+<div class='col-sm-12'>
 	<?php if($produto): ?>
 		<?= $this->Form->start([
 				'action' => '/Produto/edit/' . $produto->cod_interno,
@@ -14,21 +14,23 @@
 			</div>
 			<fieldset class='col-sm-12'>
 				<legend>Classificação Mercadológica</legend>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Grupo', [
 							'options' => [
 								$produto->cod_grupo => $produto->cod_grupo
 							],
+							'class' => 'form-control input-sm',
 							'selected' => $produto->cod_grupo,
 							'name' => 'cod_grupo'
 						]) 
 					?>
 				</div>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Subgrupo', [
 							'options' => [
 								$produto->cod_subgrupo => $produto->cod_subgrupo
 							],
+							'class' => 'form-control input-sm',
 							'selected' => $produto->cod_subgrupo,
 							'name' => 'cod_subgrupo'
 						]) 
@@ -37,21 +39,21 @@
 			</fieldset>
 			<fieldset class='col-sm-12'>
 				<legend>Dados Cadastrais</legend>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->input('Código de barras', [
 							'placeholder' => 'EX: FRUTAS E VERDURAS LTDA',
-							'class' => 'form-control text-uppercase',
+							'class' => 'form-control text-uppercase input-sm',
 							'value' => $produto->cod_produto,
-							'maxlength' => 60,
+							'maxlength' => 14,
 							'required' => true,
 							'name' => 'cod_produto'
 						]) 
 					?>
 				</div>
-				<div class='form-group col-sm-8'>
+				<div class='form-group col-md-6 col-sm-8'>
 					<?= $this->Form->input('Descrição', [
 							'placeholder' => 'EX: CREME DENTAL 75G',
-							'class' => 'form-control text-uppercase',
+							'class' => 'form-control text-uppercase input-sm',
 							'value' => $produto->descricao,
 							'maxlength' => 40,
 							'required' => true,
@@ -59,25 +61,28 @@
 						]) 
 					?>
 				</div>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Unidade de Medida', [
 							'options' => array_column($unidades, 'cod', 'descricao'),
+							'class' => 'form-control input-sm',
 							'selected' => $produto->unidade,
 							'name' => 'unidade'
 						]) 
 					?>
 				</div>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Balança', [
 							'options' => ['SIM' => 'S', 'NÃO' => 'N'],
+							'class' => 'form-control input-sm',
 							'selected' => $produto->balanca,
 							'name' => 'balanca'
 						]) 
 					?>
 				</div>
-				<div class='form-group col-sm-4'>
+				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Fabricação Própria', [
 							'options' => ['SIM' => 'P', 'NÃO' => 'T'],
+							'class' => 'form-control input-sm',
 							'selected' => $produto->fabricacao,
 							'name' => 'fabricacao'
 						]) 
@@ -88,10 +93,10 @@
 				<legend>Preço</legend>
 				<fieldset class='col-sm-12'>
 					<legend>Varejo</legend>
-					<div class='form-group col-sm-3'>
-						<?= $this->Form->input('Preço de Compra', [
+					<div class='form-group col-md-2 col-sm-3'>
+						<?= $this->Form->input('Preço Compra', [
 								'placeholder' => 'EX: 10,50',
-								'class' => 'form-control money',
+								'class' => 'form-control money input-sm',
 								'value' => $produto->compra,
 								'maxlength' => 10,
 								'required' => true,
@@ -99,10 +104,10 @@
 							]) 
 						?>
 					</div>
-					<div class='form-group col-sm-3'>
+					<div class='form-group col-md-2 col-sm-3'>
 						<?= $this->Form->input('Markup', [
 								'placeholder' => 'EX: 40.00',
-								'class' => 'form-control',
+								'class' => 'form-control input-sm',
 								'value' => $produto->markup,
 								'maxlength' => 7,
 								'required' => true,
@@ -110,18 +115,18 @@
 							]) 
 						?>
 					</div>
-					<div class='form-group col-sm-3'>
+					<div class='form-group col-md-2 col-sm-3'>
 						<?= $this->Form->input('Preço Sugerido', [
-								'class' => 'form-control money',
+								'class' => 'form-control money input-sm',
 								'value' => '0,00',
 								'disabled' => true
 							]) 
 						?>
 					</div>
-					<div class='form-group col-sm-3'>
+					<div class='form-group col-md-2 col-sm-3'>
 						<?= $this->Form->input('Preço Varejo', [
 								'placeholder' => 'EX: 15,55',
-								'class' => 'form-control money',
+								'class' => 'form-control money input-sm',
 								'value' => $produto->venda,
 								'maxlength' => 10,
 								'required' => true,
@@ -132,18 +137,19 @@
 				</fieldset>
 				<fieldset class='col-sm-12'>
 					<legend>Atacarejo</legend>
-					<div class='form-group col-sm-4'>
+					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->select('Tipo Multiplicador', [
 								'options' => ['MULTIPLO' => 'M', 'A PARTIR' => 'A'],
+								'class' => 'form-control input-sm',
 								'selected' => $produto->tipo_venda_volume,
 								'name' => 'tipo_venda_volume'
 							]) 
 						?>
 					</div>
-					<div class='form-group col-sm-3'>
+					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Quantidade Atacarejo', [
 								'placeholder' => 'EX: 5',
-								'class' => 'form-control',
+								'class' => 'form-control input-sm',
 								'value' => $produto->qtd_vol,
 								'type' => 'number',
 								'maxlength' => 6,
@@ -152,10 +158,10 @@
 							]) 
 						?>
 					</div>	
-					<div class='form-group col-sm-3'>
+					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Preço Atacarejo', [
 								'placeholder' => 'EX: 12,99',
-								'class' => 'form-control money',
+								'class' => 'form-control money input-sm',
 								'value' => $produto->preco_vol,
 								'maxlength' => 10,
 								'required' => true,

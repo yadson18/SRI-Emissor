@@ -12,8 +12,8 @@
 		      	<tr>
 		      		<th>#</th>
 		        	<th>Código Interno</th>
-		        	<th>Código de Barras</th>
 		        	<th>Descrição</th>
+		        	<th>Código de Barras</th>
 		        	<th>ICMS Dentro</th>
 		        	<th>ICMS Fora</th>
 		        	<th>ST</th>
@@ -31,8 +31,8 @@
 				    		<tr>
 				    			<th><?= ($index + 1) ?></th>
 					        	<td><?= $produto['cod_interno'] ?></td>
-								<td><?= $produto['cod_produto'] ?></td>
 								<td><?= mb_strtolower($produto['descricao']) ?></td>
+								<td><?= $produto['cod_produto'] ?></td>
 								<td><?= $produto['icms_in'] ?></td>
 								<td><?= $produto['icms_out'] ?></td>
 								<td><?= $produto['st'] ?></td>

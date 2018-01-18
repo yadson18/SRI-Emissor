@@ -73,14 +73,16 @@
 	</div>
 	<div class='form-group col-sm-3'>
 		<?= $this->Form->select('Estado', [
-				'options' => arrayToFormOptions($estados),
+				'options' => array_column($estados, 'sigla', 'sigla'),
 				'required' => true
 			]) 
 		?>
 	</div>
 	<div class='form-group col-sm-5'>	
 		<?= $this->Form->select('Cidade', [
-				'options' => arrayToFormOptions($municipios),
+				'options' => array_column(
+					$municipios, 'nome_municipio', 'nome_municipio'
+				),
 				'selected' => $estados[0]['sigla'],
 				'required' => true
 			]) 

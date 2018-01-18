@@ -1,6 +1,8 @@
 <?php 
 	namespace App\Controller;
 
+	use Simple\ORM\TableRegistry;
+
 	class ProdutoController extends AppController
 	{
 		public function isAuthorized()
@@ -40,6 +42,7 @@
 
 		public function edit($cod_interno = null)
 		{
+			$unidadesMedida = TableRegistry::get('Unidades')->get('all');
 			$produto = null;
 
 			if (!empty($cod_interno)) {
@@ -66,7 +69,8 @@
 			$this->setTitle('Modificar Produto');
 			$this->setViewVars([
 				'usuarioNome' => $this->nomeUsuarioLogado(),
-				'produto' => $produto
+				'produto' => $produto,
+				'unidades' => $unidadesMedida
 			]);
 		}
 

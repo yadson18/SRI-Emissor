@@ -1,10 +1,5 @@
 <div class='col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1'>
-	<?= $this->Form->start([
-			'action' => '/Cadastro/add',
-			'method' => 'POST',
-			'id' => 'form-add'
-		]) 
-	?>
+	<?= $this->Form->start('', ['id' => 'form-add']) ?>
 	<div class='form-header text-center'>
 		<h4>Adicionar Destinatário</h4>
 	</div>
@@ -25,20 +20,18 @@
 			</div>
 			<div class='form-group col-sm-6'>
 				<?= $this->Form->input('CPF' , [
+						'class' => 'form-control input-sm cpfMask',
 						'placeholder' => 'EX: 095.726.241-80',
-						'class' => 'cpfMask form-control input-sm',
-						'required' => true,
 						'name' => 'cnpj'
 					]) 
 				?>	
 			</div>
 			<div class='form-group col-sm-6 hidden estadual'>
 				<?= $this->Form->input('Inscrição Estadual', [
-						'class' => 'form-control text-uppercase input-sm',
 						'placeholder' => 'EX: ISENTO', 
-						'required' => 0,
+						'required' => false,
 						'maxlength' => 20,
-						'name' => ''
+						'name' => false
 					]) 
 				?>
 			</div>  
@@ -47,9 +40,7 @@
 	<div class='form-group col-sm-6'>
 		<?= $this->Form->input('Razão Social', [
 				'placeholder' => 'EX: FRUTAS E VERDURAS LTDA',
-				'class' => 'form-control text-uppercase input-sm',
 				'maxlength' => 60,
-				'required' => true,
 				'name' => 'razao'
 			]) 
 		?>
@@ -57,88 +48,66 @@
 	<div class='form-group col-sm-6'>
 		<?= $this->Form->input('Fantasia', [
 				'placeholder' => 'EX: FRUTAS E VERDURAS',
-				'class' => 'form-control text-uppercase input-sm',
-				'maxlength' => 40,
-				'required' => true
+				'maxlength' => 40
 			]) 
 		?>
 	</div>
 	<div class='form-group col-sm-4'>
 		<?= $this->Form->input('CEP', [
-				'class' => 'cepMask form-control input-sm',
-				'placeholder' => 'EX: 50000-000',
-				'required' => true
+				'class' => 'form-control input-sm cepMask',
+				'placeholder' => 'EX: 50000-000'
 			]) 
 		?>	
 	</div>
 	<div class='form-group col-sm-3'>
-		<?= $this->Form->select('Estado', [
-				'options' => array_column($estados, 'sigla', 'sigla'),
-				'class' => 'form-control input-sm',
-				'required' => true
-			]) 
+		<?= $this->Form->select('Estado', array_column(
+				$estados, 'sigla', 'sigla'
+			)) 
 		?>
 	</div>
 	<div class='form-group col-sm-5'>	
-		<?= $this->Form->select('Cidade', [
-				'options' => array_column(
-					$municipios, 'nome_municipio', 'nome_municipio'
-				),
-				'class' => 'form-control input-sm',
-				'selected' => $estados[0]['sigla'],
-				'required' => true
-			]) 
+		<?= $this->Form->select('Cidade', array_column(
+				$municipios, 'nome_municipio', 'nome_municipio'
+			)) 
 		?>
 	</div>
 	<div class='form-group col-md-5 col-sm-6'>	
 		<?= $this->Form->input('Bairro', [
-				'class' => 'form-control text-uppercase input-sm',
 				'placeholder' => 'EX: CENTRO',
-				'maxlength' => 30,
-				'required' => true
+				'maxlength' => 30
 			]) 
 		?>
 	</div>
 	<div class='form-group col-md-5 col-sm-6'>	
 		<?= $this->Form->input('Endereço', [
-				'class' => 'form-control text-uppercase input-sm',
 				'placeholder' => 'EX: RUA CARLOS AFONSO',
-				'name' => 'endereco',
-				'maxlength' => 40,
-				'required' => true
+				'maxlength' => 40
 			]) 
 		?>
 	</div>
 	<div class='form-group col-md-2 col-sm-4'>	
 		<?= $this->Form->input('Número', [
-				'class' => 'form-control text-uppercase input-sm',
 				'placeholder' => 'EX: S/N',
-				'required' => true,
-				'maxlength' => 12,
-				'name' => 'nrend1'
+				'name' => 'nrend1',
+				'maxlength' => 12
 			]) 
 		?> 
 	</div>
 	<div class='form-group col-md-5 col-sm-8'>	 
 		<?= $this->Form->input('Complemento', [
 				'placeholder' => 'EX: EMPRESARIAL ABC, 22',
-				'class' => 'form-control text-uppercase input-sm',
 				'name' => 'complementar',
-				'maxlength' => 40,
-				'required' => true
+				'maxlength' => 40
 			]) 
 		?>
 	</div>
 	<div class='form-group col-sm-7'>	
 		<?= $this->Form->select('Código de Regime Tributário', [
-				'name' => 'cod_reg_trib',
-				'options' => [
-					'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => 2,
-					'SIMPLES NACIONAL' => 1,
-					'REGIME NORMAL' => 3
-				],
-				'class' => 'form-control input-sm',
-				'required' => true
+				'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => 2,
+				'SIMPLES NACIONAL' => 1,
+				'REGIME NORMAL' => 3
+			], [
+				'name' => 'cod_reg_trib'
 			]) 
 		?>
 	</div>

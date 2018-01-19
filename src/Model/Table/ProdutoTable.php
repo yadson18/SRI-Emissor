@@ -60,7 +60,7 @@
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);
-			$validator->addRule('cod_interno')->notEmpty()->int()->size(7);
+			$validator->addRule('cod_interno')->notEmpty()->int()->size(4);
 			$validator->addRule('cod_produto')->notEmpty()->string()->size(14);
 			$validator->addRule('descricao')->empty()->string()->size(40);
 			$validator->addRule('cod_grupo')->notEmpty()->int()->size(4);

@@ -3,135 +3,144 @@
     
     class Form
     {
-        private static $tags = [
-            'button' => [
-                'options' => ['type' => 'submit', 'class' => 'btn btn-default'],
-                'tag' => '<button %options%>%name%</button>'
-            ],
+        private static $defaultAttributes = [
             'input' => [
-                'options' => ['type' => 'text', 'class' => 'form-control'],
-                'tag' => '<input %options%/>'
+                'class' => 'form-control input-sm text-uppercase',
+                'required' => true,
+                'type' => 'text'
             ],
             'select' => [
-                'options' => ['class' => 'form-control'],
-                'tag' => '<select %options%>%tags%</select>'
+                'class' => 'form-control input-sm text-uppercase'
             ],
-            'option' => ['tag' => '<option value="%value%" %selected%>%name%</option>'],  
-            'label' => ['tag' => '<label>%name%</label>'],
-            'formStart' => ['tag' => '<form %options%>'],
-            'formEnd' => ['tag' => '</form>']
+            'button' => [
+                'class' => 'btn btn-default',
+                'type' => 'submit'
+            ],
+            'form' => [
+                'method' => 'POST'
+            ]
         ];
 
         public function input(string $labelName, array $options = [])
         {
-            return $this->label($labelName) . 
-                $this->replaceProperties('input', [
-                    '%options%' => $this->mountOptions($this->mixOptions(
-                        'input', array_merge([
-                            'name' => strtolower($labelName),
-                            'id' => (!empty($labelName)) ? strtolower($labelName) : '',
-                        ], $options)
-                    ))
-                ]);
-        }
-
-        public function select(string $labelName, array $options = [])
-        {
-            if (isset($options['options'])) {
-                $optionsTags = '';
-
-                foreach ($options['options'] as $name => $value) {
-                    if (isset($options['selected']) &&
-                        $value === $options['selected']
-                    ) {
-                        $optionsTags .= $this->option($name, $value, 'selected');
-                    }
-                    else {
-                        $optionsTags .= $this->option($name, $value);
-                    }
-                }
-                unset($options['options']);
-
-                return $this->label($labelName) . 
-                    $this->replaceProperties('select', [
-                        '%tags%' => $optionsTags,
-                        '%options%' => $this->mountOptions($this->mixOptions(
-                            'select', array_merge([
-                                'name' => strtolower($labelName),
-                                'id' => ($labelName) ? strtolower($labelName) : '',
-                            ], $options)
-                        ))
-                    ]);
+            if (!isset($options['id'])) {
+                $options['id'] = $this->formatTagId($labelName);
+            }
+            if (!isset($options['name'])) {
+                $options['name'] = $this->formatTagId($labelName);
             }
 
-        }
-
-        protected function option($name, $value, string $selected = null)
-        {
-            return $this->replaceProperties('option', [
-                '%selected%' => ($selected) ? 'selected' : '',
-                '%value%' => $value,
-                '%name%' => $name
+            return implode([
+                $this->buildTag('<label></label>', [], $labelName),
+                $this->buildTag('<input>', $options)
             ]);
         }
 
-        public function button(string $buttonName, array $options = [])
+        public function select(string $labelName, array $optionsValue, array $options = [])
         {
-            return $this->replaceProperties('button', [
-                '%name%' => $buttonName,
-                '%options%' => $this->mountOptions($this->mixOptions(
-                    'button', array_merge([
-                        'id' => ($buttonName) ? strtolower($buttonName) : '',
-                    ], $options)
-                ))
+            $optionsTags = [];
+
+            if (!isset($options['id'])) {
+                $options['id'] = $this->formatTagId($labelName);
+            }
+            if (!isset($options['name'])) {
+                $options['name'] = $this->formatTagId($labelName);
+            }
+
+            foreach ($optionsValue as $name => $value) {
+                $attributes = [];
+
+                if (isset($options['selected']) && $options['selected'] === $value) {
+                    $attributes['selected'] = true;
+                    unset($options['selected']);
+                }
+
+                $optionsTags[] = $this->option($name, $value, $attributes);
+            }
+
+            return implode([
+                $this->buildTag('<label></label>', [], $labelName),
+                $this->buildTag('<select></select>', $options, implode($optionsTags))
             ]);
         }
 
-        public function start(array $options = [])
+        protected function option(string $name, $value, array $options = [])
         {
-            return $this->replaceProperties('formStart', [
-                '%options%' => $this->mountOptions($options)
-            ]);
+            $options['value'] = $value;
+
+            return $this->buildTag('<option></option>', $options, $name);
+        }
+
+        public function button(string $text, array $options = [])
+        {
+            if (!isset($options['id'])) {
+                $options['id'] = $this->formatTagId($text);
+            }
+
+            return $this->buildTag('<button></button>', $options, $text);
+        }
+
+        public function start($entity = null, array $options = [])
+        {
+            return $this->buildTag('<form>', $options);
         }
 
         public function end()
         {
-            return $this->replaceProperties('formEnd', []);
+            return $this->buildTag('</form>');
         }
 
-        protected function label(string $name)
+        protected function buildTag(string $tag, array $attrs = [], string $content = null)
         {
-            return $this->replaceProperties('label', ['%name%' => $name]);
-        }
+            $tagName = substr($tag, 1, (strpos($tag, '>') - 1));
+            $tagPatternOne = '/<[a-zA-Z1-6]+>(.*)<\/[a-zA-Z1-6]+>/';
+            $tagPatternTwo = '/<[a-zA-Z1-6]+>/';
+            $tagPatternThree = '/<\/[a-zA-Z1-6]+>/';
 
-        protected function mixOptions(string $elementName, array $options)
-        {
-            return array_merge($this->getOptions($elementName), $options);
-        }
-
-        protected function getOptions(string $elementName)
-        {
-            if (isset(static::$tags[$elementName]['options'])) {
-                return static::$tags[$elementName]['options'];
+            if (isset(static::$defaultAttributes[$tagName])) {
+                $attrs = $this->mergeAttributes($attrs, static::$defaultAttributes[$tagName]);
             }
-        }
 
-        protected function mountOptions(array $options)
-        {
-            $elementOptions = '';
+            $attrs = $this->mountAttributes($attrs);
 
-            foreach ($options as $attribute => $value) {
-                if (is_string($attribute) && is_bool($value) || !empty($value)) {
-                    $elementOptions .= ' ' . $attribute . '="' . $value . '"';
+            if (preg_match($tagPatternOne, $tag) || preg_match($tagPatternTwo, $tag) ||
+                preg_match($tagPatternThree, $tag) 
+            ) {
+                $tagSplit = str_split($tag);
+                array_splice($tagSplit, array_search('>', $tagSplit), 0, [$attrs]);
+
+                if (preg_match($tagPatternOne, $tag)) {
+                    array_splice(
+                        $tagSplit, (array_search('>', $tagSplit) + 1), 0, [$content]
+                    );
                 }
+
+                return implode($tagSplit);
             }
-            return substr($elementOptions, 1);
         }
 
-        protected function replaceProperties(string $tag, array $properties)
+        protected function mergeAttributes(array $attrsOne = [], array $attrsTwo = [])
         {
-            if (isset(static::$tags[$tag]['tag'])) {
-                return replaceRecursive(static::$tags[$tag]['tag'], $properties);
-            }
+            return array_merge($attrsTwo, $attrsOne);
+        }
+
+        protected function mountAttributes(array $attributes)
+        {
+            $attrs = implode(' ', array_map(function($attribute, $values) {
+                    if (!is_array($values)) {
+                        if ($values !== false) {
+                            return $attribute . '="' . $values . '"';
+                        }
+                    }
+                }, 
+                array_keys($attributes), array_values($attributes)
+            ));
+
+            return (!empty($attrs)) ? ' ' . $attrs : '';
+        }
+
+        protected function formatTagId(string $id)
+        {
+            return str_replace(' ', '-', sanitize(strtolower($id)));
         }
     }

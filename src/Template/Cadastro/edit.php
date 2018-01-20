@@ -73,13 +73,14 @@
 					]) 
 				?>
 			</div>
-			<div class='form-group col-sm-4'>
+			<div class='form-group col-sm-4 icon-right'>
 				<?= $this->Form->input('CEP', [
 						'class' => 'form-control input-sm cepMask',
 						'placeholder' => 'EX: 50000-000',
 						'value' => $cadastro->cep
 					]) 
-				?>	
+				?>
+				<i class='fas fa-search button' id='find-cep'></i>	
 			</div>
 			<div class='form-group col-sm-3'>
 				<?= $this->Form->select('Estado', array_column(

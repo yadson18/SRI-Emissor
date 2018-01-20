@@ -245,6 +245,20 @@ $(document).ready(function(){
         $(this).val($(this).val().toUpperCase()); 
     });
 
+    $('#find-cep').on('click', function() {
+        var cep = $('input[name=cep]').cleanVal();
+
+       /* $('select[name=estado] option[value=RJ]').attr({selected: true})*/
+        
+        $.ajax({
+            url: 'https://viacep.com.br/ws/' + cep + '/json/',
+            dataType: 'json'
+        })
+        .always(function(data) {
+            console.log(data);
+        });
+    });
+
     $('select[name=estado]').on('change', function() {
         $.ajax({
             url: '/Ibge/municipiosUF',

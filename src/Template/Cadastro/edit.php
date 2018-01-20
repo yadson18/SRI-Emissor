@@ -1,11 +1,6 @@
 <div class='col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1'>
 	<?php if($cadastro): ?>
-		<?= $this->Form->start([
-				'action' => '/Cadastro/edit/' . $cadastro->cod_cadastro,
-				'method' => 'POST',
-				'id' => 'form-edit'
-			]) 
-		?>
+		<?= $this->Form->start('', ['id' => 'form-edit']) ?>
 			<div class='form-header text-center'>
 				<h4>Modificar Destinatário</h4>
 			</div>
@@ -35,12 +30,11 @@
 					</div>
 					<div class='form-group col-sm-6'>
 						<?= $this->Form->input(strtoupper($cadastroTipo) , [
+								'class' => $cadastroTipo . 'Mask form-control input-sm',
 								'placeholder' => ($cadastroTipo === 'cnpj') 
 									? 'EX: 53.965.649/0001-03' 
 									: 'EX: 095.726.241-80',
-								'class' => $cadastroTipo . 'Mask form-control input-sm',
 								'value' => $cadastro->cnpj,
-								'required' => true,
 								'name' => 'cnpj'
 							]) 
 						?>	
@@ -54,11 +48,9 @@
 								'value' => ($cadastro->estadual) 
 									? $cadastro->estadual 
 									: 'Não Informado',
-								'class' => 'form-control text-uppercase input-sm',
 								'placeholder' => 'EX: ISENTO', 
 								'name' => 'estadual',
-								'maxlength' => 20,
-								'required' => true
+								'maxlength' => 20
 							]) 
 						?>
 					</div>  
@@ -67,10 +59,8 @@
 			<div class='form-group col-sm-6'>
 				<?= $this->Form->input('Razão Social', [
 						'placeholder' => 'EX: FRUTAS E VERDURAS LTDA',
-						'class' => 'form-control text-uppercase input-sm',
 						'value' => $cadastro->razao,
 						'maxlength' => 60,
-						'required' => true,
 						'name' => 'razao'
 					]) 
 				?>
@@ -78,69 +68,55 @@
 			<div class='form-group col-sm-6'>
 				<?= $this->Form->input('Fantasia', [
 						'placeholder' => 'EX: FRUTAS E VERDURAS',
-						'class' => 'form-control text-uppercase input-sm',
 						'value' => $cadastro->fantasia,
-						'maxlength' => 40,
-						'required' => true
+						'maxlength' => 40
 					]) 
 				?>
 			</div>
 			<div class='form-group col-sm-4'>
 				<?= $this->Form->input('CEP', [
-						'class' => 'cepMask form-control input-sm',
+						'class' => 'form-control input-sm cepMask',
 						'placeholder' => 'EX: 50000-000',
-						'value' => $cadastro->cep,
-						'required' => true
+						'value' => $cadastro->cep
 					]) 
 				?>	
 			</div>
 			<div class='form-group col-sm-3'>
-				<?= $this->Form->select('Estado', [
-						'options' => array_column($estados, 'sigla', 'sigla'),
-						'class' => 'form-control input-sm',
-						'selected' => $cadastro->estado,
-						'required' => true
+				<?= $this->Form->select('Estado', array_column(
+						$estados, 'sigla', 'sigla'
+					), [
+						'selected' => $cadastro->estado
 					]) 
 				?>
 			</div>
 			<div class='form-group col-sm-5'>	
-				<?= $this->Form->select('Cidade', [
-						'options' => array_column(
-							$municipios, 'nome_municipio', 'nome_municipio'
-						),
-						'class' => 'form-control input-sm',
-						'selected' => $cadastro->cidade,
-						'required' => true
+				<?= $this->Form->select('Cidade', array_column(
+						$municipios, 'nome_municipio', 'nome_municipio'
+					), [
+						'selected' => $cadastro->cidade
 					]) 
 				?>
 			</div>
 			<div class='form-group col-md-5 col-sm-6'>	
 				<?= $this->Form->input('Bairro', [
-						'class' => 'form-control text-uppercase input-sm',
 						'placeholder' => 'EX: CENTRO',
 						'value' => $cadastro->bairro,
-						'maxlength' => 30,
-						'required' => true
+						'maxlength' => 30
 					]) 
 				?>
 			</div>
 			<div class='form-group col-md-5 col-sm-6'>	
 				<?= $this->Form->input('Endereço', [
-						'class' => 'form-control text-uppercase input-sm',
 						'placeholder' => 'EX: RUA CARLOS AFONSO',
 						'value' => $cadastro->endereco,
-						'name' => 'endereco',
-						'maxlength' => 40,
-						'required' => true
+						'maxlength' => 40
 					]) 
 				?>
 			</div>
 			<div class='form-group col-md-2 col-sm-4'>	
 				<?= $this->Form->input('Número', [
-						'class' => 'form-control text-uppercase input-sm',
 						'value' => $cadastro->nrend1,
 						'placeholder' => 'EX: S/N',
-						'required' => true,
 						'maxlength' => 12,
 						'name' => 'nrend1'
 					]) 
@@ -149,25 +125,20 @@
 			<div class='form-group col-md-5 col-sm-8'>	 
 				<?= $this->Form->input('Complemento', [
 						'placeholder' => 'EX: EMPRESARIAL ABC, 22',
-						'class' => 'form-control text-uppercase input-sm',
 						'value' => $cadastro->complementar,
 						'name' => 'complementar',
-						'maxlength' => 40,
-						'required' => true
+						'maxlength' => 40
 					]) 
 				?>
 			</div>
 			<div class='form-group col-sm-7'>	
 				<?= $this->Form->select('Código de Regime Tributário', [
+						'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => 2,
+						'SIMPLES NACIONAL' => 1,
+						'REGIME NORMAL' => 3
+					], [
 						'selected' => $cadastro->cod_reg_trib,
-						'name' => 'cod_reg_trib',
-						'options' => [
-							'SIMPLES NACIONAL - EXCESSO DE SUBLIMITE DA RECEITA BRUTA' => '2',
-							'SIMPLES NACIONAL' => '1',
-							'REGIME NORMAL' => '3'
-						],
-						'class' => 'form-control input-sm',
-						'required' => true
+						'name' => 'cod_reg_trib'
 					]) 
 				?>
 			</div>

@@ -306,7 +306,7 @@
 		<div class='col-sm-12 text-center data-not-found'>
 			<h4>Desculpe, produto inexistente, deseja retornar?.</h4>
 			<div class='form-group col-sm-4 col-sm-offset-4'>
-				<a href='/Cadastro/index' class='btn btn-primary btn-block'>
+				<a href='/Produto/index' class='btn btn-primary btn-block'>
 					<i class='fas fa-angle-double-left'></i> Retornar 
 				</a>
 			</div>

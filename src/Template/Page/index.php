@@ -82,6 +82,7 @@
                                 <div class='icon-right'>
                                     <?= $this->Form->input('', [
                                             'placeholder' => 'Digite seu usuário',
+                                            'class' => 'form-control',
                                             'required' => true,
                                             'name' => 'login'
                                         ]) 
@@ -91,6 +92,7 @@
                                 <div class='icon-right'>
                                     <?= $this->Form->input('', [
                                             'placeholder' => 'Digite sua senha',
+                                            'class' => 'form-control',
                                             'type' => 'password',
                                             'required' => true,
                                             'name' => 'senha'

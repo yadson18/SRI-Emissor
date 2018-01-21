@@ -2,6 +2,8 @@
 	namespace App\Model\Table;
 
 	use Simple\ORM\Components\Validator;
+	use App\Model\Entity\Produto;
+	use Simple\ORM\TableRegistry;
 	use Simple\ORM\Table;
 
 	class ProdutoTable extends Table
@@ -15,6 +17,23 @@
 			$this->setPrimaryKey('cod_interno');
 
 			$this->setBelongsTo('', []);
+		}
+
+		public function getUnidadesMedida()
+		{
+			return TableRegistry::get('Unidades')->get('all');
+		}
+
+		public function insertNcscm(Produto $produto)
+		{
+			return TableRegistry::get('Ncscm')->getProductNcscm($produto);
+		}
+
+		public function getNcm(string $cod_ncm)
+		{
+			return TableRegistry::get('Ncm')->find(['ncm as cod', 'descricao'])
+				->where(['ncm =' => $cod_ncm])
+				->fetch('class');
 		}
 
 		public function quantidadeCadastrados()

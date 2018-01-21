@@ -207,7 +207,7 @@
 						<div class='form-group col-md-3 col-sm-4'>
 							<?= $this->Form->input('Código NCM', [
 									'placeholder' => 'EX: 01051200',
-									'value' => $produto->cod_ncm,
+									'value' => $produto->ncm_cod,
 									'name' => 'cod_ncm',
 									'maxlength' => 9
 								]) 
@@ -216,7 +216,7 @@
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição NCM', [
 									'placeholder' => 'EX: DESCRIÇÃO',
-									'value' => 'DESCRIÇÃO',
+									'value' => $produto->ncm_descricao,
 									'disabled' => true
 								]) 
 							?>
@@ -226,14 +226,14 @@
 				<div class='col-sm-12'>
 					<div class='row'>
 						<?= $this->Form->input('', [
-								'value' => $produto->cstpc,
+								'value' => $produto->cstpc_cod,
 								'class' => 'hidden',
 								'maxlength' => 1,
 								'name' => 'cstpc'
 							]) 
 						?>
 						<?= $this->Form->input('', [
-								'value' => $produto->cstpc_entrada,
+								'value' => $produto->cstpc_entrada_cod,
 								'name' => 'cstpc_entrada',
 								'class' => 'hidden',
 								'maxlength' => 1
@@ -241,7 +241,7 @@
 						?>	
 						<div class='form-group col-md-3 col-sm-4'>
 							<?= $this->Form->input('Código CST', [
-									'value' => $produto->cstpc,
+									'value' => $produto->cstpc_cod,
 									'placeholder' => 'EX: 1',
 									'maxlength' => 1,
 									'name' => 'cstpc'
@@ -251,7 +251,7 @@
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CST', [
 									'placeholder' => 'EX: DESCRIÇÃO',
-									'value' => 'DESCRIÇÃO',
+									'value' => $produto->cstpc_descricao,
 									'disabled' => true
 								]) 
 							?>

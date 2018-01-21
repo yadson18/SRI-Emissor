@@ -42,21 +42,26 @@
 
 		public function edit($cod_interno = null)
 		{
-			$unidadesMedida = TableRegistry::get('Unidades')->get('all');
+			$unidadesMedida = $this->Produto->getUnidadesMedida();
 			$produto = null;
 
 			if (!empty($cod_interno)) {
 				$produto = $this->Produto->get((int) $cod_interno);
-				
+
+				if ($produto) {
+					$produto = $this->Produto->insertNcscm($produto);
+				}
 				if ($this->request->is('POST')) {
-					$data = array_map('sanitize', $this->request->getData());
+					$data = array_map('removeSpecialChars', $this->request->getData());
 					$produtoEditado = $this->Produto->patchEntity(
 						$this->Produto->newEntity(), $data
 					);
 					$produtoEditado->cod_interno = $cod_interno;
 					
 					if ($this->Produto->save($produtoEditado)) {
-						$produto = $this->Produto->patchEntity($produto, $data);
+						$produto = $this->Produto->insertNcscm(
+							$this->Produto->patchEntity($produto, $data)
+						);
 
 						$this->Flash->success('Os dados foram atualizados com sucesso.');
 					}

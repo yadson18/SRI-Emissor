@@ -30,7 +30,6 @@
 				->where([
 					'nc.ncm =' => $produto->cod_ncm, 'and', 
 					'm.codigo =' => $produto->cstpc, 'and',
-					'm.referencia =' => $produto->cstpc_entrada, 'and', 
 					's.cod_st =' => $produto->st, 'and',
 					'cf.cfop =' => $produto->cfop_in, 'and', 
 					'c.cest =' => $produto->cest

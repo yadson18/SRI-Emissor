@@ -48,6 +48,7 @@
 			if (!empty($cod_interno)) {
 				$produto = $this->Produto->get((int) $cod_interno);
 
+
 				if ($produto) {
 					$produto = $this->Produto->insertNcscm($produto);
 				}

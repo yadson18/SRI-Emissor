@@ -31,9 +31,17 @@
 
 		public function getNcm(string $cod_ncm)
 		{
-			return TableRegistry::get('Ncm')->find(['ncm as cod', 'descricao'])
-				->where(['ncm =' => $cod_ncm])
-				->fetch('class');
+			return TableRegistry::get('Ncm')->getNcmPorCod($cod_ncm);
+		}
+
+		public function getGrupos()
+		{
+			return TableRegistry::get('GrupoProd')->getGrupos();
+		}
+
+		public function getSubgrupos(int $cod_grupo)
+		{
+			return TableRegistry::get('SubgrupoProd')->getSubgrupos($cod_grupo);
 		}
 
 		public function quantidadeCadastrados()

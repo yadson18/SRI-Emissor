@@ -17,6 +17,13 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function getNcmPorCod(string $cod_ncm)
+		{
+			return $this->find(['ncm as cod', 'descricao'])
+				->where(['ncm =' => $cod_ncm])
+				->fetch('class');
+		}
+
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('ncm')->notEmpty()->string()->size(8);

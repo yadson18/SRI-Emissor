@@ -24,10 +24,10 @@
         public function input(string $labelName, array $options = [])
         {
             if (!isset($options['id'])) {
-                $options['id'] = $this->formatTagId($labelName);
+                $options['id'] = $this->formatAttrId($labelName);
             }
             if (!isset($options['name'])) {
-                $options['name'] = $this->formatTagId($labelName);
+                $options['name'] = $this->formatAttrName($labelName);
             }
 
             return implode([
@@ -41,10 +41,10 @@
             $optionsTags = [];
 
             if (!isset($options['id'])) {
-                $options['id'] = $this->formatTagId($labelName);
+                $options['id'] = $this->formatAttrId($labelName);
             }
             if (!isset($options['name'])) {
-                $options['name'] = $this->formatTagId($labelName);
+                $options['name'] = $this->formatAttrName($labelName);
             }
 
             foreach ($optionsValue as $name => $value) {
@@ -74,7 +74,7 @@
         public function button(string $text, array $options = [])
         {
             if (!isset($options['id'])) {
-                $options['id'] = $this->formatTagId($text);
+                $options['id'] = $this->formatAttrId($text);
             }
 
             return $this->buildTag('<button></button>', $options, $text);
@@ -139,8 +139,18 @@
             return (!empty($attrs)) ? ' ' . $attrs : '';
         }
 
-        protected function formatTagId(string $id)
+        protected function formatTagAttr($value, string $separator)
         {
-            return str_replace(' ', '-', sanitize(strtolower($id)));
+            return str_replace(' ', $separator, sanitize(strtolower($value)));
+        }
+
+        protected function formatAttrId(string $id)
+        {
+            return $this->formatTagAttr($id, '-');
+        }
+
+        protected function formatAttrName(string $name)
+        {
+            return $this->formatTagAttr($name, '_');
         }
     }

@@ -10,18 +10,18 @@
 			<fieldset class='col-sm-12'>
 				<legend>Classificação Mercadológica</legend>
 				<div class='form-group col-md-3 col-sm-4'>
-					<?= $this->Form->select('Grupo', [
-							$produto->cod_grupo => $produto->cod_grupo
-						], [
+					<?= $this->Form->select('Grupo', array_column(
+							$grupos, 'cod_grupo', 'descricao'
+						), [
 							'selected' => $produto->cod_grupo,
 							'name' => 'cod_grupo'
 						]) 
 					?>
 				</div>
 				<div class='form-group col-md-3 col-sm-4'>
-					<?= $this->Form->select('Subgrupo', [
-							$produto->cod_subgrupo => $produto->cod_subgrupo
-						], [
+					<?= $this->Form->select('Subgrupo', array_column(
+							$subgrupos, 'cod_subgrupo', 'descricao'
+						), [
 							'selected' => $produto->cod_subgrupo,
 							'name' => 'cod_subgrupo'
 						]) 
@@ -102,7 +102,8 @@
 						<?= $this->Form->input('Preço Sugerido (R$)', [
 								'class' => 'form-control money input-sm',
 								'disabled' => true,
-								'value' => '0,00'
+								'value' => '0,00',
+								'name' => false
 							]) 
 						?>
 					</div>
@@ -204,20 +205,27 @@
 				<legend>PIS/Cofins</legend>
 				<div class='col-sm-12'>
 					<div class='row'>
+						<?= $this->Form->input('', [
+								'value' => $produto->ncm_cod,
+								'class' => 'hidden',
+								'name' => 'cod_ncm',
+								'maxlength' => 10
+							]) 
+						?>
 						<div class='form-group col-md-3 col-sm-4'>
 							<?= $this->Form->input('Código NCM', [
 									'placeholder' => 'EX: 01051200',
 									'value' => $produto->ncm_cod,
-									'name' => 'cod_ncm',
-									'maxlength' => 9
+									'maxlength' => 10,
+									'name' => false
 								]) 
 							?>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição NCM', [
-									'placeholder' => 'EX: DESCRIÇÃO',
 									'value' => $produto->ncm_descricao,
-									'disabled' => true
+									'disabled' => true,
+									'name' => false
 								]) 
 							?>
 						</div>	
@@ -228,8 +236,8 @@
 						<?= $this->Form->input('', [
 								'value' => $produto->cstpc_cod,
 								'class' => 'hidden',
-								'maxlength' => 1,
-								'name' => 'cstpc'
+								'name' => 'cstpc',
+								'maxlength' => 1
 							]) 
 						?>
 						<?= $this->Form->input('', [
@@ -244,15 +252,15 @@
 									'value' => $produto->cstpc_cod,
 									'placeholder' => 'EX: 1',
 									'maxlength' => 1,
-									'name' => 'cstpc'
+									'name' => false
 								]) 
 							?>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CST', [
-									'placeholder' => 'EX: DESCRIÇÃO',
 									'value' => $produto->cstpc_descricao,
-									'disabled' => true
+									'disabled' => true,
+									'name' => false
 								]) 
 							?>
 						</div>	
@@ -260,6 +268,7 @@
 				</div>
 				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->input('Aliquota PIS', [
+							'class' => 'form-control input-sm percent',
 							'value' => $produto->ali_pis_debito,
 							'placeholder' => 'EX: 6.0',
 							'name' => 'ali_pis_debito',
@@ -269,6 +278,7 @@
 				</div>
 				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->input('Aliquota Cofins', [
+							'class' => 'form-control input-sm percent',
 							'value' => $produto->ali_cofins_debito,
 							'name' => 'ali_cofins_debito',
 							'placeholder' => 'EX: 12.0',
@@ -279,13 +289,110 @@
 			</fieldset>
 			<fieldset class='col-sm-12'>
 				<legend>ICMS</legend>
-				<!-- 
-					st
-					cfop_in
-					cest
-					icms_in
-					icms_out 
-				-->
+				<div class='col-sm-12'>
+					<div class='row'>
+						<?= $this->Form->input('', [
+								'value' => $produto->st_cod,
+								'class' => 'hidden',
+								'maxlength' => 4,
+								'name' => 'st'
+							]) 
+						?>	
+						<div class='form-group col-md-3 col-sm-4'>
+							<?= $this->Form->input('Código CST', [
+									'placeholder' => 'EX: 0000',
+									'value' => $produto->st_cod,
+									'maxlength' => 4,
+									'name' => false
+								]) 
+							?>
+						</div>	
+						<div class='form-group col-md-7 col-sm-8'>
+							<?= $this->Form->input('Descrição CST', [
+									'value' => $produto->st_descricao,
+									'disabled' => true,
+									'name' => false
+								]) 
+							?>
+						</div>	
+					</div>
+				</div>
+				<div class='col-sm-12'>
+					<div class='row'>
+						<?= $this->Form->input('', [
+								'value' => $produto->cfop_cod,
+								'class' => 'hidden',
+								'maxlength' => 4,
+								'name' => 'st'
+							]) 
+						?>	
+						<div class='form-group col-md-3 col-sm-4'>
+							<?= $this->Form->input('Código CFOP', [
+									'placeholder' => 'EX: 0000',
+									'value' => $produto->cfop_cod,
+									'maxlength' => 4,
+									'name' => false
+								]) 
+							?>
+						</div>	
+						<div class='form-group col-md-7 col-sm-8'>
+							<?= $this->Form->input('Descrição CFOP', [
+									'value' => $produto->cfop_descricao,
+									'disabled' => true,
+									'name' => false
+								]) 
+							?>
+						</div>	
+					</div>
+				</div>
+				<div class='col-sm-12'>
+					<div class='row'>
+						<?= $this->Form->input('', [
+								'value' => $produto->cest_cod,
+								'class' => 'hidden',
+								'maxlength' => 7,
+								'name' => 'cest'
+							]) 
+						?>	
+						<div class='form-group col-md-3 col-sm-4'>
+							<?= $this->Form->input('Código CEST', [
+									'placeholder' => 'EX: 2000400',
+									'value' => $produto->cest_cod,
+									'maxlength' => 7,
+									'name' => false
+								]) 
+							?>
+						</div>	
+						<div class='form-group col-md-7 col-sm-8'>
+							<?= $this->Form->input('Descrição CEST', [
+									'value' => $produto->cest_descricao,
+									'disabled' => true,
+									'name' => false
+								]) 
+							?>
+						</div>	
+					</div>
+				</div>
+				<div class='form-group col-md-3 col-sm-4'>
+					<?= $this->Form->input('ICMS Dentro', [
+							'class' => 'form-control input-sm percent',
+							'value' => $produto->icms_in,
+							'placeholder' => 'EX: 17.00',
+							'name' => 'icms_in',
+							'maxlength' => 7
+						]) 
+					?>
+				</div>
+				<div class='form-group col-md-3 col-sm-4'>
+					<?= $this->Form->input('ICMS Fora', [
+							'class' => 'form-control input-sm percent',
+							'value' => $produto->icms_out,
+							'name' => 'icms_out',
+							'placeholder' => 'EX: 12.00',
+							'maxlength' => 7
+						]) 
+					?>
+				</div>
 			</fieldset>
 			<div class='row'>
 				<div class='col-md-8 col-sm-12 col-xs-12 pull-right'>

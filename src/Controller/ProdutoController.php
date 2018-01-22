@@ -42,15 +42,21 @@
 
 		public function edit($cod_interno = null)
 		{
-			$unidadesMedida = $this->Produto->getUnidadesMedida();
+			$unidadesMedida = [];
+			$subgrupos = [];
+			$grupos = [];
 			$produto = null;
 
 			if (!empty($cod_interno)) {
 				$produto = $this->Produto->get((int) $cod_interno);
 
-
 				if ($produto) {
 					$produto = $this->Produto->insertNcscm($produto);
+					$unidadesMedida = $this->Produto->getUnidadesMedida();
+					$grupos = $this->Produto->getGrupos();
+					$subgrupos = array_merge(
+						$this->Produto->getSubgrupos($produto->cod_grupo), $subgrupos
+					);
 				}
 				if ($this->request->is('POST')) {
 					$data = array_map('removeSpecialChars', $this->request->getData());
@@ -76,7 +82,9 @@
 			$this->setViewVars([
 				'usuarioNome' => $this->nomeUsuarioLogado(),
 				'produto' => $produto,
-				'unidades' => $unidadesMedida
+				'unidades' => $unidadesMedida,
+				'grupos' => $grupos,
+				'subgrupos' => $subgrupos
 			]);
 		}
 

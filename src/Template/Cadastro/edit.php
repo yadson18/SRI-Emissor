@@ -35,6 +35,7 @@
 									? 'EX: 53.965.649/0001-03' 
 									: 'EX: 095.726.241-80',
 								'value' => $cadastro->cnpj,
+								'autofocus' => true,
 								'name' => 'cnpj'
 							]) 
 						?>	

@@ -73,6 +73,7 @@
                                     <?= $this->Form->input('', [
                                             'placeholder' => 'Digite seu CNPJ',
                                             'class' => 'cnpjMask form-control',
+                                            'autofocus' => true,
                                             'required' => true,
                                             'name' => 'cnpj' 
                                         ]) 

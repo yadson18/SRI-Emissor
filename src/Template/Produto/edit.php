@@ -35,6 +35,7 @@
 							'placeholder' => 'EX: FRUTAS E VERDURAS LTDA',
 							'value' => $produto->cod_produto,
 							'name' => 'cod_produto',
+							'autofocus' => true,
 							'maxlength' => 14
 						]) 
 					?>

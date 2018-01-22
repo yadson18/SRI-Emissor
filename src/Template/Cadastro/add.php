@@ -22,6 +22,7 @@
 				<?= $this->Form->input('CPF' , [
 						'class' => 'form-control input-sm cpfMask',
 						'placeholder' => 'EX: 095.726.241-80',
+						'autofocus' => true,
 						'name' => 'cnpj'
 					]) 
 				?>	

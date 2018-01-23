@@ -19,29 +19,16 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getUnidadesMedida()
+		public function inserirDadosProduto(Produto $produto)
 		{
-			return TableRegistry::get('Unidades')->get('all');
-		}
+			$produto->data_alteracao = date('d.m.Y'); 
+			$produto->ncm = $this->getNcm($produto->cod_ncm);
+			$produto->cstpc = $this->getCstpc($produto->cstpc);
+			$produto->st = $this->getSt($produto->st);
+			$produto->cfop = $this->getCfop($produto->cfop_in);
+			$produto->cest = $this->getCest($produto->cest);
 
-		public function insertNcscm(Produto $produto)
-		{
-			return TableRegistry::get('Ncscm')->getProductNcscm($produto);
-		}
-
-		public function getNcm(string $cod_ncm)
-		{
-			return TableRegistry::get('Ncm')->getNcmPorCod($cod_ncm);
-		}
-
-		public function getGrupos()
-		{
-			return TableRegistry::get('GrupoProd')->getGrupos();
-		}
-
-		public function getSubgrupos(int $cod_grupo)
-		{
-			return TableRegistry::get('SubgrupoProd')->getSubgrupos($cod_grupo);
+			return $produto;
 		}
 
 		public function quantidadeCadastrados()
@@ -84,10 +71,50 @@
 				->fetch('class');
 		}
 
+		public function getUnidadesMedida()
+		{
+			return TableRegistry::get('Unidades')->get('all');
+		}
+
+		public function getGrupos()
+		{
+			return TableRegistry::get('GrupoProd')->getGrupos();
+		}
+
+		public function getSubgrupos(int $cod_grupo)
+		{
+			return TableRegistry::get('SubgrupoProd')->getSubgrupos($cod_grupo);
+		}
+
+		public function getNcm(string $ncm)
+		{
+			return TableRegistry::get('Ncm')->getNcmPorCod($ncm);
+		}
+
+		public function getCstpc(string $codigo)
+		{
+			return TableRegistry::get('ModPiscofins')->get($codigo);
+		}
+
+		public function getSt(string $cod_st)
+		{
+			return TableRegistry::get('St')->getStPorCod($cod_st);
+		}
+
+		public function getCfop(string $cfop)
+		{
+			return TableRegistry::get('Cfop')->getCfopPorCod($cfop);
+		}
+
+		public function getCest(string $cest)
+		{
+			return TableRegistry::get('Cest')->getCestPorCod($cest);
+		}
+
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);
-			$validator->addRule('cod_interno')->notEmpty()->int()->size(4);
+			$validator->addRule('cod_interno')->notEmpty()->int()->size(6);
 			$validator->addRule('cod_produto')->notEmpty()->string()->size(14);
 			$validator->addRule('descricao')->empty()->string()->size(40);
 			$validator->addRule('cod_grupo')->notEmpty()->int()->size(4);
@@ -120,10 +147,10 @@
 			$validator->addRule('atacado2')->empty()->int()->size(4);
 			$validator->addRule('venda')->empty()->int()->size(4);
 			$validator->addRule('data_ultcompra')->empty()->string()->size(8);
-			$validator->addRule('data_cadastro')->empty()->string()->size(4);
-			$validator->addRule('cod_colaboradorcadastro')->notEmpty()->int()->size(4);
-			$validator->addRule('data_alteracao')->empty()->string()->size(4);
-			$validator->addRule('cod_colaboradoralteracao')->notEmpty()->int()->size(4);
+			$validator->addRule('data_cadastro')->empty()->string()->size(10);
+			$validator->addRule('cod_colaboradorcadastro')->notEmpty()->int()->size(5);
+			$validator->addRule('data_alteracao')->empty()->string()->size(10);
+			$validator->addRule('cod_colaboradoralteracao')->notEmpty()->int()->size(5);
 			$validator->addRule('qtd_embalagem')->empty()->int()->size(8);
 			$validator->addRule('preco_embalagem')->empty()->int()->size(4);
 			$validator->addRule('pauta')->empty()->int()->size(4);
@@ -134,8 +161,8 @@
 			$validator->addRule('und_embalagem')->empty()->string()->size(10);
 			$validator->addRule('qtd_antes_ult_compra')->empty()->int()->size(4);
 			$validator->addRule('st_promocao')->notEmpty()->string()->size(1);
-			$validator->addRule('data_inicio_prom')->empty()->string()->size(8);
-			$validator->addRule('data_final_prom')->empty()->string()->size(8);
+			$validator->addRule('data_inicio_prom')->empty()->string()->size(24);
+			$validator->addRule('data_final_prom')->empty()->string()->size(24);
 			$validator->addRule('preco_prom')->empty()->int()->size(8);
 			$validator->addRule('data_ult_venda')->empty()->string()->size(4);
 			$validator->addRule('cod_barra_embalagem')->empty()->string()->size(14);
@@ -166,7 +193,7 @@
 			$validator->addRule('val_info')->empty()->string()->size(300);
 			$validator->addRule('cfop_in')->empty()->string()->size(4);
 			$validator->addRule('cfop_out')->empty()->string()->size(4);
-			$validator->addRule('markup_varejo')->empty()->int()->size(4);
+			$validator->addRule('markup_varejo')->empty()->float()->size(5);
 			$validator->addRule('venda_markup_varejo')->empty()->int()->size(4);
 			$validator->addRule('status_inv')->empty()->string()->size(1);
 			$validator->addRule('localizacao')->empty()->string()->size(25);
@@ -184,7 +211,7 @@
 			$validator->addRule('perc_ibpt')->empty()->int()->size(8);
 			$validator->addRule('referencia')->empty()->string()->size(14);
 			$validator->addRule('prfuturo')->empty()->int()->size(4);
-			$validator->addRule('compra')->empty()->int()->size(4);
+			$validator->addRule('compra')->empty()->float()->size(5);
 			$validator->addRule('markup')->empty()->int()->size(4);
 			$validator->addRule('cotacao')->notEmpty()->string()->size(1);
 			$validator->addRule('st_out')->empty()->string()->size(4);

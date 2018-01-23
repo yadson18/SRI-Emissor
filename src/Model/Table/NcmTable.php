@@ -17,12 +17,12 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getNcmPorCod(string $cod_ncm)
+		public function getNcmPorCod(string $ncm)
 		{
-			return $this->find(['ncm as cod', 'descricao'])
-				->where(['ncm =' => $cod_ncm])
+			return $this->find(['ncm', 'descricao'])
+				->where(['ncm =' => $ncm])
 				->fetch('class');
-		}
+		} 
 
 		protected function defaultValidator(Validator $validator)
 		{

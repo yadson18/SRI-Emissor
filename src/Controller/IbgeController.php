@@ -14,9 +14,9 @@
 				$data = $this->request->getData();
 
 				if (isset($data['sigla'])) {
-					$this->Ajax->response(
-						'municipios', $this->Ibge->municipiosUF($data['sigla'])
-					);
+					$this->Ajax->response('municipios', [
+						'municipios' => $this->Ibge->municipiosUF($data['sigla'])
+					]);
 				}
 			}
 			else {

@@ -51,22 +51,23 @@
 				$produto = $this->Produto->get((int) $cod_interno);
 
 				if ($produto) {
-					$produto = $this->Produto->insertNcscm($produto);
+					$produto = $this->Produto->inserirDadosProduto($produto);
 					$unidadesMedida = $this->Produto->getUnidadesMedida();
 					$grupos = $this->Produto->getGrupos();
-					$subgrupos = array_merge(
-						$this->Produto->getSubgrupos($produto->cod_grupo), $subgrupos
-					);
+					$subgrupos = $this->Produto->getSubgrupos($produto->cod_grupo);
 				}
 				if ($this->request->is('POST')) {
-					$data = array_map('removeSpecialChars', $this->request->getData());
+					$cod_cadastro = $this->Auth->getUser('cadastro')->cod_cadastro;
+					$data = sanitizeProductValues($this->request->getData());
+
 					$produtoEditado = $this->Produto->patchEntity(
 						$this->Produto->newEntity(), $data
 					);
-					$produtoEditado->cod_interno = $cod_interno;
-					
+					$produtoEditado->cod_interno = $cod_interno; 
+					$produtoEditado->cod_colaboradoralteracao = $cod_cadastro; 
+
 					if ($this->Produto->save($produtoEditado)) {
-						$produto = $this->Produto->insertNcscm(
+						$produto = $this->Produto->inserirDadosProduto(
 							$this->Produto->patchEntity($produto, $data)
 						);
 
@@ -77,7 +78,7 @@
 					}
 				}
 			}
-
+	
 			$this->setTitle('Modificar Produto');
 			$this->setViewVars([
 				'usuarioNome' => $this->nomeUsuarioLogado(),

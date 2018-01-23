@@ -15,11 +15,14 @@
 		protected function mountPdoConfig(array $configs)
 		{
 			return [
-				'dsn' => replaceRecursive(static::$dsn, [
-					'%host%' => $configs['host'],
-					'%path%' => $configs['path'],
-					'%encode%' => $configs['encoding']
-				]),
+				'dsn' => preg_replace(
+					['/%host%/', '/%path%/', '/%encode%/'], [
+						$configs['host'], 
+						$configs['path'], 
+						$configs['encoding']
+					], 
+					static::$dsn
+				),
 				'user' => $configs['user'],
 				'password' => $configs['password']
 			];

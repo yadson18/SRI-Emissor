@@ -7,9 +7,25 @@
 		{
 			return $this->allow([]);
 		}
+ 
+		public function getSubgrupos()
+		{
+			if ($this->request->is('POST')) {
+				$data = $this->request->getData();
+
+				if (isset($data['codGrupo'])) {
+					$this->Ajax->response('subgrupos', [
+						'subgrupos' => $this->SubgrupoProd->getSubgrupos($data['codGrupo'])
+					]);
+				}
+			}
+			else {
+				return $this->redirect(['controller' => 'Produto', 'view' => 'index']);
+			}
+		}
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized([]);
+			$this->Auth->isAuthorized(['getSubgrupos']);
 		}
 	}

@@ -50,7 +50,7 @@
             foreach ($optionsValue as $name => $value) {
                 $attributes = [];
 
-                if (isset($options['selected']) && $options['selected'] === $value) {
+                if (isset($options['selected']) && $options['selected'] == $value) {
                     $attributes['selected'] = true;
                     unset($options['selected']);
                 }

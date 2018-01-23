@@ -86,7 +86,7 @@
 
 		public function initializeTables()
 		{
-			$tableName = replace(removeNamespace($this), 'Controller', '');
+			$tableName = str_replace('Controller', '', removeNamespace($this));
 			$table = TableRegistry::get($tableName);
 
 			if (!empty($table)) {

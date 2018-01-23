@@ -1,4 +1,25 @@
 <?php
+	function sanitizeProductValues(array $productData)
+	{
+		$sanitizedData = array_map(function($column, $value) {
+			if ($column === 'compra' || $column === 'venda' ||
+				$column === 'preco_vol' || $column === 'preco_prom'
+			) {
+				return unmaskMoney($value);
+			}
+			else if ($column === 'data_inicio_prom' || 
+				$column === 'data_final_prom'
+			) {
+				return substr(date('d.m.Y, H:i:s.u', strtotime($value)), 0, 24);
+			}
+			else {
+				return removeSpecialChars($value);
+			}
+		}, array_keys($productData), array_values($productData));
+
+		return array_combine(array_keys($productData), $sanitizedData);
+	}
+
 	function removeNamespace($object)
 	{
 		return splitNamespace(get_class($object));
@@ -23,6 +44,11 @@
 			return number_format($number, 2, '.', '');
 		}
 		return $number;
+	}
+
+	function unmaskMoney($number)
+	{
+		return preg_replace(['/[.]/', '/[,]/'], ['', '.'], $number);
 	}
 
 	function mask(string $mask, string $value)
@@ -90,19 +116,6 @@
 			return (!empty($result)) ? $result : array_pop($pieces);
 		}
 		return $pieces;
-	}
-
-	function replaceRecursive(string $value, array $replaces)
-	{
-		while ($replaces) {
-			$value = replace($value, key($replaces), array_shift($replaces));
-		}
-		return $value;
-	}
-
-	function replace(string $value, string $search, string $replace)
-	{
-		return str_replace($search, $replace, $value);
 	}
 
 	function findArrayValues(string $keys, array $array)

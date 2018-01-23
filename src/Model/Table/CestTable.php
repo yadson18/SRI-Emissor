@@ -17,6 +17,13 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function getCestPorCod(string $cest)
+		{
+			return $this->find(['cest', 'descricao'])
+				->where(['cest =' => $cest])
+				->fetch('class');
+		}
+
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('seq')->notEmpty()->int()->size(4);

@@ -40,7 +40,7 @@
 
 		protected function getEntityName()
 		{
-			$entityName = replace(splitNamespace(get_class($this)), 'Table', '');
+			$entityName = str_replace('Table', '', splitNamespace(get_class($this)));
 
 			return Table::ENTITY_NAMESPACE . $entityName;
 		}
@@ -92,7 +92,7 @@
 			if (!empty($key) && !empty($this->getTable())) {
 				if ($key === 'all') {
 					return $this->find(['*'])
-							->fetch('all');
+						->fetch('all');
 				}
 				else if (!empty($this->getPrimaryKey())) {
 					if (isset($contain['contain']) && !empty($contain['contain'])) {

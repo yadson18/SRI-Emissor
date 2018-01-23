@@ -267,24 +267,48 @@ $(document).ready(function(){
             method: 'POST'
         })
         .always(function(data, status) {
-            if (status === 'success') {
-                var $cidadesSelect = $('select[name=cidade]');
-                    $options = [];
-                    municipio = null; 
+            var $options = [];
 
-                $.each(data, function(index, value) {
-                    municipio = value['nome_municipio'];
+            if (status === 'success' && data['municipios']) {
+                $.each(data['municipios'], function(index, value) {
                     $options.push($('<option></option>', {
-                        value: municipio, 
-                        text: municipio
+                        value: value['nome_municipio'], 
+                        text: value['nome_municipio']
                     }));
                 });
                 
-                $cidadesSelect.empty().append($options);
+                $('select[name=cidade]').empty().append($options);
             }   
             else {
                 console.log('Error: não foi possível completar a requisição.');
             }
+        });
+    });
+
+    $('select[name=cod_grupo]').on('change', function() {
+        $.ajax({
+            url: '/SubgrupoProd/getSubgrupos',
+            data: { codGrupo: $(this).val() },
+            dataType: 'json',
+            method: 'POST'
+        }).always(function(data, status) {
+            var $options = [];
+            
+            if (status === 'success' && data['subgrupos']) {
+                $.each(data['subgrupos'], function(index, value) {
+                    $options.push($('<option></option>', {
+                        value: value['cod_subgrupo'],
+                        text: value['descricao']
+                    }));
+                });
+            }
+            else {
+                $options.push($('<option></option>', {
+                    value: 0,
+                    text: '-- SEM SUBGRUPO --'
+                }));
+            }
+            $('select[name=cod_subgrupo]').empty().append($options);
         });
     });
 });

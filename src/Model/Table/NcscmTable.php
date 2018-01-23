@@ -10,14 +10,14 @@
 		{
 			$this->setDatabase('SRICASH');
 
-			$this->setTable('ncm nc, cest c, st s, cfop cf, mod_piscofins m');
+			$this->setTable('ncm nc, mod_piscofins m, st s, cfop cf, cest c');
 
 			$this->setPrimaryKey('');
 
 			$this->setBelongsTo('', []);
 		}
 
-		public function getProductNcscm($produto)
+		/*public function getProductNcscm($produto)
 		{
 			$ncscm = $this->find([
 					'nc.ncm as ncm_cod', 'nc.descricao as ncm_descricao',
@@ -37,6 +37,9 @@
 				->limit(1)
 				->fetch('all');
 
+				debug($ncscm);
+				exit;
+
 			if (!empty($ncscm)) {
 				$produto = $this->patchEntity($produto, array_shift($ncscm));
 				unset(
@@ -47,7 +50,7 @@
 
 				return $produto;
 			}
-		}
+		}*/
 
 		protected function defaultValidator(Validator $validator)
 		{

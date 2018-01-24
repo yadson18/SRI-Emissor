@@ -137,7 +137,6 @@ $(document).ready(function(){
                 else {
                     $messageBox.bootstrapAlert('error', 'Digite um CPF válido.');
                 }
-
             }
         }
         $div.append($('<i></i>', { class: 'fas ' + classes }));
@@ -152,13 +151,26 @@ $(document).ready(function(){
     cnpj = { mask: '00.000.000/0000-00', size: 14 };
     cpf = { mask: '000.000.000-00', size: 11 };
 
-    $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
-    $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
-    $('.cepMask').mask('00000-000', defaultMaskConfigs);
-    $('.date').mask('00/00/0000 00:00:00', { reverse: false });
     $('.money').mask('000.000.000.000.000,00', { reverse: true });
     $('.thousand').mask('000.000.000.000.000', { reverse: true });
+    $('.cepMask').mask('00000-000', defaultMaskConfigs);
+    $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
+    $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
     $('.percent').mask('0000.00', { reverse: true });
+    $('.icms').mask('00.00', { reverse: true });
+    $('.ali-pis').mask('0.0000');
+
+    $.datetimepicker.setLocale('pt-BR');
+    $('.date').datetimepicker({
+        format:'d/m/Y',
+        timepicker: false,
+        minDate: 0
+    }).mask('00/00/0000', { reverse: false });
+    
+    $('.date-time').datetimepicker({
+        format:'d/m/Y H:i:s',
+        minDate: 0
+    }).mask('00/00/0000 00:00:00', { reverse: false });
 
     $('.cnpjCpfMask').mask(function(value) { 
         return (value.length === cpf.size) ? cpf.mask : cnpj.mask;
@@ -245,28 +257,85 @@ $(document).ready(function(){
         $(this).val($(this).val().toUpperCase()); 
     });
 
-    $('#find-cep').on('click', function() {
-        var cep = $('input[name=cep]').cleanVal();
-
-       /* $('select[name=estado] option[value=RJ]').attr({selected: true})*/
-        
-        $.ajax({
-            url: 'https://viacep.com.br/ws/' + cep + '/json/',
-            dataType: 'json'
-        })
-        .always(function(data) {
-            console.log(data);
+    function municipiosUF(siglaUF) {
+        return $.ajax({
+            url: '/Ibge/municipiosUF',
+            data: { sigla: siglaUF },
+            dataType: 'json',
+            method: 'POST'
         });
+    }
+
+    $('#find-cep').on('click', function() {
+        var $cep = $('input[name=cep]');
+        
+        if (cep) {
+            $.ajax({
+                url: 'https://viacep.com.br/ws/' + $cep.cleanVal() + '/json/',
+                dataType: 'json',
+                method: 'GET'
+            })
+            .always(function(data, status) {
+                $DOM = {
+                    estado: $('select[name=estado] option'),
+                    endereco: $('input[name=endereco]'),
+                    cidade: $('select[name=cidade]'),
+                    bairro: $('input[name=bairro]'),
+                    messageBox: $('.message-box'),
+                    cepInputDiv: $cep.closest('div'),
+                    options: [],
+                    option: null
+                };
+
+                if (status === 'success' && !data['erro']) {
+                    var cidade = data.localidade.toUpperCase();
+
+                    $DOM.cepInputDiv.removeClass('has-error');
+                    $DOM.cidade.find('option').filter(function() {
+                        return $(this).val() === cidade
+                    }).prop('selected', true);
+                    $DOM.estado.filter(function() {
+                        return $(this).val() === data.uf;
+                    }).prop('selected', true);
+                    $DOM.endereco.val(data.logradouro);
+                    $DOM.bairro.val(data.bairro);
+
+                    if ($DOM.cidade.find('option:contains('+ cidade +')').length === 0) {
+                        municipiosUF(data.uf).always(function(dataAjax, status) {
+                            if (status === 'success' && dataAjax['municipios']) {
+                                $.each(dataAjax['municipios'], function(index, value) {
+                                    $DOM.option = $('<option></option>', {
+                                        value: value['nome_municipio'], 
+                                        text: value['nome_municipio']
+                                    });
+                                    if (value['nome_municipio'] === cidade) {
+                                        $DOM.option.prop('selected', true);
+                                    }
+                                    $DOM.options.push($DOM.option);
+                                });
+                                $DOM.cidade.empty().append($DOM.options);
+                            }   
+                            else {
+                                console.log('Error: não foi possível completar a requisição.');
+                            }
+                        });
+                    }
+                }
+                else {
+                    $DOM.cepInputDiv.addClass('has-error');
+                    $DOM.messageBox.bootstrapAlert('error', 'CEP inválido, tente novamente.');
+                    $DOM.estado.filter(function() {
+                        return $(this).val() === 'AC'
+                    }).prop('selected', true).change();
+                    $DOM.bairro.val('');
+                    $DOM.endereco.val('');
+                }
+            });
+        }
     });
 
     $('select[name=estado]').on('change', function() {
-        $.ajax({
-            url: '/Ibge/municipiosUF',
-            data: { sigla: $(this).val() },
-            dataType: 'json',
-            method: 'POST'
-        })
-        .always(function(data, status) {
+        municipiosUF($(this).val()).always(function(data, status) {
             var $options = [];
 
             if (status === 'success' && data['municipios']) {
@@ -310,5 +379,27 @@ $(document).ready(function(){
             }
             $('select[name=cod_subgrupo]').empty().append($options);
         });
+    });
+
+    $('input[name=compra], input[name=markup]').on('focusout', function(){
+        $DOM = {
+            compra: $('input[name=compra]'),
+            markup: $('input[name=markup]')
+        };
+
+        if ($DOM.compra.val().replace(/[0,.]/) !== '' && 
+            $DOM.markup.val().replace(/[0,.]/) !== ''
+        ) {
+            var markup = parseFloat($DOM.markup.val()) / 100;
+                price = parseFloat($DOM.compra.val().replace(/[.,]/, ''));
+                result = price + (price * markup);
+
+                $('.preco-sugerido').val(result).mask(
+                    '000.000.000.000.000,00', { reverse: true }
+                );
+        }
+        else {
+            $('.preco-sugerido').val('0,00');
+        }
     });
 });

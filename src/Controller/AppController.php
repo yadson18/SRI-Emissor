@@ -59,10 +59,19 @@
 
 		public function nomeUsuarioLogado()
 		{
-			$usuario = $this->Auth->getUser();
+			$nome = $this->Auth->getUser('nome');
 
-			if ($usuario) {
-				return $usuario->nome;
+			if ($nome) {
+				return $nome;
+			}
+		}
+
+		public function idUsuarioLogado()
+		{
+			$cadastro = $this->Auth->getUser('cadastro');
+
+			if (isset($cadastro->cod_cadastro)) {
+				return $cadastro->cod_cadastro;
 			}
 		}
 	}

@@ -11,13 +11,15 @@
 		<?= $this->Html->font('Montserrat') ?>
 		<?= $this->Html->css('bootstrap.min.css') ?>
 		<?= $this->Html->css('fontawesome-all.min.css') ?>
+		<?= $this->Html->css('jquery-datetimepicker.min.css') ?>
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
 		<?= $this->Html->script('jquery.mask.js') ?>
 		<?= $this->Html->script('jquery.cpfcnpj.min.js') ?>
+		<?= $this->Html->script('jquery-datetimepicker.min.js') ?>
 		<?= $this->Html->script('internal-functions.js') ?>
-
+		
 		<?= $this->Html->less('mixin.less') ?>
 		<?= $this->Html->script(
 				strtolower($this->fetch('controller')) . '-' . 

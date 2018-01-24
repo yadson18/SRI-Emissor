@@ -42,51 +42,48 @@
 
 		public function edit($cod_interno = null)
 		{
-			$unidadesMedida = [];
-			$subgrupos = [];
-			$grupos = [];
 			$produto = null;
 
-			if (!empty($cod_interno)) {
-				$produto = $this->Produto->get((int) $cod_interno);
+			if (is_numeric($cod_interno)) {
+				$produto = $this->Produto->get($cod_interno);
 
-				if ($produto) {
-					$produto = $this->Produto->inserirDadosProduto($produto);
-					$unidadesMedida = $this->Produto->getUnidadesMedida();
-					$grupos = $this->Produto->getGrupos();
-					$subgrupos = $this->Produto->getSubgrupos($produto->cod_grupo);
-				}
-				if ($this->request->is('POST')) {
-					$cod_cadastro = $this->Auth->getUser('cadastro')->cod_cadastro;
-					$data = sanitizeProductValues($this->request->getData());
-
-					$produtoEditado = $this->Produto->patchEntity(
-						$this->Produto->newEntity(), $data
+				if ($this->request->is('POST') && !is_null($produto)) {
+					$produto = $this->Produto->patchEntity(
+						$this->Produto->newEntity(), 
+						sanitizeProductValues($this->request->getData())
 					);
-					$produtoEditado->cod_interno = $cod_interno; 
-					$produtoEditado->cod_colaboradoralteracao = $cod_cadastro; 
+					$produto->cod_colaboradoralteracao = $this->idUsuarioLogado();
+					$produto->cod_interno = $cod_interno; 
 
-					if ($this->Produto->save($produtoEditado)) {
-						$produto = $this->Produto->inserirDadosProduto(
-							$this->Produto->patchEntity($produto, $data)
-						);
-
+					if ($this->Produto->save($produto)) {
 						$this->Flash->success('Os dados foram atualizados com sucesso.');
 					}
 					else {
 						$this->Flash->error('Não foi possível atualizar os dados do produto.');
-					}
+					}	
 				}
 			}
-	
+			if ($produto) {
+				$this->setViewVars([
+					'subgrupos' => $this->Produto->getSubgrupos($produto->cod_grupo),
+					'cstpc' => $this->Produto->getCstpc($produto->cstpc),
+					'cfop' => $this->Produto->getCfop($produto->cfop_in),
+					'ncm' => $this->Produto->getNcm($produto->cod_ncm),
+					'cest' => $this->Produto->getCest($produto->cest),
+					'unidades' => $this->Produto->getUnidadesMedida(),
+					'usuarioNome' => $this->nomeUsuarioLogado(),
+					'st' => $this->Produto->getSt($produto->st),
+					'grupos' => $this->Produto->getGrupos(),
+					'produto' => $produto
+				]);
+			}
+			else {
+				$this->setViewVars([
+					'usuarioNome' => $this->nomeUsuarioLogado(),
+					'produto' => $produto
+				]);
+			}
 			$this->setTitle('Modificar Produto');
-			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
-				'produto' => $produto,
-				'unidades' => $unidadesMedida,
-				'grupos' => $grupos,
-				'subgrupos' => $subgrupos
-			]);
 		}
 
 		public function beforeFilter()

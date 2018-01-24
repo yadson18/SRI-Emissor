@@ -19,18 +19,6 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function inserirDadosProduto(Produto $produto)
-		{
-			$produto->data_alteracao = date('d.m.Y'); 
-			$produto->ncm = $this->getNcm($produto->cod_ncm);
-			$produto->cstpc = $this->getCstpc($produto->cstpc);
-			$produto->st = $this->getSt($produto->st);
-			$produto->cfop = $this->getCfop($produto->cfop_in);
-			$produto->cest = $this->getCest($produto->cest);
-
-			return $produto;
-		}
-
 		public function quantidadeCadastrados()
 		{
 			$dataDeHoje = date("'". 'd.m.Y' ."'");
@@ -93,7 +81,7 @@
 
 		public function getCstpc(string $codigo)
 		{
-			return TableRegistry::get('ModPiscofins')->get($codigo);
+			return TableRegistry::get('ModPiscofins')->getCstpcPorCod($codigo);
 		}
 
 		public function getSt(string $cod_st)

@@ -17,6 +17,13 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function getCstpcPorCod(string $codigo)
+		{
+			return $this->find(['codigo', 'descricao', 'referencia'])
+				->where(['codigo =' => $codigo])
+				->fetch('class');
+		}
+
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('codigo')->notEmpty()->int()->size(4);

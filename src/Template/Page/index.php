@@ -68,39 +68,37 @@
                     <div class='modal-body'>
                         <?= $this->Form->start([]) ?>
                             <div id='message-box'></div>
-                            <div class='form-group'>
-                                <div class='icon-right'>
-                                    <?= $this->Form->input('', [
-                                            'placeholder' => 'Digite seu CNPJ',
-                                            'class' => 'cnpjMask form-control',
-                                            'autofocus' => true,
-                                            'required' => true,
-                                            'name' => 'cnpj' 
-                                        ]) 
-                                    ?>
-                                    <i class="fas fa-id-card"></i>
-                                </div>
-                                <div class='icon-right'>
-                                    <?= $this->Form->input('', [
-                                            'placeholder' => 'Digite seu usuário',
-                                            'class' => 'form-control',
-                                            'required' => true,
-                                            'name' => 'login'
-                                        ]) 
-                                    ?>
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class='icon-right'>
-                                    <?= $this->Form->input('', [
-                                            'placeholder' => 'Digite sua senha',
-                                            'class' => 'form-control',
-                                            'type' => 'password',
-                                            'required' => true,
-                                            'name' => 'senha'
-                                        ]) 
-                                    ?>
-                                    <i class="fas fa-key"></i>
-                                </div>
+                            <div class='form-group icon-right'>
+                                <?= $this->Form->input('', [
+                                        'placeholder' => 'Digite seu CNPJ',
+                                        'class' => 'cnpjMask form-control',
+                                        'autofocus' => true,
+                                        'required' => true,
+                                        'name' => 'cnpj' 
+                                    ]) 
+                                ?>
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class='form-group icon-right'>
+                                <?= $this->Form->input('', [
+                                        'placeholder' => 'Digite seu usuário',
+                                        'class' => 'form-control',
+                                        'required' => true,
+                                        'name' => 'login'
+                                    ]) 
+                                ?>
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class='form-group icon-right'>
+                                <?= $this->Form->input('', [
+                                        'placeholder' => 'Digite sua senha',
+                                        'class' => 'form-control',
+                                        'type' => 'password',
+                                        'required' => true,
+                                        'name' => 'senha'
+                                    ]) 
+                                ?>
+                                <i class="fas fa-key"></i>
                             </div>
                             <div class='form-group'>
                                 <?= $this->Form->button(

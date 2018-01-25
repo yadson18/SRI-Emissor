@@ -22,11 +22,7 @@
 		<?= $this->Html->script('internal-functions.js') ?>
 		
 		<?= $this->Html->less('mixin.less') ?>
-		<?= $this->Html->script(
-				strtolower($this->fetch('controller')) . '-' . 
-				strtolower($this->fetch('view')) . '.js'
-			) 
-		?>
+		<?= $this->Html->script($this->fetch('controller') . '.js') ?>
 		<?= $this->Html->less(
 				strtolower($this->fetch('controller')) . '-' . 
 				strtolower($this->fetch('view')) . '.less'

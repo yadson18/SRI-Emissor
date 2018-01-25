@@ -40,20 +40,21 @@
 			]);
 		}
 
-		public function edit($cod_interno = null)
+		public function edit($codInterno = null)
 		{
 			$produto = null;
 
-			if (is_numeric($cod_interno)) {
-				$produto = $this->Produto->get($cod_interno);
+			if (is_numeric($codInterno)) {
+				$codCadastro = $this->userLogado('cadastro')->cod_cadastro;
+				$produto = $this->Produto->get($codInterno);
 
 				if ($this->request->is('POST') && !is_null($produto)) {
 					$produto = $this->Produto->patchEntity(
 						$this->Produto->newEntity(), 
 						normalizarDadosProduto($this->request->getData())
 					);
-					$produto->cod_colaboradoralteracao = $this->userLogado('cod_cadastro');
-					$produto->cod_interno = $cod_interno; 
+					$produto->cod_colaboradoralteracao = $codCadastro;
+					$produto->cod_interno = $codInterno; 
 
 					if ($this->Produto->save($produto)) {
 						$this->Flash->success('Os dados foram atualizados com sucesso.');

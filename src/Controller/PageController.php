@@ -27,7 +27,7 @@
 
 			$this->setTitle('Home');
 			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'usuarioNome' => $this->userLogado('nome'),
 				'usuarioRazao' => $usuario->cadastro->razao,
 				'usuarioCnpj' => $usuario->cadastro->cnpj,
 				'nfeEmitidas' => $nfe,

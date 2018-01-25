@@ -23,29 +23,25 @@
 
         public function input(string $labelName, array $options = [])
         {
+            $label = '';
+            
             if (!isset($options['id'])) {
                 $options['id'] = $this->formatAttrId($labelName);
             }
             if (!isset($options['name'])) {
                 $options['name'] = $this->formatAttrName($labelName);
             }
+            if (!empty($labelName)) {
+                $label = $this->buildTag('<label></label>', [], $labelName);
+            }
 
-            return implode([
-                $this->buildTag('<label></label>', [], $labelName),
-                $this->buildTag('<input>', $options)
-            ]);
+            return $label . $this->buildTag('<input>', $options);
         }
 
         public function select(string $labelName, array $optionsValue, array $options = [])
         {
             $optionsTags = [];
-
-            if (!isset($options['id'])) {
-                $options['id'] = $this->formatAttrId($labelName);
-            }
-            if (!isset($options['name'])) {
-                $options['name'] = $this->formatAttrName($labelName);
-            }
+            $label = '';
 
             foreach ($optionsValue as $name => $value) {
                 $attributes = [];
@@ -57,11 +53,19 @@
 
                 $optionsTags[] = $this->option($name, $value, $attributes);
             }
+            if (!isset($options['id'])) {
+                $options['id'] = $this->formatAttrId($labelName);
+            }
+            if (!isset($options['name'])) {
+                $options['name'] = $this->formatAttrName($labelName);
+            }
+            if (!empty($labelName)) {
+                $label = $this->buildTag('<label></label>', [], $labelName);
+            }
 
-            return implode([
-                $this->buildTag('<label></label>', [], $labelName),
-                $this->buildTag('<select></select>', $options, implode($optionsTags))
-            ]);
+            return $label . $this->buildTag(
+                '<select></select>', $options, implode($optionsTags)
+            );
         }
 
         protected function option(string $name, $value, array $options = [])

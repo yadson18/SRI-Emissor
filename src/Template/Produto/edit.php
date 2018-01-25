@@ -213,13 +213,22 @@
 							]) 
 						?>
 						<div class='form-group col-md-3 col-sm-4'>
-							<?= $this->Form->input('Código NCM', [
-									'placeholder' => 'EX: 01051200',
-									'value' => ($ncm) ? $ncm->ncm : '',
-									'maxlength' => 10,
-									'name' => false
-								]) 
-							?>
+							<label>Código NCM</label>
+							<div class='input-group'>
+						      	<?= $this->Form->input('', [
+										'value' => ($ncm) ? $ncm->ncm : '',
+										'placeholder' => 'EX: 01051200',
+										'id' => 'codigo-ncm',
+										'maxlength' => 10,
+										'name' => false
+									]) 
+								?>
+						      	<span class='input-group-btn'>
+						        	<button class='btn btn-primary btn-sm' type='button'>
+						        		Consultar <i class='fas fa-search'></i>
+						        	</button>
+						      	</span>
+						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição NCM', [
@@ -249,13 +258,22 @@
 							]) 
 						?>	
 						<div class='form-group col-md-3 col-sm-4'>
-							<?= $this->Form->input('Código CST', [
-									'value' => ($cstpc) ? $cstpc->codigo : '',
-									'placeholder' => 'EX: 1',
-									'maxlength' => 1,
-									'name' => false
-								]) 
-							?>
+							<label>Código CST</label>
+							<div class='input-group'>
+						      	<?= $this->Form->input('', [
+										'value' => ($cstpc) ? $cstpc->codigo : '',
+										'placeholder' => 'EX: 1',
+										'id' => 'codigo-cst',
+										'maxlength' => 1,
+										'name' => false
+									]) 
+								?> 
+						      	<span class='input-group-btn'>
+						        	<button class='btn btn-primary btn-sm' type='button'>
+						        		Consultar <i class='fas fa-search'></i>
+						        	</button>
+						      	</span>
+						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CST', [
@@ -301,13 +319,22 @@
 							]) 
 						?>	
 						<div class='form-group col-md-3 col-sm-4'>
-							<?= $this->Form->input('Código CST', [
-									'placeholder' => 'EX: 0000',
-									'value' => ($st) ? $st->cod_st : '',
-									'maxlength' => 4,
-									'name' => false
-								]) 
-							?>
+							<label>Código CST</label>
+							<div class='input-group'>
+						      	<?= $this->Form->input('', [
+										'value' => ($st) ? $st->cod_st : '',
+										'placeholder' => 'EX: 0000',
+										'id' => 'cod-cst-st',
+										'maxlength' => 4,
+										'name' => false
+									]) 
+								?>
+						      	<span class='input-group-btn'>
+						        	<button class='btn btn-primary btn-sm' type='button'>
+						        		Consultar <i class='fas fa-search'></i>
+						        	</button>
+						      	</span>
+						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CST', [
@@ -330,13 +357,22 @@
 							]) 
 						?>	
 						<div class='form-group col-md-3 col-sm-4'>
-							<?= $this->Form->input('Código CFOP', [
-									'placeholder' => 'EX: 0000',
-									'value' => ($cfop) ? $cfop->cfop : '',
-									'maxlength' => 4,
-									'name' => false
-								]) 
-							?>
+							<label>Código CFOP</label>
+							<div class='input-group'>
+						      	<?= $this->Form->input('', [
+										'value' => ($cfop) ? $cfop->cfop : '',
+										'placeholder' => 'EX: 0000',
+										'id' => 'codigo-cfop',
+										'maxlength' => 4,
+										'name' => false
+									]) 
+								?>
+						      	<span class='input-group-btn'>
+						        	<button class='btn btn-primary btn-sm' type='button'>
+						        		Consultar <i class='fas fa-search'></i>
+						        	</button>
+						      	</span>
+						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CFOP', [
@@ -354,10 +390,9 @@
 						<?= $this->Form->input('', [
 								'value' => $codRegTrib,
 								'id' => 'cod_reg_trib',
+								'required' => false,
 								'class' => 'hidden',
 								'maxlength' => 1,
-								'value' => '3',
-								'required' => false,
 								'name' => false
 							]) 
 						?>
@@ -369,13 +404,22 @@
 							]) 
 						?>	
 						<div class='form-group col-md-3 col-sm-4'>
-							<?= $this->Form->input('Código CEST', [
-									'placeholder' => 'EX: 2000400',
-									'value' => ($cest) ? $cest->cest : '',
-									'maxlength' => 7,
-									'name' => false
-								]) 
-							?>
+							<label>Código CEST</label>
+							<div class='input-group'>
+						      	<?= $this->Form->input('', [
+										'value' => ($cest) ? $cest->cest : '',
+										'placeholder' => 'EX: 2000400',
+										'id' => 'codigo-cest',
+										'maxlength' => 7,
+										'name' => false
+									]) 
+								?>
+						      	<span class='input-group-btn'>
+						        	<button class='btn btn-primary btn-sm' type='button'>
+						        		Consultar <i class='fas fa-search'></i>
+						        	</button>
+						      	</span>
+						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
 							<?= $this->Form->input('Descrição CEST', [

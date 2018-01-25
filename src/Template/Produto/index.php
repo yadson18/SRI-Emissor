@@ -40,7 +40,7 @@
 								<td><?= $produto['cest'] ?></td>
 								<td><?= $produto['aliquota'] ?></td>
 								<td><?= mb_strtolower($produto['unidade']) ?></td>
-								<td class='money'><?= unmask($produto['venda']) ?></td>
+								<td class='money millions'><?= unmask($produto['venda']) ?></td>
 								<td class='actions'>
 									<a class='btn btn-primary action-btn' href=/Produto/edit/<?= $produto['cod_interno'] ?>>
 										<i class='fas fa-pencil-alt'></i>

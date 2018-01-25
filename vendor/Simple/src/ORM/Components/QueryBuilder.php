@@ -252,21 +252,21 @@
 			$values = $this->getQueryValues();
 			$this->resetToDefault();
 
-			$satement = new Statement($this->getConnection());
-			$satement->compileQuery($queryType, $query, $values, $validator);
+			$statement = new Statement($this->getConnection());
+			$statement->compileQuery($queryType, $query, $values, $validator);
 
 			switch ($queryType) {
 				case 'select':
 					switch ($fetchType) {
 						case 'all':
-							return $satement->fetchAll();
+							return $statement->fetchAll();
 							break;
 						case 'object':
-							return $satement->fetchObject();
+							return $statement->fetchObject();
 							break;
 						case 'class':
 							if (class_exists($this->getEntity())) {
-								return $satement->fetchObject($this->getEntity());
+								return $statement->fetchObject($this->getEntity());
 							}
 							break;
 						default:
@@ -277,7 +277,7 @@
 				default:
 					switch ($fetchType) {
 						case 'rowCount':
-							return $satement->rowCount();
+							return $statement->rowCount();
 							break;
 						default:
 							return 'Undefined fetch type.';

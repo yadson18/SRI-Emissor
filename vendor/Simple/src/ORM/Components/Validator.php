@@ -94,17 +94,6 @@
 					else if ($rule['null'] === true) {
 						return true;
 					}
-
-					/*if (!empty($value) && $rule['null'] === true || 
-						!empty($value) && $rule['null'] === false ||
-						empty($value) && $rule['null'] === true 
-					) {
-						if (!empty($value) && settype($value, $rule['type'])) {
-							if (strlen((string) $value) <= $rule['size']) {
-								return true;
-							}
-						}	
-					}*/
 				}
 			}
 			return false;

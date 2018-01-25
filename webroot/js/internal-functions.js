@@ -151,14 +151,26 @@ $(document).ready(function(){
     cnpj = { mask: '00.000.000/0000-00', size: 14 };
     cpf = { mask: '000.000.000-00', size: 11 };
 
-    $('.money').mask('000.000.000.000.000,00', { reverse: true });
     $('.thousand').mask('000.000.000.000.000', { reverse: true });
+    $('.money.millions').mask('0.000.000,00', { reverse: true });
+    $('.money.thousands').mask('000.000,00', { reverse: true });
     $('.cepMask').mask('00000-000', defaultMaskConfigs);
     $('.cnpjMask').mask(cnpj.mask, defaultMaskConfigs);
     $('.cpfMask').mask(cpf.mask, defaultMaskConfigs);
-    $('.percent').mask('0000.00', { reverse: true });
     $('.icms').mask('00.00', { reverse: true });
     $('.ali-pis').mask('0.0000');
+
+    $('.money').maskMoney({ 
+        thousands:'.', 
+        decimal:',', 
+        allowZero: true 
+    });
+
+    $('.percent').maskMoney({ 
+        thousands:'', 
+        decimal:'.', 
+        allowZero: true
+    });
 
     $.datetimepicker.setLocale('pt-BR');
     $('.date').datetimepicker({
@@ -381,7 +393,7 @@ $(document).ready(function(){
         });
     });
 
-    $('input[name=compra], input[name=markup]').on('focusout', function(){
+    $('input[name=compra], input[name=markup]').on('keyup', function(){
         $DOM = {
             compra: $('input[name=compra]'),
             markup: $('input[name=markup]')
@@ -391,12 +403,18 @@ $(document).ready(function(){
             $DOM.markup.val().replace(/[0,.]/) !== ''
         ) {
             var markup = parseFloat($DOM.markup.val()) / 100;
-                price = parseFloat($DOM.compra.val().replace(/[.,]/, ''));
-                result = price + (price * markup);
-
-                $('.preco-sugerido').val(result).mask(
-                    '000.000.000.000.000,00', { reverse: true }
+                price = parseFloat(
+                    $DOM.compra.val().replace(/[.]/, '').replace(/[,]/, '.')
                 );
+                result = (price + (price * markup)).toFixed(2);
+
+                $('.preco-sugerido').val(result).mask('000.000.000,00', { 
+                    reverse: true 
+                }).maskMoney({ 
+                    thousands:'.', 
+                    decimal:',', 
+                    allowZero: true 
+                });
         }
         else {
             $('.preco-sugerido').val('0,00');

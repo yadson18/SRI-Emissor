@@ -133,7 +133,7 @@
 			$validator->addRule('atacado')->empty()->int()->size(4);
 			$validator->addRule('atacado1')->empty()->int()->size(4);
 			$validator->addRule('atacado2')->empty()->int()->size(4);
-			$validator->addRule('venda')->empty()->int()->size(4);
+			$validator->addRule('venda')->empty()->float()->size(10);
 			$validator->addRule('data_ultcompra')->empty()->string()->size(8);
 			$validator->addRule('data_cadastro')->empty()->string()->size(10);
 			$validator->addRule('cod_colaboradorcadastro')->notEmpty()->int()->size(5);
@@ -165,8 +165,8 @@
 			$validator->addRule('mod_bcicmsst')->empty()->string()->size(2);
 			$validator->addRule('ali_icmsst')->notEmpty()->string()->size(2);
 			$validator->addRule('fabricacao')->notEmpty()->string()->size(1);
-			$validator->addRule('qtd_vol')->empty()->int()->size(4);
-			$validator->addRule('preco_vol')->empty()->int()->size(4);
+			$validator->addRule('qtd_vol')->empty()->int()->size(9);
+			$validator->addRule('preco_vol')->empty()->int()->size(9);
 			$validator->addRule('inativo')->notEmpty()->string()->size(1);
 			$validator->addRule('controla_estoque')->notEmpty()->string()->size(1);
 			$validator->addRule('descricao_promocao')->empty()->string()->size(25);
@@ -199,7 +199,7 @@
 			$validator->addRule('perc_ibpt')->empty()->int()->size(8);
 			$validator->addRule('referencia')->empty()->string()->size(14);
 			$validator->addRule('prfuturo')->empty()->int()->size(4);
-			$validator->addRule('compra')->empty()->float()->size(5);
+			$validator->addRule('compra')->empty()->float()->size(10);
 			$validator->addRule('markup')->empty()->int()->size(4);
 			$validator->addRule('cotacao')->notEmpty()->string()->size(1);
 			$validator->addRule('st_out')->empty()->string()->size(4);

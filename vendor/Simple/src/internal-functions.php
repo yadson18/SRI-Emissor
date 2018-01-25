@@ -10,7 +10,7 @@
 			else if ($column === 'data_inicio_prom' || 
 				$column === 'data_final_prom'
 			) {
-				return substr(date('d.m.Y, H:i:s.u', strtotime($value)), 0, 24);
+				return str_replace('/', '.', $value);
 			}
 			else {
 				return removeSpecialChars($value);

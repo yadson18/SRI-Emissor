@@ -81,11 +81,10 @@
 					<legend>Varejo</legend>
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Compra (R$)', [
-								'class' => 'form-control money input-sm',
-								'value' => moneyFormat($produto->compra),
+								'class' => 'form-control input-sm money millions',
+								'value' => $produto->compra,
 								'placeholder' => 'EX: 10,50',
-								'name' => 'compra',
-								'maxlength' => 10
+								'name' => 'compra'
 							]) 
 						?>
 					</div>
@@ -101,7 +100,7 @@
 					</div>
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Sugerido (R$)', [
-								'class' => 'form-control money input-sm preco-sugerido',
+								'class' => 'form-control input-sm preco-sugerido money millions',
 								'required' => false,
 								'disabled' => true,
 								'value' => '0,00',
@@ -111,10 +110,9 @@
 					</div>
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Varejo (R$)', [
-								'class' => 'form-control money input-sm',
-								'value' => moneyFormat($produto->venda),
+								'class' => 'form-control input-sm money millions',
+								'value' => $produto->venda,
 								'placeholder' => 'EX: 15,55',
-								'maxlength' => 10,
 								'name' => 'venda'
 							]) 
 						?>
@@ -137,14 +135,15 @@
 								'placeholder' => 'EX: 5',
 								'name' => 'qtd_vol',
 								'type' => 'number',
-								'min' => '0'
+								'min' => '0',
+								'max' => '999999998'
 							]) 
 						?>
 					</div>	
 					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Preço Atacarejo (R$)', [
-								'value' => moneyFormat($produto->preco_vol),
-								'class' => 'form-control money input-sm',
+								'value' => $produto->preco_vol,
+								'class' => 'form-control input-sm money thousands',
 								'placeholder' => 'EX: 12,99',
 								'name' => 'preco_vol',
 								'maxlength' => 10
@@ -182,11 +181,10 @@
 						<div class='row'>
 							<div class='form-group col-md-3 col-sm-4'>
 								<?= $this->Form->input('Preço Promoção (R$)', [
-										'value' => moneyFormat($produto->preco_prom),
-										'class' => 'form-control money input-sm',
+										'value' => $produto->preco_prom,
+										'class' => 'form-control input-sm money millions',
 										'placeholder' => 'EX: 12,99',
-										'name' => 'preco_prom',
-										'maxlength' => 10
+										'name' => 'preco_prom'
 									]) 
 								?>
 							</div>	

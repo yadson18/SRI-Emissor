@@ -31,10 +31,10 @@
 			if ($this->getPdo() && !empty($query) && $this->prepare($query)) {
 				if (!empty($values)) {
 					if ($queryType !== 'select') {
-						if ($validator->validateRules($values) &&
-							$this->bind($queryType, $values) && $this->execute()
-						) {
-							$this->compiled = true;
+						if ($validator->validateRules($values)) {
+							if ($this->bind($queryType, $values) && $this->execute()) {
+								$this->compiled = true;
+							}
 						}
 					}
 					else if ($this->bind($queryType, $values) && $this->execute()) {

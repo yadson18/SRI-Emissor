@@ -4,6 +4,7 @@
 	 */
 
 	require_once 'routes.php';
+	require_once APP . 'functions.php';
 
 	use Simple\Configurator\Configurator;
 

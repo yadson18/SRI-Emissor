@@ -35,7 +35,7 @@
 			
 			$this->setTitle('Produtos Cadastrados');
 			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'usuarioNome' => $this->userLogado('nome'),
 				'produtos' => $produtos
 			]);
 		}
@@ -50,9 +50,9 @@
 				if ($this->request->is('POST') && !is_null($produto)) {
 					$produto = $this->Produto->patchEntity(
 						$this->Produto->newEntity(), 
-						sanitizeProductValues($this->request->getData())
+						normalizarDadosProduto($this->request->getData())
 					);
-					$produto->cod_colaboradoralteracao = $this->idUsuarioLogado();
+					$produto->cod_colaboradoralteracao = $this->userLogado('cod_cadastro');
 					$produto->cod_interno = $cod_interno; 
 
 					if ($this->Produto->save($produto)) {
@@ -66,20 +66,21 @@
 			if ($produto) {
 				$this->setViewVars([
 					'subgrupos' => $this->Produto->getSubgrupos($produto->cod_grupo),
+					'codRegTrib' => $this->userLogado('cadastro')->cod_reg_trib,
 					'cstpc' => $this->Produto->getCstpc($produto->cstpc),
 					'cfop' => $this->Produto->getCfop($produto->cfop_in),
 					'ncm' => $this->Produto->getNcm($produto->cod_ncm),
 					'cest' => $this->Produto->getCest($produto->cest),
 					'unidades' => $this->Produto->getUnidadesMedida(),
-					'usuarioNome' => $this->nomeUsuarioLogado(),
 					'st' => $this->Produto->getSt($produto->st),
+					'usuarioNome' => $this->userLogado('nome'),
 					'grupos' => $this->Produto->getGrupos(),
 					'produto' => $produto
 				]);
 			}
 			else {
 				$this->setViewVars([
-					'usuarioNome' => $this->nomeUsuarioLogado(),
+					'usuarioNome' => $this->userLogado('nome'),
 					'produto' => $produto
 				]);
 			}

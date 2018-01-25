@@ -35,7 +35,7 @@
 			
 			$this->setTitle('Destinatários Cadastrados');
 			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'usuarioNome' => $this->userLogado('nome'),
 				'cadastros' => $cadastros
 			]);
 		}
@@ -65,7 +65,7 @@
 
 			$this->setTitle('Adicionar Destinatário');
 			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'usuarioNome' => $this->userLogado('nome'),
 				'estados' => $estados,
 				'municipios' => $municipios
 			]);
@@ -109,7 +109,7 @@
 
 			$this->setTitle('Modificar Destinatário');
 			$this->setViewVars([
-				'usuarioNome' => $this->nomeUsuarioLogado(),
+				'usuarioNome' => $this->userLogado('nome'),
 				'cadastroTipo' => $cadastroTipo,
 				'cadastro' => $cadastro,
 				'estados' => $estados,

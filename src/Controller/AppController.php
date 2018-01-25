@@ -56,22 +56,12 @@
         }
 		
 		public abstract function beforeFilter();
-
-		public function nomeUsuarioLogado()
+		
+		public function userLogado(string $coluna = null)
 		{
-			$nome = $this->Auth->getUser('nome');
-
-			if ($nome) {
-				return $nome;
+			if (!empty($coluna)) {
+				return $this->Auth->getUser($coluna);
 			}
-		}
-
-		public function idUsuarioLogado()
-		{
-			$cadastro = $this->Auth->getUser('cadastro');
-
-			if (isset($cadastro->cod_cadastro)) {
-				return $cadastro->cod_cadastro;
-			}
+			return $this->Auth->getUser();
 		}
 	}

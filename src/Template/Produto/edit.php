@@ -101,9 +101,9 @@
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Sugerido (R$)', [
 								'class' => 'form-control input-sm preco-sugerido money millions',
+								'value' => precoSugerido($produto->compra, $produto->markup),
 								'required' => false,
 								'disabled' => true,
-								'value' => '0,00',
 								'name' => false
 							]) 
 						?>
@@ -350,7 +350,17 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row'>
+					<div class='row' id='cest-block'>
+						<?= $this->Form->input('', [
+								'value' => $codRegTrib,
+								'id' => 'cod_reg_trib',
+								'class' => 'hidden',
+								'maxlength' => 1,
+								'value' => '3',
+								'required' => false,
+								'name' => false
+							]) 
+						?>
 						<?= $this->Form->input('', [
 								'value' => ($cest) ? $cest->cest : '',
 								'class' => 'hidden',

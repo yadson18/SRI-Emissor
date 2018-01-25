@@ -1,25 +1,4 @@
 <?php
-	function sanitizeProductValues(array $productData)
-	{
-		$sanitizedData = array_map(function($column, $value) {
-			if ($column === 'compra' || $column === 'venda' ||
-				$column === 'preco_vol' || $column === 'preco_prom'
-			) {
-				return unmaskMoney($value);
-			}
-			else if ($column === 'data_inicio_prom' || 
-				$column === 'data_final_prom'
-			) {
-				return str_replace('/', '.', $value);
-			}
-			else {
-				return removeSpecialChars($value);
-			}
-		}, array_keys($productData), array_values($productData));
-
-		return array_combine(array_keys($productData), $sanitizedData);
-	}
-
 	function removeNamespace($object)
 	{
 		return splitNamespace(get_class($object));
@@ -36,19 +15,6 @@
 					: arrayDeepSearch($keys, $array[$key]);
 			}
 		}
-	}
-
-	function moneyFormat($number)
-	{
-		if (is_numeric($number)) {
-			return number_format($number, 2, '.', '');
-		}
-		return $number;
-	}
-
-	function unmaskMoney($number)
-	{
-		return preg_replace(['/[.]/', '/[,]/'], ['', '.'], $number);
 	}
 
 	function mask(string $mask, string $value)

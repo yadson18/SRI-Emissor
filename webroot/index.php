@@ -8,7 +8,7 @@
 
 	use Simple\Http\Server;
 	use Simple\Application\Application;
-
+	
 	$server = new Server(new Application(CONFIG));
 
 	$server->run($server->listening());

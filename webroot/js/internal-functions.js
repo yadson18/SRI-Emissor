@@ -393,31 +393,57 @@ $(document).ready(function(){
         });
     });
 
+    function moneyToFloat(money) {
+        return parseFloat(money.replace(/[.]/g, '').replace(/[,]/g, '.'));
+    }
+
     $('input[name=compra], input[name=markup]').on('keyup', function(){
         $DOM = {
             compra: $('input[name=compra]'),
             markup: $('input[name=markup]')
         };
 
-        if ($DOM.compra.val().replace(/[0,.]/) !== '' && 
-            $DOM.markup.val().replace(/[0,.]/) !== ''
+        if ($DOM.compra.val().replace(/[0,.]/g, '') !== '' && 
+            $DOM.markup.val().replace(/[0,.]/g, '') !== ''
         ) {
-            var markup = parseFloat($DOM.markup.val()) / 100;
-                price = parseFloat(
-                    $DOM.compra.val().replace(/[.]/, '').replace(/[,]/, '.')
-                );
-                result = (price + (price * markup)).toFixed(2);
+            var preco = moneyToFloat($DOM.compra.val());
+                markup = parseFloat($DOM.markup.val());
+                precoSugerido = (
+                    preco + (preco * (markup / 100))
+                ).toFixed(2).replace(/[.]/g, ',');
 
-                $('.preco-sugerido').val(result).mask('000.000.000,00', { 
-                    reverse: true 
-                }).maskMoney({ 
-                    thousands:'.', 
-                    decimal:',', 
-                    allowZero: true 
-                });
+            $('.preco-sugerido').val(precoSugerido).maskMoney('mask');
         }
         else {
             $('.preco-sugerido').val('0,00');
+        }
+    });
+
+    $('input#codigo-cst').on('keyup', function() {
+        $('input[name=st]').val($(this).val());
+        
+        var $stRegTrib = {
+                normal: ['0010', '0030', '0060'],
+                simples: ['0201', '0202', '0500']
+            };
+            $DOM = {
+                divCest: $('#cest-block'),
+                inputCestCod: $('#cest-block input[name=cest]'),
+                inputCest: $('#cest-block #codigo-cest'),
+                inputRegTrib: $('#cod_reg_trib')
+            };
+
+        if ($stRegTrib.normal.indexOf($(this).val()) !== -1 &&
+            $DOM.inputRegTrib.val() === '3' || 
+            $stRegTrib.simples.indexOf($(this).val()) !== -1 &&
+            $DOM.inputRegTrib.val() === '1'
+        ) {
+            $DOM.divCest.removeClass('hidden');
+            $DOM.inputCestCod.val($DOM.inputCest.val());
+        }
+        else {
+            $DOM.divCest.addClass('hidden');
+            $DOM.inputCestCod.val('0000000');
         }
     });
 });

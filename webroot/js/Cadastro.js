@@ -31,6 +31,15 @@ $(document).ready(function(){
         };
     })();
 
+    var defaultMaskConfigs = {
+        clearIfNotMatch: true,
+        reverse: true,
+        optional: false,
+        translation: { '0': { pattern: /[0-9]/ } }
+    };
+    cnpj = { mask: '00.000.000/0000-00', size: 14 };
+    cpf = { mask: '000.000.000-00', size: 11 };
+
     var $trToDelete = null;
 
     $('#destinatarie table .delete').on('click', function() {

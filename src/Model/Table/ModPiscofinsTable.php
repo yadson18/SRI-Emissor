@@ -17,9 +17,16 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getCstpcPorCod(string $codigo)
+		public function getCstpcDescricao(string $codigo)
 		{
-			return $this->find(['codigo', 'descricao', 'referencia'])
+			return $this->find(['descricao'])
+				->where(['codigo =' => $codigo])
+				->fetch('class');
+		}
+
+		public function getCstpcRef(string $codigo)
+		{
+			return $this->find(['referencia'])
 				->where(['codigo =' => $codigo])
 				->fetch('class');
 		}

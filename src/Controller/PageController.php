@@ -21,17 +21,17 @@
 
 		public function home()
 		{
-			$usuario = $this->Auth->getUser();
-			$nfe = TableRegistry::get('Nfe')->quantidadeEmitidas();
 			$produto = TableRegistry::get('Produto')->quantidadeCadastrados();
+			$nfe = TableRegistry::get('Nfe')->quantidadeEmitidas();
+			$usuario = $this->Auth->getUser();
 
 			$this->setTitle('Home');
 			$this->setViewVars([
-				'usuarioNome' => $this->userLogado('nome'),
 				'usuarioRazao' => $usuario->cadastro->razao,
 				'usuarioCnpj' => $usuario->cadastro->cnpj,
-				'nfeEmitidas' => $nfe,
-				'produtosCadastrados' => $produto 
+				'usuarioNome' => $this->getUserName(),
+				'produtosCadastrados' => $produto,
+				'nfeEmitidas' => $nfe
 			]);	
 		}
 

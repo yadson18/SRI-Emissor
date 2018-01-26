@@ -17,9 +17,9 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getCfopPorCod(string $cfop)
+		public function getCfopDescricao(string $cfop)
 		{
-			return $this->find(['cfop', 'descricao'])
+			return $this->find(['descricao'])
 				->where(['cfop =' => $cfop])
 				->fetch('class');
 		}

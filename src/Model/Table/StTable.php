@@ -17,9 +17,9 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getStPorCod(string $cod_st)
+		public function getStDescricao(string $cod_st)
 		{
-			return $this->find(['cod_st', 'descricao'])
+			return $this->find(['descricao'])
 				->where(['cod_st =' => $cod_st])
 				->fetch('class');
 		} 

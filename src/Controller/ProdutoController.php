@@ -35,7 +35,7 @@
 			
 			$this->setTitle('Produtos Cadastrados');
 			$this->setViewVars([
-				'usuarioNome' => $this->userLogado('nome'),
+				'usuarioNome' => $this->getUserName(),
 				'produtos' => $produtos
 			]);
 		}
@@ -45,43 +45,54 @@
 			$produto = null;
 
 			if (is_numeric($codInterno)) {
-				$codCadastro = $this->userLogado('cadastro')->cod_cadastro;
 				$produto = $this->Produto->get($codInterno);
 
-				if ($this->request->is('POST') && !is_null($produto)) {
+				if ($this->request->is('POST') && $produto) {
 					$produto = $this->Produto->patchEntity(
 						$this->Produto->newEntity(), 
 						normalizarDadosProduto($this->request->getData())
 					);
-					$produto->cod_colaboradoralteracao = $codCadastro;
-					$produto->cod_interno = $codInterno; 
+					$validador = $this->Produto->validaNCSCC(
+						$produto->cod_ncm, $produto->cstpc, $produto->st, 
+						$produto->cfop_in, $produto->cest
+					);
 
-					if ($this->Produto->save($produto)) {
-						$this->Flash->success('Os dados foram atualizados com sucesso.');
+					if ($validador['status'] === 'success') {
+						$referencia = $this->Produto->getCstpcRef($produto->cstpc)->referencia;
+						$produto->cod_colaboradoralteracao = $this->getUserId();
+						$produto->cstpc_entrada = $referencia;
+						$produto->cod_interno = $codInterno;
+
+						if ($this->Produto->save($produto)) {
+							$this->Flash->success('Os dados foram atualizados com sucesso.');
+						}
+						else {
+							$this->Flash->error('Não foi possível atualizar os dados do produto.');
+						}
 					}
 					else {
-						$this->Flash->error('Não foi possível atualizar os dados do produto.');
-					}	
+						$this->Flash->error($validador['mensagem']);
+					}
 				}
 			}
 			if ($produto) {
 				$this->setViewVars([
+					'ncm' => $this->Produto->getNcmDescricao($produto->cod_ncm),
+					'cstpc' => $this->Produto->getCstpcDescricao($produto->cstpc),
+					'st' => $this->Produto->getStDescricao($produto->st),
+					'cfop' => $this->Produto->getCfopDescricao($produto->cfop_in),
+					'cest' => $this->Produto->getCestDescricao($produto->cest),
 					'subgrupos' => $this->Produto->getSubgrupos($produto->cod_grupo),
-					'codRegTrib' => $this->userLogado('cadastro')->cod_reg_trib,
-					'cstpc' => $this->Produto->getCstpc($produto->cstpc),
-					'cfop' => $this->Produto->getCfop($produto->cfop_in),
-					'ncm' => $this->Produto->getNcm($produto->cod_ncm),
-					'cest' => $this->Produto->getCest($produto->cest),
+					'codRegTrib' => $this->getUserRegTrib(),
 					'unidades' => $this->Produto->getUnidadesMedida(),
-					'st' => $this->Produto->getSt($produto->st),
-					'usuarioNome' => $this->userLogado('nome'),
+					'usuarioNome' => $this->getUserName(),
 					'grupos' => $this->Produto->getGrupos(),
 					'produto' => $produto
 				]);
 			}
 			else {
 				$this->setViewVars([
-					'usuarioNome' => $this->userLogado('nome'),
+					'usuarioNome' => $this->getUserName(),
 					'produto' => $produto
 				]);
 			}

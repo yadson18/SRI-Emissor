@@ -17,9 +17,9 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getCestPorCod(string $cest)
+		public function getCestDescricao(string $cest)
 		{
-			return $this->find(['cest', 'descricao'])
+			return $this->find(['descricao'])
 				->where(['cest =' => $cest])
 				->fetch('class');
 		}

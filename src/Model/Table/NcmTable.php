@@ -17,9 +17,9 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function getNcmPorCod(string $ncm)
+		public function getNcmDescricao(string $ncm)
 		{
-			return $this->find(['ncm', 'descricao'])
+			return $this->find(['descricao'])
 				->where(['ncm =' => $ncm])
 				->fetch('class');
 		} 

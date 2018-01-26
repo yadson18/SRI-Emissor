@@ -56,12 +56,25 @@
         }
 		
 		public abstract function beforeFilter();
-		
-		public function userLogado(string $coluna = null)
+
+		public function getUserId()
 		{
-			if (!empty($coluna)) {
-				return $this->Auth->getUser($coluna);
-			}
-			return $this->Auth->getUser();
+			$id = $this->Auth->getUser('cadastro')->cod_cadastro;
+
+			return ($id) ? $id : false;
+		}
+
+		public function getUserName()
+		{
+			$name = $this->Auth->getUser('nome');
+
+			return ($name) ? $name : false;
+		}
+
+		public function getUserRegTrib()
+		{
+			$cadastro = $this->Auth->getUser('cadastro');
+
+			return (isset($cadastro->cod_reg_trib)) ? $cadastro->cod_reg_trib : false;
 		}
 	}

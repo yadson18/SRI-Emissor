@@ -82,8 +82,8 @@
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Compra (R$)', [
 								'class' => 'form-control input-sm money millions',
-								'value' => $produto->compra,
 								'placeholder' => 'EX: 10,50',
+								'value' => $produto->compra,
 								'name' => 'compra'
 							]) 
 						?>
@@ -133,17 +133,17 @@
 						<?= $this->Form->input('Quantidade Atacarejo', [
 								'value' => $produto->qtd_vol,
 								'placeholder' => 'EX: 5',
+								'max' => '999999998',
 								'name' => 'qtd_vol',
 								'type' => 'number',
-								'min' => '0',
-								'max' => '999999998'
+								'min' => '0'
 							]) 
 						?>
 					</div>	
 					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Preço Atacarejo (R$)', [
-								'value' => $produto->preco_vol,
 								'class' => 'form-control input-sm money thousands',
+								'value' => $produto->preco_vol,
 								'placeholder' => 'EX: 12,99',
 								'name' => 'preco_vol',
 								'maxlength' => 10
@@ -181,8 +181,8 @@
 						<div class='row'>
 							<div class='form-group col-md-3 col-sm-4'>
 								<?= $this->Form->input('Preço Promoção (R$)', [
-										'value' => $produto->preco_prom,
 										'class' => 'form-control input-sm money millions',
+										'value' => $produto->preco_prom,
 										'placeholder' => 'EX: 12,99',
 										'name' => 'preco_prom'
 									]) 
@@ -205,22 +205,14 @@
 				<legend>PIS/Cofins</legend>
 				<div class='col-sm-12'>
 					<div class='row'>
-						<?= $this->Form->input('', [
-								'value' => ($ncm) ? $ncm->ncm : '',
-								'class' => 'hidden',
-								'name' => 'cod_ncm',
-								'maxlength' => 10
-							]) 
-						?>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código NCM</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
-										'value' => ($ncm) ? $ncm->ncm : '',
 										'placeholder' => 'EX: 01051200',
-										'id' => 'codigo-ncm',
-										'maxlength' => 10,
-										'name' => false
+										'value' => $produto->cod_ncm,
+										'name' => 'cod_ncm',
+										'maxlength' => 8
 									]) 
 								?>
 						      	<span class='input-group-btn'>
@@ -243,29 +235,14 @@
 				</div>
 				<div class='col-sm-12'>
 					<div class='row'>
-						<?= $this->Form->input('', [
-								'value' => ($cstpc) ? $cstpc->codigo : '',
-								'class' => 'hidden',
-								'name' => 'cstpc',
-								'maxlength' => 1
-							]) 
-						?>
-						<?= $this->Form->input('', [
-								'value' => ($cstpc) ? $cstpc->referencia : '',
-								'name' => 'cstpc_entrada',
-								'class' => 'hidden',
-								'maxlength' => 1
-							]) 
-						?>	
 						<div class='form-group col-md-3 col-sm-4'>
-							<label>Código CST</label>
+							<label>Código CSTPC</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
-										'value' => ($cstpc) ? $cstpc->codigo : '',
+										'value' => $produto->cstpc,
 										'placeholder' => 'EX: 1',
-										'id' => 'codigo-cst',
-										'maxlength' => 1,
-										'name' => false
+										'name' => 'cstpc',
+										'maxlength' => 1
 									]) 
 								?> 
 						      	<span class='input-group-btn'>
@@ -276,7 +253,7 @@
 						    </div>
 						</div>	
 						<div class='form-group col-md-7 col-sm-8'>
-							<?= $this->Form->input('Descrição CST', [
+							<?= $this->Form->input('Descrição CSTPC', [
 									'value' => ($cstpc) ? $cstpc->descricao : '',
 									'required' => false,
 									'disabled' => true,
@@ -311,22 +288,14 @@
 				<legend>ICMS</legend>
 				<div class='col-sm-12'>
 					<div class='row'>
-						<?= $this->Form->input('', [
-								'value' => ($st) ? $st->cod_st : '',
-								'class' => 'hidden',
-								'maxlength' => 4,
-								'name' => 'st'
-							]) 
-						?>	
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CST</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
-										'value' => ($st) ? $st->cod_st : '',
 										'placeholder' => 'EX: 0000',
-										'id' => 'cod-cst-st',
+										'value' => $produto->st,
 										'maxlength' => 4,
-										'name' => false
+										'name' => 'st'
 									]) 
 								?>
 						      	<span class='input-group-btn'>
@@ -349,22 +318,14 @@
 				</div>
 				<div class='col-sm-12'>
 					<div class='row'>
-						<?= $this->Form->input('', [
-								'value' => ($cfop) ? $cfop->cfop : '',
-								'class' => 'hidden',
-								'maxlength' => 4,
-								'name' => 'cfop_in'
-							]) 
-						?>	
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CFOP</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
-										'value' => ($cfop) ? $cfop->cfop : '',
+										'value' => $produto->cfop_in,
 										'placeholder' => 'EX: 0000',
-										'id' => 'codigo-cfop',
-										'maxlength' => 4,
-										'name' => false
+										'name' => 'cfop_in',
+										'maxlength' => 4
 									]) 
 								?>
 						      	<span class='input-group-btn'>
@@ -396,22 +357,14 @@
 								'name' => false
 							]) 
 						?>
-						<?= $this->Form->input('', [
-								'value' => ($cest) ? $cest->cest : '',
-								'class' => 'hidden',
-								'maxlength' => 7,
-								'name' => 'cest'
-							]) 
-						?>	
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CEST</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
-										'value' => ($cest) ? $cest->cest : '',
 										'placeholder' => 'EX: 2000400',
-										'id' => 'codigo-cest',
+										'value' => $produto->cest,
 										'maxlength' => 7,
-										'name' => false
+										'name' => 'cest'
 									]) 
 								?>
 						      	<span class='input-group-btn'>

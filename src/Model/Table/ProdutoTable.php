@@ -2,7 +2,6 @@
 	namespace App\Model\Table;
 
 	use Simple\ORM\Components\Validator;
-	use App\Model\Entity\Produto;
 	use Simple\ORM\TableRegistry;
 	use Simple\ORM\Table;
 
@@ -74,29 +73,41 @@
 			return TableRegistry::get('SubgrupoProd')->getSubgrupos($cod_grupo);
 		}
 
-		public function getNcm(string $ncm)
+		public function getNcmDescricao(string $ncm)
 		{
-			return TableRegistry::get('Ncm')->getNcmPorCod($ncm);
+			return TableRegistry::get('Ncm')->getNcmDescricao($ncm);
 		}
 
-		public function getCstpc(string $codigo)
+		public function getCstpcDescricao(string $codigo)
 		{
-			return TableRegistry::get('ModPiscofins')->getCstpcPorCod($codigo);
+			return TableRegistry::get('ModPiscofins')->getCstpcDescricao($codigo);
 		}
 
-		public function getSt(string $cod_st)
+		public function getCstpcRef(string $codigo)
 		{
-			return TableRegistry::get('St')->getStPorCod($cod_st);
+			return TableRegistry::get('ModPiscofins')->getCstpcRef($codigo);
 		}
 
-		public function getCfop(string $cfop)
+		public function getStDescricao(string $cod_st)
 		{
-			return TableRegistry::get('Cfop')->getCfopPorCod($cfop);
+			return TableRegistry::get('St')->getStDescricao($cod_st);
 		}
 
-		public function getCest(string $cest)
+		public function getCfopDescricao(string $cfop)
 		{
-			return TableRegistry::get('Cest')->getCestPorCod($cest);
+			return TableRegistry::get('Cfop')->getCfopDescricao($cfop);
+		}
+
+		public function getCestDescricao(string $cest)
+		{
+			return TableRegistry::get('Cest')->getCestDescricao($cest);
+		}
+
+		public function validaNCSCC($ncm, $cstpc, $st, $cfop, $cest)
+		{
+			return TableRegistry::get('Ncscc')->validaNCSCC(
+				$ncm, $cstpc, $st, $cfop, $cest
+			);
 		}
 
 		protected function defaultValidator(Validator $validator)
@@ -155,7 +166,7 @@
 			$validator->addRule('data_ult_venda')->empty()->string()->size(4);
 			$validator->addRule('cod_barra_embalagem')->empty()->string()->size(14);
 			$validator->addRule('balanca')->notEmpty()->string()->size(1);
-			$validator->addRule('cod_ncm')->empty()->string()->size(10);
+			$validator->addRule('cod_ncm')->empty()->string()->size(8);
 			$validator->addRule('ex_ipi')->empty()->string()->size(10);
 			$validator->addRule('cod_gen')->empty()->int()->size(4);
 			$validator->addRule('cod_lst')->empty()->int()->size(4);

@@ -17,10 +17,11 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function validarCadastro(string $cnpj)
+		public function validaCadastro(string $cnpj)
 		{
 			$cadastro = $this->find([
-					'cod_cadastro', 'razao', 'cnpj', 'ativo', 'status', 'cod_reg_trib'
+					'cod_cadastro', 'razao', 'cnpj', 
+					'ativo', 'status', 'cod_reg_trib'
 				])
 				->from(['cadastro', 'contrato'])
 				->where([
@@ -37,8 +38,8 @@
 		public function listarAtivos(int $quantity = null, int $skipTo = null)
 		{
 			$cadastros = $this->find([
-				'cod_cadastro', 'cnpj', 'razao', 'fantasia', 'estado', 
-				'cidade', 'cep', 'endereco', 'bairro'
+				'cod_cadastro', 'cnpj', 'razao', 'fantasia', 
+				'estado', 'cidade', 'cep', 'endereco', 'bairro'
 			]);
 
 			if (!empty($quantity)) {

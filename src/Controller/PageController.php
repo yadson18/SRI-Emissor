@@ -21,18 +21,18 @@
 
 		public function home()
 		{
-			$produto = TableRegistry::get('Produto')->quantidadeCadastrados();
-			$nfe = TableRegistry::get('Nfe')->quantidadeEmitidas();
+			$produto = TableRegistry::get('Produto');
 			$usuario = $this->Auth->getUser();
+			$nfe = TableRegistry::get('Nfe');
 
-			$this->setTitle('Home');
 			$this->setViewVars([
+				'produtosCadastrados' => $produto->quantidadeCadastrados(),
 				'usuarioRazao' => $usuario->cadastro->razao,
+				'nfeEmitidas' => $nfe->quantidadeEmitidas(),
 				'usuarioCnpj' => $usuario->cadastro->cnpj,
-				'usuarioNome' => $this->getUserName(),
-				'produtosCadastrados' => $produto,
-				'nfeEmitidas' => $nfe
+				'usuarioNome' => $usuario->nome
 			]);	
+			$this->setTitle('Home');
 		}
 
 		public function beforeFilter()

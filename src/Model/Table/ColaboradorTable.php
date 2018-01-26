@@ -2,8 +2,6 @@
 	namespace App\Model\Table;
 
 	use Simple\ORM\Components\Validator;
-	use App\Model\Entity\Colaborador;
-	use Simple\ORM\TableRegistry;
 	use Simple\ORM\Table;
 
 	class ColaboradorTable extends Table
@@ -19,51 +17,20 @@
 			$this->setBelongsTo('', []);
 		}
 
-		public function login(Colaborador $colaborador)
+		public function validaAcesso(string $cod_cadastro, string $login, string $senha)
 		{
-			if (isset($colaborador->login) && !empty($colaborador->login) &&
-				isset($colaborador->senha) && !empty($colaborador->senha) &&
-				isset($colaborador->cnpj) && !empty($colaborador->cnpj)
-			) {
-				$cadastro = TableRegistry::get('Cadastro')->validarCadastro(
-					$colaborador->cnpj
-				);
+			$colaborador = $this->find(['cod_colaborador', 'nome', 'funcao'])
+				->where([
+					'cod_cadastro =' => $cod_cadastro, 'and',
+					'login =' => $login, 'and',
+					'senha =' => $senha
+				])
+				->fetch('class');
 
-				if ($cadastro) {
-					if ($cadastro->status !== 8) {
-						$usuario = $this->find(['cod_colaborador', 'nome', 'funcao'])->where([
-							'cod_cadastro =' => $cadastro->cod_cadastro, 'and',
-							'login =' => $colaborador->login, 'and',
-							'senha =' => $colaborador->senha
-						])->fetch('class');
-
-						if ($usuario) {
-							$usuario->cadastro = $cadastro;
-
-							return [
-								'status' => 'success',
-								'user' => $usuario
-							];
-						}
-						return [
-							'status' => 'error',
-							'message' => 'Usuário ou senha incorreto, tente novamente.'
-						];
-					}
-					return [
-						'status' => 'error',
-						'message' => 'Desculpe, este contrato foi cancelado, renove-o para continuar usando.'
-					];
-				}
-				return [
-					'status' => 'error',
-					'message' => 'Nenhum contrato foi encontrado com o CNPJ informado.'
-				];
+			if ($colaborador) {
+				return $colaborador;
 			}
-			return [
-				'status' => 'error',
-				'message' => 'Os campos CNPJ, usuário e senha, são obrigatórios.'
-			];
+			return false;
 		}
 
 		protected function defaultValidator(Validator $validator)

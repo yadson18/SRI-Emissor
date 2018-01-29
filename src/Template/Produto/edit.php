@@ -216,9 +216,16 @@
 									]) 
 								?>
 						      	<span class='input-group-btn'>
-						        	<button class='btn btn-primary btn-sm' type='button'>
-						        		Consultar <i class='fas fa-search'></i>
-						        	</button>
+						      		<?= $this->Form->button(
+						      				"Consultar <i class='fas fa-search'></i>", [
+						      					'class' => 'btn btn-primary btn-sm',
+						      					'data-toggle' => 'modal',
+						      					'data-target' => '#find-ncscc',
+						      					'data-find' => 'ncm',
+						      					'type' => 'button'
+						      				]
+						      			) 
+						      		?>
 						      	</span>
 						    </div>
 						</div>	
@@ -246,9 +253,16 @@
 									]) 
 								?> 
 						      	<span class='input-group-btn'>
-						        	<button class='btn btn-primary btn-sm' type='button'>
-						        		Consultar <i class='fas fa-search'></i>
-						        	</button>
+						        	<?= $this->Form->button(
+						      				"Consultar <i class='fas fa-search'></i>", [
+						      					'class' => 'btn btn-primary btn-sm',
+						      					'data-toggle' => 'modal',
+						      					'data-target' => '#find-ncscc',
+						      					'data-find' => 'cstpc',
+						      					'type' => 'button'
+						      				]
+						      			) 
+						      		?>
 						      	</span>
 						    </div>
 						</div>	
@@ -299,9 +313,16 @@
 									]) 
 								?>
 						      	<span class='input-group-btn'>
-						        	<button class='btn btn-primary btn-sm' type='button'>
-						        		Consultar <i class='fas fa-search'></i>
-						        	</button>
+						        	<?= $this->Form->button(
+						      				"Consultar <i class='fas fa-search'></i>", [
+						      					'class' => 'btn btn-primary btn-sm',
+						      					'data-toggle' => 'modal',
+						      					'data-target' => '#find-ncscc',
+						      					'data-find' => 'st',
+						      					'type' => 'button'
+						      				]
+						      			) 
+						      		?>
 						      	</span>
 						    </div>
 						</div>	
@@ -329,9 +350,16 @@
 									]) 
 								?>
 						      	<span class='input-group-btn'>
-						        	<button class='btn btn-primary btn-sm' type='button'>
-						        		Consultar <i class='fas fa-search'></i>
-						        	</button>
+						        	<?= $this->Form->button(
+						      				"Consultar <i class='fas fa-search'></i>", [
+						      					'class' => 'btn btn-primary btn-sm',
+						      					'data-toggle' => 'modal',
+						      					'data-target' => '#find-ncscc',
+						      					'data-find' => 'cfop',
+						      					'type' => 'button'
+						      				]
+						      			) 
+						      		?>
 						      	</span>
 						    </div>
 						</div>	
@@ -368,9 +396,16 @@
 									]) 
 								?>
 						      	<span class='input-group-btn'>
-						        	<button class='btn btn-primary btn-sm' type='button'>
-						        		Consultar <i class='fas fa-search'></i>
-						        	</button>
+						        	<?= $this->Form->button(
+						      				"Consultar <i class='fas fa-search'></i>", [
+						      					'class' => 'btn btn-primary btn-sm',
+						      					'data-toggle' => 'modal',
+						      					'data-target' => '#find-ncscc',
+						      					'data-find' => 'cest',
+						      					'type' => 'button'
+						      				]
+						      			) 
+						      		?>
 						      	</span>
 						    </div>
 						</div>	
@@ -432,3 +467,62 @@
 		</div>
 	<?php endif; ?>
 </div>
+<!-- Modal de Consultas -->
+<div class='modal fade' id='find-ncscc' tabindex='-1' role='dialog'>
+	<div class='modal-dialog modal-lg' role='document'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+					<span aria-hidden='true'>&times;</span>
+				</button>
+				<h4 class='modal-title text-center' id='exampleModalLabel'>Consultar</h4>
+			</div>
+			<div class='modal-body'>
+				<div class='row'>
+					<div class='col-sm-6 form-group'>
+  						<div class='input-group icon-right'>
+  							<span class='input-group-btn'>
+      							<select class='btn btn-default btn-sm filter'>
+		      						<option value='codigo'>CÓDIGO</option>
+		      						<option value='descricao'>DESCRIÇÃO</option>
+      							</select>
+  							</span>
+		      				<?= $this->Form->input('', [
+		                           	'placeholder' => 'Digite sua busca aqui',
+		                           	'class' => 'form-control input-sm search-content text-uppercase',
+		                           	'required' => false,
+		                           	'name' => false,
+		                           	'id' => false
+		                       	]) 
+		                    ?>
+                			<i class='fas fa-search icon icon-sm button find'></i>
+  						</div>
+					</div>
+					<div class='col-sm-12'>
+						<div class='table-responsive fixed-height'>
+							<table class='table table-bordered'>
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Código</th>
+										<th>Descrição</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-danger' data-dismiss='modal'>
+					Fechar <i class='fas fa-times'></i>
+				</button>
+	 			<button type='button' class='btn btn-success'>
+	 				Concluir <i class='fas fa-check'></i>
+	 			</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Fim do Modal -->

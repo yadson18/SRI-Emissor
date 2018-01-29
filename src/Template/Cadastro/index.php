@@ -73,11 +73,11 @@
                         <h4>Deseja realmente excluir este destinatário?</h4>
                     </div>
                     <div class='modal-footer'>
-                    	<button class='btn btn-success remove' data-dismiss='modal'>
-                    		Sim <i class='fas fa-check'></i>
-                    	</button>
                     	<button data-dismiss='modal' class='btn btn-danger exit'>
                     		Não <i class='fas fa-times'></i>
+                    	</button>
+                    	<button class='btn btn-success remove' data-dismiss='modal'>
+                    		Sim <i class='fas fa-check'></i>
                     	</button>
                     </div>
                 </div>

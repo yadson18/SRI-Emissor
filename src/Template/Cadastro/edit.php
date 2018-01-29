@@ -7,28 +7,28 @@
 			<div class='col-sm-12 message-box'>
 				<?= $this->Flash->showMessage() ?>
 			</div>
-			<div class='col-sm-12'>
-				<div class='row'>
-					<div class='form-group col-sm-12' id='breadcrumb'>
-						<ul class='nav nav-tabs destinatarie-type'>
-							<?php if($cadastroTipo === 'cpf'): ?>
-								<li role='breadcrumb-item' class='active'>
-									<a href='#' id='CPF'>Pessoa Física</a>
-								</li>
-								<li role='breadcrumb-item'>
-									<a href='#' id='CNPJ'>Pessoa Jurídica</a>
-								</li>
-							<?php else: ?>
-								<li role='breadcrumb-item'>
-									<a href='#' id='CPF'>Pessoa Física</a>
-								</li>
-								<li role='breadcrumb-item' class='active'>
-									<a href='#' id='CNPJ'>Pessoa Jurídica</a>
-								</li>
-							<?php endif; ?>
-						</ul>
-					</div>
-					<div class='form-group col-sm-6'>
+			<div class='form-group col-sm-12' id='breadcrumb'>
+				<ul class='nav nav-tabs destinatarie-type'>
+					<?php if($cadastroTipo === 'cpf'): ?>
+						<li role='breadcrumb-item' class='active'>
+							<a href='#' id='CPF'>Pessoa Física</a>
+						</li>
+						<li role='breadcrumb-item'>
+							<a href='#' id='CNPJ'>Pessoa Jurídica</a>
+						</li>
+					<?php else: ?>
+						<li role='breadcrumb-item'>
+							<a href='#' id='CPF'>Pessoa Física</a>
+						</li>
+						<li role='breadcrumb-item' class='active'>
+							<a href='#' id='CNPJ'>Pessoa Jurídica</a>
+						</li>
+					<?php endif; ?>
+				</ul>
+			</div>
+			<div class='row'>
+				<div class='form-group col-sm-12'>
+					<div class='col-sm-6 icon-right'>
 						<?= $this->Form->input(strtoupper($cadastroTipo) , [
 								'class' => $cadastroTipo . 'Mask form-control input-sm',
 								'placeholder' => ($cadastroTipo === 'cnpj') 
@@ -41,9 +41,9 @@
 						?>	
 					</div>
 					<?php if($cadastroTipo === 'cnpj'): ?>
-						<div class='form-group col-sm-6 estadual'>
+						<div class='col-sm-6 estadual'>
 					<?php else: ?>
-						<div class='form-group col-sm-6 estadual hidden'>
+						<div class='col-sm-6 estadual hidden'>
 					<?php endif; ?>
 						<?= $this->Form->input('Inscrição Estadual', [
 								'value' => ($cadastro->estadual) 
@@ -81,7 +81,7 @@
 						'value' => $cadastro->cep
 					]) 
 				?>
-				<i class='fas fa-search button' id='find-cep'></i>	
+				<i class='fas fa-search icon col-icon icon-sm button' id='find-cep'></i>	
 			</div>
 			<div class='form-group col-sm-3'>
 				<?= $this->Form->select('Estado', array_column(

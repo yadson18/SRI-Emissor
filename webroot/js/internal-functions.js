@@ -114,7 +114,7 @@ $(document).ready(function(){
             $messageBox = $('form .message-box');
             classes = '';
 
-        $div.addClass('icon-right').find('i').remove();
+        $div.find('i').remove();
 
         if ($input.prop('class').indexOf('cnpjMask') !== -1 &&
             $input.val().length === 18 ||
@@ -124,11 +124,12 @@ $(document).ready(function(){
             if (status === 'success' && 
                 !(/^(.)\1+$/.test($input.cleanVal()))
             ) {   
-                classes = 'fa-check success';
+                classes = 'fa-check success icon col-icon icon-sm';
                 $div.removeClass('has-error');
+                $messageBox.empty();
             } 
             else {
-                classes = 'fa-times danger';
+                classes = 'fa-times danger icon col-icon icon-sm';
                 $div.addClass('has-error');
 
                 if ($input.val().length === 18) {
@@ -138,8 +139,9 @@ $(document).ready(function(){
                     $messageBox.bootstrapAlert('error', 'Digite um CPF válido.');
                 }
             }
+            
+            $div.append($('<i></i>', { class: 'fas ' + classes }));
         }
-        $div.append($('<i></i>', { class: 'fas ' + classes }));
     }
 
     var defaultMaskConfigs = {

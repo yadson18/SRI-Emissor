@@ -74,20 +74,22 @@
                                         'class' => 'cnpjMask form-control',
                                         'autofocus' => true,
                                         'required' => true,
-                                        'name' => 'cnpj' 
+                                        'name' => 'cnpj',
+                                        'id' => false 
                                     ]) 
                                 ?>
-                                <i class="fas fa-id-card"></i>
+                                <i class='fas fa-id-card icon'></i>
                             </div>
                             <div class='form-group icon-right'>
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite seu usuário',
                                         'class' => 'form-control',
                                         'required' => true,
-                                        'name' => 'login'
+                                        'name' => 'login',
+                                        'id' => false
                                     ]) 
                                 ?>
-                                <i class="fas fa-user"></i>
+                                <i class='fas fa-user icon'></i>
                             </div>
                             <div class='form-group icon-right'>
                                 <?= $this->Form->input('', [
@@ -95,10 +97,11 @@
                                         'class' => 'form-control',
                                         'type' => 'password',
                                         'required' => true,
-                                        'name' => 'senha'
+                                        'name' => 'senha',
+                                        'id' => false
                                     ]) 
                                 ?>
-                                <i class="fas fa-key"></i>
+                                <i class='fas fa-key icon'></i>
                             </div>
                             <div class='form-group'>
                                 <?= $this->Form->button(

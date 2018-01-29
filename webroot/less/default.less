@@ -31,47 +31,56 @@
     .close { .font-size(1.2em); }
     .data-not-found { .margin-top(12em); }
     .modal .modal-top { .margin-top(30px); }
-    .form-group.icon-right i { .right(1.8em); }
-    .icon-right i { .right(1em); }
-    .icon-right {
+    .icon-left, .icon-right {
         .position(relative);
-
-        i {
+        
+        .icon {
             .position(absolute);
-            .bottom(8.5px);
-            .color(#777);
-        }
-        i.button {
-            .cursor(pointer);
-            .z-index(600);
-            .padding(7px 7px);
             .bottom(0);
-            .right(1.2em);
+            .color(#777);
+            .z-index(600);
+            .padding(10px 15px);
+        }
+        .icon.icon-sm {
+            .padding(8px 15px);
+        }
+        .icon.button {
+            .cursor(pointer);
 
             &:hover {
                 .color(#225589);
                 .font-size(13.5px);
             }
             &:active {
-                .color(#666);
+                .color(#777);
                 .font-size(1em);
             }
         }
-        i.success { .color(#5cb85c); }
-        i.danger { .color(#c9302c); }
-    }
-    .icon-left i { .left(1.8em); }
-    .icon-left {
-        .position(relative);
-
-        i {
-            .position(absolute);
-            .bottom(8px);
-            .color(#777); 
+        .icon.success {
+            .color(#3c763d);
         }
-        i.success { .color(#5cb85c); }
-        i.danger { .color(#c9302c); }
-        input { .padding-left(30px); }
+        .icon.danger {
+            .color(#a94442);
+        }
+    }
+    .icon-right {
+        .icon {
+            .right(0);
+        }
+        .icon.col-icon {
+            .right(0.8em);
+        }
+    }
+    .icon-left {
+        .icon {
+            .left(0);
+        }
+        .icon.col-icon {
+            .left(0.8em);
+        }
+        input {
+            .padding-left(35px);
+        }
     }
     .table {
         tbody tr, thead tr {
@@ -182,6 +191,7 @@
                     i {
                         .display(block);
                         .font-size(1.8em);
+                        .margin-bottom(5px);
                     }
                 }
             }

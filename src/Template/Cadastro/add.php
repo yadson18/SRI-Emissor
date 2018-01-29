@@ -6,19 +6,19 @@
 	<div class='col-sm-12 message-box'>
 		<?= $this->Flash->showMessage() ?>
 	</div>
-	<div class='col-sm-12'>
-		<div class='row'>
-			<div class='form-group col-sm-12' id='breadcrumb'>
-				<ul class='nav nav-tabs destinatarie-type'>
-					<li role='breadcrumb-item' class='active'>
-						<a href='#' id='CPF'>Pessoa Física</a>
-					</li>
-					<li role='breadcrumb-item'>
-						<a href='#' id='CNPJ'>Pessoa Jurídica</a>
-					</li>
-				</ul>
-			</div>
-			<div class='form-group col-sm-6'>
+	<div class='form-group col-sm-12' id='breadcrumb'>
+		<ul class='nav nav-tabs destinatarie-type'>
+			<li role='breadcrumb-item' class='active'>
+				<a href='#' id='CPF'>Pessoa Física</a>
+			</li>
+			<li role='breadcrumb-item'>
+				<a href='#' id='CNPJ'>Pessoa Jurídica</a>
+			</li>
+		</ul>
+	</div>
+	<div class='row'>
+		<div class='form-group col-sm-12'>
+			<div class='col-sm-6 icon-right'>
 				<?= $this->Form->input('CPF' , [
 						'class' => 'form-control input-sm cpfMask',
 						'placeholder' => 'EX: 095.726.241-80',
@@ -27,7 +27,7 @@
 					]) 
 				?>	
 			</div>
-			<div class='form-group col-sm-6 hidden estadual'>
+			<div class='col-sm-6 hidden estadual'>
 				<?= $this->Form->input('Inscrição Estadual', [
 						'placeholder' => 'EX: ISENTO', 
 						'required' => false,
@@ -35,7 +35,7 @@
 						'name' => false
 					]) 
 				?>
-			</div>  
+			</div> 
 		</div>
 	</div>
 	<div class='form-group col-sm-6'>
@@ -59,7 +59,7 @@
 				'placeholder' => 'EX: 50000-000'
 			]) 
 		?>	
-		<i class='fas fa-search button' id='find-cep'></i>
+		<i class='fas fa-search icon col-icon icon-sm button' id='find-cep'></i>
 	</div>
 	<div class='form-group col-sm-3'>
 		<?= $this->Form->select('Estado', array_column(

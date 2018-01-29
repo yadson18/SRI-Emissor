@@ -3,7 +3,57 @@ $(document).ready(function(){
         return parseFloat(money.replace(/[.]/g, '').replace(/[,]/g, '.'));
     }
 
-   $('select[name=cod_grupo]').on('change', function() {
+    var $search;
+    $('#find-ncscc').on('show.bs.modal', function (event) {
+        $search = {
+            method: 'POST',
+            dataType: 'json'
+        };
+
+        var recipient = $(event.relatedTarget).data('find');
+            $modal = $(this);
+
+        $modal.find('.modal-title').text('Consultar ' + recipient.toUpperCase());
+        switch (recipient) {
+            case 'ncm':
+                $search.url = '/Ncm/find';
+                break;
+            case 'cstpc':
+                $search.url = '/ModPiscofins/find';
+                break;
+            case 'st':
+                $search.url = '/St/find';
+                break;
+            case 'cfop':
+                $search.url = '/Cfop/find';
+                break;
+            case 'cest':
+                $search.url = '/Cest/find';
+                break;
+        }
+    });
+
+    $('#find-ncscc .find').on('click', function() {
+        $DOM = {
+            search: $('#find-ncscc .search-content'),
+            filter: $('#find-ncscc .filter')
+        };
+
+        if ($DOM.search.val().replace(/[ ]/g, '') !== '' &&
+            typeof $search === 'object'
+        ) {
+            $search.data = { 
+                search: $DOM.search.val(),
+                filter: $DOM.filter.val()
+            };
+
+            $.ajax($search).always(function(data, status) {
+                console.log(data);
+            });
+        }
+    });
+
+    $('select[name=cod_grupo]').on('change', function() {
         $.ajax({
             url: '/SubgrupoProd/getSubgrupos',
             data: { codGrupo: $(this).val() },
@@ -53,8 +103,6 @@ $(document).ready(function(){
     });
 
     $('input[name=st]').on('keyup', function() {
-        console.log('ok');
-
         var $stCodigos = {
                 normal: ['0010', '0030', '0060'],
                 simples: ['0201', '0202', '0500']

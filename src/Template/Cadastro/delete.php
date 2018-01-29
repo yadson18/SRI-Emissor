@@ -1,1 +1,1 @@
-<?= $deleteCadastro ?>
+<?= $cadastroDeletado ?>

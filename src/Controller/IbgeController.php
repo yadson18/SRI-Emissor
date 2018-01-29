@@ -11,7 +11,7 @@
 		public function municipiosUF()
 		{
 			if ($this->request->is('POST')) {
-				$data = $this->request->getData();
+				$data = array_map('removeSpecialChars', $this->request->getData());
 
 				if (isset($data['sigla'])) {
 					$this->Ajax->response('municipios', [
@@ -20,7 +20,7 @@
 				}
 			}
 			else {
-				return $this->redirect(['controller' => 'Page', 'view' => 'home']);
+				return $this->redirect('default');
 			}
 		}
 

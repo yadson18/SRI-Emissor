@@ -15,12 +15,19 @@
 
 				if (isset($data['codGrupo'])) {
 					$this->Ajax->response('subgrupos', [
-						'subgrupos' => $this->SubgrupoProd->getSubgrupos($data['codGrupo'])
+						'status' => 'success',
+						'data' => $this->SubgrupoProd->getSubgrupos($data['codGrupo'])
+					]);
+				}
+				else {
+					$this->Ajax->response('subgrupos', [
+						'status' => 'error',
+						'data' => 'Nenhum subgrupo encontrado, grupo inexistente.' 
 					]);
 				}
 			}
 			else {
-				return $this->redirect(['controller' => 'Produto', 'view' => 'index']);
+				return $this->redirect('default');
 			}
 		}
 

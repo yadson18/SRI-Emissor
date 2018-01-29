@@ -4,11 +4,6 @@
 		return splitNamespace(get_class($object));
 	}
 
-	function emptyObject($object)
-	{
-		return (count(get_object_vars($object)) === 0) ? true : false;
-	}
-
 	function arrayDeepSearch(array $keys, array $array)
 	{
 		while ($keys) {

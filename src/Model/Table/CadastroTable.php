@@ -17,6 +17,19 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function cadastroExistente(string $cnpj)
+		{
+			$cadastro = $this->find(['razao'])
+				->from(['cadastro'])
+				->where(['cnpj =' => unmask($cnpj)])
+				->fetch('class');
+
+			if ($cadastro) {
+				return true;
+			}
+			return false;
+		}
+
 		public function validaCadastro(string $cnpj)
 		{
 			$cadastro = $this->find([
@@ -33,6 +46,18 @@
 				return $cadastro;
 			}
 			return false;	
+		}
+
+		public function normalizarDados(array $dadosCadastro)
+		{
+			if (isset($dadosCadastro['cnpj'])) {
+				$dadosCadastro['cnpj'] = unmask($dadosCadastro['cnpj']);
+			}
+			if (isset($dadosCadastro['cep'])) {
+				$dadosCadastro['cep'] = unmask($dadosCadastro['cep']);
+			}
+
+			return array_map('removeSpecialChars', $dadosCadastro);
 		}
 
 		public function listarAtivos(int $quantity = null, int $skipTo = null)

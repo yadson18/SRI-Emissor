@@ -50,64 +50,29 @@
 				->fetch('all');
 		}
 
+		public function normalizarDados(array $dadosProduto)
+		{
+			foreach ($dadosProduto as $coluna => $valor) {
+				if ($coluna === 'compra' || $coluna === 'venda' ||
+					$coluna === 'preco_vol' || $coluna === 'preco_prom'
+				) {
+					$dadosProduto[$coluna] = dinheiroParaFloat($valor);
+				}
+				else if ($coluna === 'data_inicio_prom' || 
+					$coluna === 'data_final_prom'
+				) {
+					$dadosProduto[$coluna] = str_replace('/', '.', $valor);
+				}
+			}
+			return array_map('removeSpecialChars', $dadosProduto);
+		}
+
 		public function contarAtivos()
 		{
 			return $this->find([])
 				->count('cod_interno')->as('quantidade')
 				->where(['inativo =' => 'A'])
 				->fetch('class');
-		}
-
-		public function getUnidadesMedida()
-		{
-			return TableRegistry::get('Unidades')->get('all');
-		}
-
-		public function getGrupos()
-		{
-			return TableRegistry::get('GrupoProd')->getGrupos();
-		}
-
-		public function getSubgrupos(int $cod_grupo)
-		{
-			return TableRegistry::get('SubgrupoProd')->getSubgrupos($cod_grupo);
-		}
-
-		public function getNcmDescricao(string $ncm)
-		{
-			return TableRegistry::get('Ncm')->getNcmDescricao($ncm);
-		}
-
-		public function getCstpcDescricao(string $codigo)
-		{
-			return TableRegistry::get('ModPiscofins')->getCstpcDescricao($codigo);
-		}
-
-		public function getCstpcRef(string $codigo)
-		{
-			return TableRegistry::get('ModPiscofins')->getCstpcRef($codigo);
-		}
-
-		public function getStDescricao(string $cod_st)
-		{
-			return TableRegistry::get('St')->getStDescricao($cod_st);
-		}
-
-		public function getCfopDescricao(string $cfop)
-		{
-			return TableRegistry::get('Cfop')->getCfopDescricao($cfop);
-		}
-
-		public function getCestDescricao(string $cest)
-		{
-			return TableRegistry::get('Cest')->getCestDescricao($cest);
-		}
-
-		public function validaNCSCC($ncm, $cstpc, $st, $cfop, $cest)
-		{
-			return TableRegistry::get('Ncscc')->validaNCSCC(
-				$ncm, $cstpc, $st, $cfop, $cest
-			);
 		}
 
 		protected function defaultValidator(Validator $validator)

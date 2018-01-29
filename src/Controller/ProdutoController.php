@@ -10,18 +10,20 @@
 			return $this->allow([]);
 		}
 
-		public function index($identify = null, $page = 1)
+		public function index($identificador = null, $pagina = 1)
 		{	
-			$page = (is_numeric($page) && $page > 0) ? (int) $page : 1;
-			$ativos = $this->Produto->contarAtivos();
+			$pagina = (is_numeric($pagina) && $pagina > 0) ? $pagina : 1;
+			$usuario = $this->Auth->getUser();
 			$produtos = null;
 
-			$this->Paginator->showPage($page)
-				->buttonsLink('/Produto/index/page/')
-				->itensTotalQuantity($ativos->quantidade)
+			$this->Paginator->showPage($pagina)
+				->buttonsLink('/Produto/index/pagina/')
+				->itensTotalQuantity(
+					$this->Produto->contarAtivos()->quantidade
+				)
 				->limit(200);
 			
-			if ($identify === 'page' && !empty($page)) {
+			if ($identificador === 'pagina') {
 				$produtos = $this->Produto->listarAtivos(
 					$this->Paginator->getListQuantity(), 
 					$this->Paginator->getStartPosition()
@@ -35,65 +37,79 @@
 			
 			$this->setTitle('Produtos Cadastrados');
 			$this->setViewVars([
-				'usuarioNome' => $this->getUserName(),
+				'usuarioNome' => $usuario->nome,
 				'produtos' => $produtos
 			]);
 		}
 
-		public function edit($codInterno = null)
+		public function edit($cod_interno = null)
 		{
-			$produto = null;
+			$produto = $this->Produto->newEntity();
+			$subgrupo = TableRegistry::get('SubgrupoProd');
+			$cstpc = TableRegistry::get('ModPiscofins');
+			$unidade = TableRegistry::get('Unidades');
+			$grupo = TableRegistry::get('GrupoProd');
+			$ncscc = TableRegistry::get('Ncscc');
+			$cest = TableRegistry::get('Cest');
+			$cfop = TableRegistry::get('Cfop');
+			$usuario = $this->Auth->getUser();
+			$ncm = TableRegistry::get('Ncm');
+			$st = TableRegistry::get('St');
 
-			if (is_numeric($codInterno)) {
-				$produto = $this->Produto->get($codInterno);
-
-				if ($this->request->is('POST') && $produto) {
-					$produto = $this->Produto->patchEntity(
-						$this->Produto->newEntity(), 
-						normalizarDadosProduto($this->request->getData())
-					);
-					$validador = $this->Produto->validaNCSCC(
+			if (is_numeric($cod_interno)) {
+				if ($this->request->is('GET')) {
+					$produto = $this->Produto->get($cod_interno);
+				}
+				else if ($this->request->is('POST')) {
+					$dados = $this->Produto->normalizarDados($this->request->getData());
+					$produto = $this->Produto->patchEntity($produto, $dados);
+					$validador = $ncscc->validaNCSCC(
 						$produto->cod_ncm, $produto->cstpc, $produto->st, 
 						$produto->cfop_in, $produto->cest
 					);
 
 					if ($validador['status'] === 'success') {
-						$referencia = $this->Produto->getCstpcRef($produto->cstpc)->referencia;
-						$produto->cod_colaboradoralteracao = $this->getUserId();
+						$referencia = $cstpc->getCstpcRef($produto->cstpc)->referencia;
+						$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
 						$produto->cstpc_entrada = $referencia;
-						$produto->cod_interno = $codInterno;
+						$produto->cod_interno = $cod_interno;
 
 						if ($this->Produto->save($produto)) {
-							$this->Flash->success('Os dados foram atualizados com sucesso.');
+							$this->Flash->success(
+								'Os dados do produto (' . $produto->descricao . ') foram atualizados com sucesso.'
+							);
 						}
 						else {
-							$this->Flash->error('Não foi possível atualizar os dados do produto.');
+							$this->Flash->error(
+								'Não foi possível atualizar os dados do produto (' . $produto->descricao . ').'
+							);
 						}
 					}
 					else {
-						$this->Flash->error($validador['mensagem']);
+						$this->Flash->error($validador['message']);
 					}
 				}
 			}
-			if ($produto) {
+
+			if (isset($produto->cod_interno)) {
 				$this->setViewVars([
-					'ncm' => $this->Produto->getNcmDescricao($produto->cod_ncm),
-					'cstpc' => $this->Produto->getCstpcDescricao($produto->cstpc),
-					'st' => $this->Produto->getStDescricao($produto->st),
-					'cfop' => $this->Produto->getCfopDescricao($produto->cfop_in),
-					'cest' => $this->Produto->getCestDescricao($produto->cest),
-					'subgrupos' => $this->Produto->getSubgrupos($produto->cod_grupo),
-					'codRegTrib' => $this->getUserRegTrib(),
-					'unidades' => $this->Produto->getUnidadesMedida(),
-					'usuarioNome' => $this->getUserName(),
-					'grupos' => $this->Produto->getGrupos(),
+					'subgrupos' => $subgrupo->getSubgrupos($produto->cod_grupo),
+					'cstpc' => $cstpc->getCstpcDescricao($produto->cstpc),
+					'cfop' => $cfop->getCfopDescricao($produto->cfop_in),
+					'ncm' => $ncm->getNcmDescricao($produto->cod_ncm),
+					'cest' => $cest->getCestDescricao($produto->cest),
+					'codRegTrib' => $usuario->cadastro->cod_reg_trib,
+					'st' => $st->getStDescricao($produto->st),
+					'unidades' => $unidade->get('all'),
+					'grupos' => $grupo->getGrupos(),
+					'usuarioNome' => $usuario->nome,
 					'produto' => $produto
 				]);
 			}
 			else {
 				$this->setViewVars([
-					'usuarioNome' => $this->getUserName(),
-					'produto' => $produto
+					'usuarioNome' => $usuario->nome,
+					'produto' => null
 				]);
 			}
 			$this->setTitle('Modificar Produto');

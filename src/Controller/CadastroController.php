@@ -10,19 +10,20 @@
 			return $this->allow([]);
 		}
 
-		public function index($identify = null, $page = 1)
+		public function index($identificador = null, $pagina = 1)
 		{	
-			$page = (is_numeric($page) && $page > 0) ? $page : 1;
+			$pagina = (is_numeric($pagina) && $pagina > 0) ? $pagina : 1;
+			$usuario = $this->Auth->getUser();
 			$cadastros = null;
 
-			$this->Paginator->showPage($page)
-				->buttonsLink('/Cadastro/index/page/')
+			$this->Paginator->showPage($pagina)
+				->buttonsLink('/Cadastro/index/pagina/')
 				->itensTotalQuantity(
 					$this->Cadastro->contarAtivos()->quantidade
 				)
 				->limit(100);
 
-			if ($identify === 'page') {
+			if ($identificador === 'pagina') {
 				$cadastros = $this->Cadastro->listarAtivos(
 					$this->Paginator->getListQuantity(), 
 					$this->Paginator->getStartPosition()
@@ -36,7 +37,7 @@
 			
 			$this->setTitle('Destinatários Cadastrados');
 			$this->setViewVars([
-				'usuarioNome' => $this->getUserName(),
+				'usuarioNome' => $usuario->nome,
 				'cadastros' => $cadastros
 			]);
 		}
@@ -45,13 +46,21 @@
 		{
 			$cadastro = $this->Cadastro->newEntity();
 			$ibge = TableRegistry::get('Ibge');
+			$usuario = $this->Auth->getUser();
 
 			if ($this->request->is('POST')) {
-				$data = array_map('sanitize', $this->request->getData());
-				$cadastro = $this->Cadastro->patchEntity($cadastro, $data);
+				$dados = $this->Cadastro->normalizarDados($this->request->getData());
+				$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
 				$cadastro->ativo = 'T';
 
-				if ($this->Cadastro->save($cadastro)) {
+				if ($this->Cadastro->cadastroExistente($cadastro->cnpj)) {
+					$tipoCadastro = (strlen($cadastro->cnpj) === 18) ? 'CNPJ' : 'CPF';
+
+					$this->Flash->error(
+						'Desculpe, o ' . $tipoCadastro . ' (' . $cadastro->cnpj . ') já está em uso.'
+					);
+				}
+				else if ($this->Cadastro->save($cadastro)) {
 					$this->Flash->success(
 						'O destinatário (' . $cadastro->razao . ') foi adicionado com sucesso.'
 					);
@@ -66,24 +75,26 @@
 			$this->setTitle('Adicionar Destinatário');
 			$this->setViewVars([
 				'municipios' => $ibge->municipiosUF('AC'),
-				'usuarioNome' => $this->getUserName(),
-				'estados' => $ibge->siglaEstados()
+				'estados' => $ibge->siglaEstados(),
+				'usuarioNome' => $usuario->nome
 			]);
 		}
 
 		public function edit($cod_cadastro = null)
 		{
 			$cadastro = $this->Cadastro->newEntity();
+			$ibge = TableRegistry::get('Ibge');
+			$usuario = $this->Auth->getUser();
 
 			if (is_numeric($cod_cadastro)) {
 				if ($this->request->is('GET')) {
 					$cadastro = $this->Cadastro->get($cod_cadastro);
 				}
 				else if ($this->request->is('POST')) {
-					$data = array_map('sanitize', $this->request->getData());
-					$cadastro = $this->Cadastro->patchEntity($cadastro, $data);
+					$dados = $this->Cadastro->normalizarDados($this->request->getData());
+					$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
 					$cadastro->cod_cadastro = $cod_cadastro;
-						
+					
 					if ($this->Cadastro->save($cadastro)) {
 						$this->Flash->success(
 							'Os dados do destinatário (' . $cadastro->razao . ') foram modificados com sucesso.'
@@ -96,25 +107,20 @@
 					}
 				}
 			}
-			else {
-				$cadastro = null;
-			}
 
-			if ($cadastro) {
-				$ibge = TableRegistry::get('Ibge');
-
+			if (isset($cadastro->cnpj)) {
 				$this->setViewVars([
-					'cadastroTipo' => (strlen($cadastro->cnpj) === 14) ? 'cnpj' : 'cpf',
+					'cadastroTipo' => (strlen($cadastro->cnpj)) ? 'cnpj' : 'cpf',
 					'municipios' => $ibge->municipiosUF($cadastro->estado),
-					'usuarioNome' => $this->getUserName(),
 					'estados' => $ibge->siglaEstados(),
+					'usuarioNome' => $usuario->nome,
 					'cadastro' => $cadastro
 				]);
 			}
 			else {
 				$this->setViewVars([
-					'usuarioNome' => $this->getUserName(),
-					'cadastro' => $cadastro
+					'usuarioNome' => $usuario->nome,
+					'cadastro' => null
 				]);
 			}
 			$this->setTitle('Modificar Destinatário');
@@ -125,36 +131,38 @@
 			$cadastro = $this->Cadastro->newEntity();
 
 			if ($this->request->is('POST')) {
-				$data = $this->request->getData();
+				$dados = $this->Cadastro->normalizarDados($this->request->getData());
 
-				if (is_numeric($data['cod_cadastro'])) {
-					if ($this->Cadastro->get($data['cod_cadastro'])) {
-						$cadastro = $this->Cadastro->patchEntity($cadastro, $data);
+				if (isset($dados['cod_cadastro']) && is_numeric($dados['cod_cadastro'])) {
+					$paraApagar = $this->Cadastro->get($dados['cod_cadastro']);
+
+					if ($paraApagar) {
+						$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
 						$cadastro->ativo = 'F';
 
 						if ($this->Cadastro->save($cadastro)) {
-							$this->Ajax->response('deleteCadastro', [
+							$this->Ajax->response('cadastroDeletado', [
 								'status' => 'success',
-								'message' => 'Destinatário removido com sucesso.'
+								'message' => 'Destinatário (' . $paraApagar->razao . ') removido com sucesso.'
 							]);
 						}
 						else {
-							$this->Ajax->response('deleteCadastro', [
+							$this->Ajax->response('cadastroDeletado', [
 								'status' => 'error',
-								'message' => 'Não foi possível remover o destinatário.'
+								'message' => 'Não foi possível remover o destinatário (' . $paraApagar->razao . ').'
 							]);
 						}
 					}
 				}
 				else {
-					$this->Ajax->response('deleteCadastro', [
+					$this->Ajax->response('cadastroDeletado', [
 						'status' => 'error',
 						'message' => 'Não foi possível remover, o destinatário não existe.'
 					]);
 				}
 			}
 			else {
-				return $this->redirect(['controller' => 'Cadastro', 'view' => 'index']);
+				return $this->redirect('default');
 			}
 		}
 

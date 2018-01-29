@@ -204,7 +204,7 @@
 			<fieldset class='col-sm-12'>
 				<legend>PIS/Cofins</legend>
 				<div class='col-sm-12'>
-					<div class='row'>
+					<div class='row select-ncscc'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código NCM</label>
 							<div class='input-group'>
@@ -212,6 +212,7 @@
 										'placeholder' => 'EX: 01051200',
 										'value' => $produto->cod_ncm,
 										'name' => 'cod_ncm',
+										'readonly' => true,
 										'maxlength' => 8
 									]) 
 								?>
@@ -219,8 +220,8 @@
 						      		<?= $this->Form->button(
 						      				"Consultar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
+						      					'data-toggle' => 'modal',
 						      					'data-find' => 'ncm',
 						      					'type' => 'button'
 						      				]
@@ -241,13 +242,14 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row'>
+					<div class='row select-ncscc'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CSTPC</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
 										'value' => $produto->cstpc,
 										'placeholder' => 'EX: 1',
+										'readonly' => true,
 										'name' => 'cstpc',
 										'maxlength' => 1
 									]) 
@@ -301,13 +303,14 @@
 			<fieldset class='col-sm-12'>
 				<legend>ICMS</legend>
 				<div class='col-sm-12'>
-					<div class='row'>
+					<div class='row select-ncscc'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CST</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
 										'placeholder' => 'EX: 0000',
 										'value' => $produto->st,
+										'readonly' => true,
 										'maxlength' => 4,
 										'name' => 'st'
 									]) 
@@ -338,7 +341,7 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row'>
+					<div class='row select-ncscc'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CFOP</label>
 							<div class='input-group'>
@@ -346,6 +349,7 @@
 										'value' => $produto->cfop_in,
 										'placeholder' => 'EX: 0000',
 										'name' => 'cfop_in',
+										'readonly' => true,
 										'maxlength' => 4
 									]) 
 								?>
@@ -375,7 +379,7 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row' id='cest-block'>
+					<div class='row select-ncscc' id='cest-block'>
 						<?= $this->Form->input('', [
 								'value' => $codRegTrib,
 								'id' => 'cod_reg_trib',
@@ -391,6 +395,7 @@
 						      	<?= $this->Form->input('', [
 										'placeholder' => 'EX: 2000400',
 										'value' => $produto->cest,
+										'readonly' => true,
 										'maxlength' => 7,
 										'name' => 'cest'
 									]) 
@@ -478,13 +483,14 @@
 				<h4 class='modal-title text-center' id='exampleModalLabel'>Consultar</h4>
 			</div>
 			<div class='modal-body'>
+				<div class='col-sm-12 message-box'></div>
 				<div class='row'>
 					<div class='col-sm-6 form-group'>
   						<div class='input-group icon-right'>
   							<span class='input-group-btn'>
       							<select class='btn btn-default btn-sm filter'>
-		      						<option value='codigo'>CÓDIGO</option>
-		      						<option value='descricao'>DESCRIÇÃO</option>
+		      						<option value='1'>CÓDIGO</option>
+		      						<option value='2'>DESCRIÇÃO</option>
       							</select>
   							</span>
 		      				<?= $this->Form->input('', [
@@ -506,6 +512,7 @@
 										<th>#</th>
 										<th>Código</th>
 										<th>Descrição</th>
+										<th>Selecionado</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -518,7 +525,7 @@
 				<button type='button' class='btn btn-danger' data-dismiss='modal'>
 					Fechar <i class='fas fa-times'></i>
 				</button>
-	 			<button type='button' class='btn btn-success'>
+	 			<button type='button' class='btn btn-success inserir'>
 	 				Concluir <i class='fas fa-check'></i>
 	 			</button>
 			</div>

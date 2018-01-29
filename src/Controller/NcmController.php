@@ -11,27 +11,15 @@
 		public function find()
 		{
 			if ($this->request->is('POST')) {
-				$data = array_map('sanitize', $this->request->getData());
-				$resultado = null;
+				$data = array_map('removeSpecialChars', $this->request->getData());
 
-				if (!empty($data['search']) && !empty($data['filter'])) {
-					$resultado = $this->Ncm->find(['descricao'])
-						->distinct('ncm')->as('ncm')
-						->orderBy(['descricao'])
-						->limit(60);
-					
-					if ($data['filter'] === 'codigo') {
-						$resultado->where(['ncm like' => $data['search'] . '%']);
-					}
-					else if ($data['filter'] === 'descricao') {
-						$resultado->where(['descricao like' => $data['search'] . '%']);
-					}
-					$resultado = $resultado->fetch('all');
+				if (!empty($data['filtro']) && !empty($data['busca'])) {
+					$ncm = $this->Ncm->buscaNcm($data['filtro'], $data['busca']);
 
-					if (!empty($resultado)) {
+					if (!empty($ncm)) {
 						$this->Ajax->response('ncm', [
 							'status' => 'success',
-							'data' => $resultado
+							'data' => $ncm
 						]);
 					}
 					else {
@@ -40,6 +28,12 @@
 							'message' => 'Desculpe, nada foi encontrado.'
 						]);
 					}
+				}
+				else {
+					$this->Ajax->response('ncm', [
+						'status' => 'error',
+						'message' => 'Por favor, verifique se os dados foram digitados corretamente.'
+					]);
 				}
 			}
 			else {

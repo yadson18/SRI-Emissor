@@ -23,9 +23,9 @@
 				->where(['cod_grupo =' => $cod_grupo])
 				->fetch('all');
 
-			return array_merge(
-				[['cod_subgrupo' => 0,'descricao' => '-- SEM SUBGRUPO --']], $subgrupos
-			);
+			return array_merge([
+					['cod_subgrupo' => 0, 'descricao' => '-- SEM SUBGRUPO --']
+			], $subgrupos);
 		}
 
 		protected function defaultValidator(Validator $validator)

@@ -3,53 +3,128 @@ $(document).ready(function(){
         return parseFloat(money.replace(/[.]/g, '').replace(/[,]/g, '.'));
     }
 
-    var $search;
-    $('#find-ncscc').on('show.bs.modal', function (event) {
-        $search = {
+    var $busca;
+    $('#find-ncscc').on('show.bs.modal', function (evento) {
+        var $DOM = {
+            botao: $(evento.relatedTarget),
+            modal: $(this)
+        };
+        var tipoConsulta = $DOM.botao.data('find');
+        $busca = {
             method: 'POST',
             dataType: 'json'
         };
 
-        var recipient = $(event.relatedTarget).data('find');
-            $modal = $(this);
+        $DOM.modal.find('.modal-title').text('Consultar ' + tipoConsulta.toUpperCase());
+        $DOM.botao.closest('.select-ncscc').addClass('consulting');
+        $DOM.modal.find('.search-content').val('');
+        $DOM.modal.find('table tbody').empty();
 
-        $modal.find('.modal-title').text('Consultar ' + recipient.toUpperCase());
-        switch (recipient) {
-            case 'ncm':
-                $search.url = '/Ncm/find';
-                break;
-            case 'cstpc':
-                $search.url = '/ModPiscofins/find';
-                break;
-            case 'st':
-                $search.url = '/St/find';
-                break;
-            case 'cfop':
-                $search.url = '/Cfop/find';
-                break;
-            case 'cest':
-                $search.url = '/Cest/find';
-                break;
+        switch (tipoConsulta) {
+            case 'ncm': $busca.url = '/Ncm/find'; break;
+            case 'cstpc': $busca.url = '/ModPiscofins/find'; break;
+            case 'st': $busca.url = '/St/find'; break;
+            case 'cfop': $busca.url = '/Cfop/find'; break;
+            case 'cest': $busca.url = '/Cest/find'; break;
         }
     });
 
     $('#find-ncscc .find').on('click', function() {
-        $DOM = {
-            search: $('#find-ncscc .search-content'),
-            filter: $('#find-ncscc .filter')
+        var $DOM = {
+            mensagem: $('#find-ncscc .message-box'),
+            tabelaConteudo: $('#find-ncscc table tbody'),
+            filtro: $('#find-ncscc .filter'),
+            buscarPor: $('#find-ncscc .search-content'),
+            opcoes: []
         };
+        
+        $DOM.tabelaConteudo.empty();
 
-        if ($DOM.search.val().replace(/[ ]/g, '') !== '' &&
-            typeof $search === 'object'
+        if ($DOM.buscarPor.val().replace(/[ ]/g, '') !== '' &&
+            typeof $busca === 'object'
         ) {
-            $search.data = { 
-                search: $DOM.search.val(),
-                filter: $DOM.filter.val()
+            $busca.data = { 
+                filtro: $DOM.filtro.val(),
+                busca: $DOM.buscarPor.val()
             };
 
-            $.ajax($search).always(function(data, status) {
-                console.log(data);
+            $.ajax($busca).always(function(dados, status) {
+                if (status === 'success') {
+                    if (dados.status === 'success') {
+                        $.each(dados.data, function(indice, valor) {
+                            $DOM.opcoes.push($('<tr></tr>', {
+                                html: [
+                                    $('<th></th>', { text: (indice + 1) }),
+                                    $('<td></td>', { 
+                                        text: valor.ncm,
+                                        class: 'cod'
+                                    }),
+                                    $('<td></td>', { 
+                                        text: valor.descricao,
+                                        class: 'descricao'
+                                    }),
+                                    $('<td></td>', { 
+                                        html: $('<input/>', {
+                                            class: 'select',
+                                            type: 'checkbox'
+                                        })
+                                    })
+                                ]
+                            }));
+                        });
+                        
+                        $DOM.mensagem.empty();
+                        $DOM.tabelaConteudo.append($DOM.opcoes);
+                    }
+                    else {
+                        $DOM.mensagem.bootstrapAlert('error', dados.message);
+                    }
+                }
+                else {
+                    $DOM.mensagem.bootstrapAlert('warning', 
+                        'Desculpe, ocorreu um problema, verifique sua conexão com à internet.'
+                    );
+                }
             });
+        }
+        else {
+            $DOM.mensagem.bootstrapAlert('error', 
+                'O campo de busca não foi preenchido, preencha-o e tente novamente.'
+            );
+        }
+    });
+
+    $(this).on('click', '#find-ncscc .select', function(){ 
+        var $DOM = {
+            caixaSelecao: $('#find-ncscc .select'),
+            linhaSelecionada: $(this).closest('tr')
+        };
+
+        $DOM.linhaSelecionada.addClass('selected');
+        $DOM.caixaSelecao.prop('checked', false); 
+        $(this).prop('checked', true); 
+    });
+
+    $('#find-ncscc .inserir').on('click', function() {
+        var $DOM = {
+            tabelaConteudo: $('#find-ncscc table tbody tr'),
+            itemSelecionado: $('#find-ncscc .selected'),
+            consultando: $('.consulting .form-group'),
+            mensagem: $('#find-ncscc .message-box')
+        };
+        var codigo = $DOM.itemSelecionado.find('.cod').text();
+        var descricao = $DOM.itemSelecionado.find('.descricao').text();
+            
+        if ($DOM.itemSelecionado.length > 0 && $DOM.consultando.length > 0 &&
+            $DOM.tabelaConteudo.length > 0 && codigo !== '' && descricao !== ''
+        ) {
+            $DOM.mensagem.empty();
+            $DOM.consultando.find('input:nth-child(1)').val(codigo);
+            $DOM.consultando.find('input:nth-child(2)').val(descricao);
+            $('#find-ncscc.modal').modal('toggle');
+        }
+        else {
+            $DOM.mensagem.bootstrapAlert('error', 'Desculpe, nenhum item foi selecionado.');
         }
     });
 
@@ -59,16 +134,21 @@ $(document).ready(function(){
             data: { codGrupo: $(this).val() },
             dataType: 'json',
             method: 'POST'
-        }).always(function(data, status) {
+        }).always(function(dados, status) {
             var $options = [];
             
-            if (status === 'success' && data['subgrupos']) {
-                $.each(data['subgrupos'], function(index, value) {
-                    $options.push($('<option></option>', {
-                        value: value['cod_subgrupo'],
-                        text: value['descricao']
-                    }));
-                });
+            if (status === 'success') {
+                if (dados.status === 'success') {
+                    $.each(dados.data, function(indice, valor) {
+                        $options.push($('<option></option>', {
+                            value: valor.cod_subgrupo,
+                            text: valor.descricao
+                        }));
+                    });
+                }
+                else {
+                    $DOM.mensagem.bootstrapAlert('error', dados.message);
+                }
             }
             else {
                 $options.push($('<option></option>', {
@@ -109,21 +189,25 @@ $(document).ready(function(){
             };
             $DOM = {
                 divCest: $('#cest-block'),
-                inputCestCod: $('#cest-block input[name=cest]'),
-                inputRegTrib: $('#cod_reg_trib')
+                inputCestCodigo: $('#cest-block input[name=cest]'),
+                inputRegimeTrib: $('#cod_reg_trib')
             };
 
         if ($stCodigos.normal.indexOf($(this).val()) !== -1 &&
-            $DOM.inputRegTrib.val() === '3' || 
+            $DOM.inputRegimeTrib.val() === '3' || 
             $stCodigos.simples.indexOf($(this).val()) !== -1 &&
-            $DOM.inputRegTrib.val() === '1'
+            $DOM.inputRegimeTrib.val() === '1'
         ) {
             $DOM.divCest.removeClass('hidden');
-            $DOM.inputCestCod.val('').prop('required', true);
+
+            if ($DOM.inputCestCodigo.val() === '0000000') {
+                $DOM.inputCestCodigo.val('');
+            }
+            $DOM.inputCestCodigo.prop('required', true);
         }
         else {
             $DOM.divCest.addClass('hidden');
-            $DOM.inputCestCod.val('0000000').prop('required', false);
+            $DOM.inputCestCodigo.val('0000000').prop('required', false);
         }
     }).keyup();
 });

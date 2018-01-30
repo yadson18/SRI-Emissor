@@ -81,24 +81,24 @@ $(document).ready(function(){
                 $DOM.finalProm.val($promocao.getFinal());
                 $DOM.precoProm.val($promocao.getPreco());
             }
-            $properties = { readonly: false, required: true};
-            $DOM.descricaoProm.prop($properties);
-            $DOM.inicioProm.prop($properties);
-            $DOM.finalProm.prop($properties);
-            $DOM.precoProm.prop($properties);
+            $properties = { readonly: false, required: true };
+            $DOM.descricaoProm.prop($properties).removeClass('disabled');
+            $DOM.inicioProm.prop($properties).removeClass('disabled');
+            $DOM.finalProm.prop($properties).removeClass('disabled');
+            $DOM.precoProm.prop($properties).removeClass('disabled');
 
         }
         else {
-            $properties = { readonly: true, required: false};
+            $properties = { readonly: true, required: false };
             $promocao.setDescricao($DOM.descricaoProm.val());
             $promocao.setInicio($DOM.inicioProm.val());
             $promocao.setFinal($DOM.finalProm.val());
             $promocao.setPreco($DOM.precoProm.val());
 
-            $DOM.descricaoProm.prop($properties).val('');
-            $DOM.inicioProm.prop($properties).val('');
-            $DOM.finalProm.prop($properties).val('');
-            $DOM.precoProm.prop($properties).val('0,00');
+            $DOM.descricaoProm.prop($properties).addClass('disabled').val('');
+            $DOM.inicioProm.prop($properties).addClass('disabled').val('');
+            $DOM.finalProm.prop($properties).addClass('disabled').val('');
+            $DOM.precoProm.prop($properties).addClass('disabled').val('0,00');
         }
     }).change();
 

@@ -21,6 +21,7 @@
 		{
 			$subgrupos = $this->find(['cod_subgrupo', 'descricao'])
 				->where(['cod_grupo =' => $cod_grupo])
+				->orderBy(['cod_subgrupo'])
 				->fetch('all');
 
 			return array_merge([

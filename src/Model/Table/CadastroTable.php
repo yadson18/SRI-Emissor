@@ -19,7 +19,7 @@
 
 		public function cadastroExistente(string $cnpj)
 		{
-			$cadastro = $this->find(['razao'])
+			$cadastro = $this->find(['cnpj'])
 				->from(['cadastro'])
 				->where(['cnpj =' => unmask($cnpj)])
 				->fetch('class');

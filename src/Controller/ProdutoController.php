@@ -42,6 +42,63 @@
 			]);
 		}
 
+		public function add()
+		{
+			$produto = $this->Produto->newEntity();
+			$subgrupo = TableRegistry::get('SubgrupoProd');
+			$cstpc = TableRegistry::get('ModPiscofins');
+			$unidade = TableRegistry::get('Unidades');
+			$grupo = TableRegistry::get('GrupoProd');
+			$ncscc = TableRegistry::get('Ncscc');
+			$usuario = $this->Auth->getUser();
+
+			if ($this->request->is('POST')) {
+				$dados = $this->Produto->normalizarDados($this->request->getData());
+				$produto = $this->Produto->patchEntity($produto, $dados);
+				$validador = $ncscc->validaNCSCC(
+					$produto->cod_ncm, $produto->cstpc, $produto->st, 
+					$produto->cfop_in, $produto->cest
+				);
+
+				if ($validador['status'] === 'success') {
+					$referencia = $cstpc->getCstpcRef($produto->cstpc)->referencia;
+					$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
+					$produto->cod_colaboradorcadastro = $usuario->cadastro->cod_cadastro;
+					$produto->data_alteracao = date('d.m.Y');
+					$produto->data_cadastro = date('d.m.Y');
+					$produto->cstpc_entrada = $referencia;
+
+					if ($this->Produto->produtoExistente($produto->cod_produto)) {
+						$this->Flash->error(
+							'Desculpe, o código de barras (' . $produto->cod_produto . ') já está em uso.'
+						);
+					}
+					else if ($this->Produto->save($produto)) {
+						$this->Flash->success(
+							'O produto (' . $produto->descricao . ') foi adicionado com sucesso.'
+						);
+					}
+					else {
+						$this->Flash->error(
+							'Não foi possível adicionar o produto (' . $produto->descricao . ').'
+						);
+					}
+				}
+				else {
+					$this->Flash->error($validador['message']);
+				}
+			}
+
+			$this->setViewVars([
+				'codRegTrib' => $usuario->cadastro->cod_reg_trib,
+				'subgrupos' => $subgrupo->getSubgrupos(0),
+				'unidades' => $unidade->get('all'),
+				'usuarioNome' => $usuario->nome,
+				'grupos' => $grupo->getGrupos()
+			]);
+			$this->setTitle('Adicionar Produto');
+		}
+
 		public function edit($cod_interno = null)
 		{
 			$produto = $this->Produto->newEntity();
@@ -117,6 +174,6 @@
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'edit']);
+			$this->Auth->isAuthorized(['index', 'add', 'edit']);
 		}
 	}

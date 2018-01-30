@@ -178,12 +178,16 @@ $(document).ready(function(){
     $('.date').datetimepicker({
         format:'d/m/Y',
         timepicker: false,
-        minDate: 0
+        minDate: 0,
+        defaultSelect: true,
+        todayButton:true
     }).mask('00/00/0000', { reverse: false });
     
     $('.date-time').datetimepicker({
         format:'d/m/Y H:i:s',
-        minDate: 0
+        minDate: 0,
+        defaultSelect: true,
+        todayButton:true
     }).mask('00/00/0000 00:00:00', { reverse: false });
 
     $('.cnpjCpfMask').mask(function(value) { 

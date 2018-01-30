@@ -19,7 +19,9 @@
 
 		public function getGrupos()
 		{
-			return $this->find(['cod_grupo', 'descricao'])->fetch('all');
+			return $this->find(['cod_grupo', 'descricao'])
+				->orderBy(['cod_grupo'])
+				->fetch('all');
 		}
 
 		protected function defaultValidator(Validator $validator)

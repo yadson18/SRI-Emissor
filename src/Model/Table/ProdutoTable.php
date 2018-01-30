@@ -29,6 +29,18 @@
 				->fetch('class');
 		}
 
+		public function produtoExistente(string $cod_produto)
+		{
+			$produto = $this->find(['cod_produto'])
+				->where(['cod_produto =' => $cod_produto])
+				->fetch('class');
+
+			if ($produto) {
+				return true;
+			}
+			return false;
+		}
+
 		public function listarAtivos(int $quantity = null, int $skipTo = null)
 		{
 			$produtos = $this->find([

@@ -82,8 +82,8 @@
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Compra (R$)', [
 								'class' => 'form-control input-sm money millions',
+								'value' => floatParaDinheiro($produto->compra),
 								'placeholder' => 'EX: 10,50',
-								'value' => $produto->compra,
 								'name' => 'compra'
 							]) 
 						?>
@@ -111,7 +111,7 @@
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Varejo (R$)', [
 								'class' => 'form-control input-sm money millions',
-								'value' => $produto->venda,
+								'value' => floatParaDinheiro($produto->venda),
 								'placeholder' => 'EX: 15,55',
 								'name' => 'venda'
 							]) 
@@ -143,7 +143,7 @@
 					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Preço Atacarejo (R$)', [
 								'class' => 'form-control input-sm money thousands',
-								'value' => $produto->preco_vol,
+								'value' => floatParaDinheiro($produto->preco_vol),
 								'placeholder' => 'EX: 12,99',
 								'name' => 'preco_vol',
 								'maxlength' => 10
@@ -181,8 +181,8 @@
 						<div class='row'>
 							<div class='form-group col-md-3 col-sm-4'>
 								<?= $this->Form->input('Preço Promoção (R$)', [
+										'value' => floatParaDinheiro($produto->preco_prom),
 										'class' => 'form-control input-sm money millions',
-										'value' => $produto->preco_prom,
 										'placeholder' => 'EX: 12,99',
 										'name' => 'preco_prom'
 									]) 
@@ -258,8 +258,8 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
+						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cstpc',
 						      					'type' => 'button'
 						      				]
@@ -319,8 +319,8 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
+						      					'data-toggle' => 'modal',
 						      					'data-find' => 'st',
 						      					'type' => 'button'
 						      				]
@@ -357,8 +357,8 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
+						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cfop',
 						      					'type' => 'button'
 						      				]
@@ -404,8 +404,8 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
+						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cest',
 						      					'type' => 'button'
 						      				]
@@ -439,8 +439,8 @@
 					<?= $this->Form->input('ICMS Fora', [
 							'class' => 'form-control input-sm icms',
 							'value' => $produto->icms_out,
-							'name' => 'icms_out',
 							'placeholder' => 'EX: 12.00',
+							'name' => 'icms_out',
 							'maxlength' => 4
 						]) 
 					?>

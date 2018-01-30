@@ -50,7 +50,12 @@
 		public function rowCount()
 		{
 			if ($this->compiled()) {
-				return $this->statement->rowCount();
+				try {
+					return $this->statement->rowCount();
+				}
+				catch (PDOException $exception) {
+					echo $exception->getMessage();
+				}
 			}
 			return false;
 		}
@@ -58,7 +63,12 @@
 		public function fetchAll()
 		{
 			if ($this->compiled()) {
-				return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+				try {
+					return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+				}
+				catch (PDOException $exception) {
+					echo $exception->getMessage();
+				}
 			}
 			return false;
 		}
@@ -66,10 +76,15 @@
 		public function fetchObject($object = null)
 		{
 			if ($this->compiled()) {
-				if (!empty($object)) {
-					return $this->statement->fetchObject($object);
+				try {
+					if (!empty($object)) {
+						return $this->statement->fetchObject($object);
+					}
+					return $this->statement->fetchObject();
 				}
-				return $this->statement->fetchObject();
+				catch (PDOException $exception) {
+					echo $exception->getMessage();
+				}
 			}
 			return false;
 		}

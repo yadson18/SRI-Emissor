@@ -91,7 +91,7 @@
 				}
 			}
 
-			if (isset($produto->cod_interno)) {
+			if (isset($produto->cod_produto)) {
 				$this->setViewVars([
 					'subgrupos' => $subgrupo->getSubgrupos($produto->cod_grupo),
 					'cstpc' => $cstpc->getCstpcDescricao($produto->cstpc),

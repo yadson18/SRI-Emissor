@@ -19,44 +19,52 @@
 
 		public function validaNCSCC($ncm, $cstpc, $st, $cfop, $cest)
 		{
-			$ncscc = $this->find([
-					'CASE WHEN (nc.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS NCM',
-					'CASE WHEN (mp.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CSTPC',
-					'CASE WHEN (st.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS ST',
-					'CASE WHEN (cf.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CFOP'
-				])
-				->join([
-					'LEFT JOIN MOD_PISCOFINS mp ON(mp.CODIGO = ' . $cstpc . ')',
-					'LEFT JOIN ST st ON(st.COD_ST = ' . $st . ')',
-					'LEFT JOIN CFOP cf ON(cf.CFOP = ' . $cfop . ')'
-				]);
-
-			if ($cest !== '0000000') {
-				$ncscc->find([
-						'CASE WHEN (ce.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CEST'
+			if (is_numeric($ncm) && is_numeric($cstpc) && is_numeric($st) &&
+				is_numeric($cfop) && is_numeric($cest)
+		 	) {
+				$ncscc = $this->find([
+						'CASE WHEN (nc.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS NCM',
+						'CASE WHEN (mp.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CSTPC',
+						'CASE WHEN (st.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS ST',
+						'CASE WHEN (cf.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CFOP'
 					])
-					->join(['LEFT JOIN CEST ce ON(ce.CEST = ' . $cest . ')']);
-			}
-			
-			$validador = $ncscc->where(['nc.NCM =' => $ncm])->fetch('all');
+					->join([
+						'LEFT JOIN MOD_PISCOFINS mp ON(mp.CODIGO = ' . $cstpc . ')',
+						'LEFT JOIN ST st ON(st.COD_ST = ' . $st . ')',
+						'LEFT JOIN CFOP cf ON(cf.CFOP = ' . $cfop . ')'
+					]);
 
-			if (!empty($validador)) {
-				$campo = array_search(0, array_shift($validador));
+				if ($cest !== '0000000') {
+					$ncscc->find([
+							'CASE WHEN (ce.DESCRICAO IS NULL) THEN 0 ELSE 1 END AS CEST'
+						])
+						->join(['LEFT JOIN CEST ce ON(ce.CEST = ' . $cest . ')']);
+				}	
+				$validador = $ncscc->where(['nc.NCM =' => $ncm])->fetch('all');
 
-				if ($campo) {
-					$campo = strtoupper($campo);
-					return [
-						'status' => 'error',
-						'coluna' => $campo,
-						'message' => 'Por favor, digite um ' . $campo . ' válido.'
-					];
+				if (!empty($validador)) {
+					$campo = array_search(0, array_shift($validador));
+
+					if ($campo) {
+						$campo = strtoupper($campo);
+						return [
+							'status' => 'error',
+							'coluna' => $campo,
+							'message' => 'Por favor, digite um ' . $campo . ' válido.'
+						];
+					}
+					return ['status' => 'success'];
 				}
-				return ['status' => 'success'];
+				return [
+					'status' => 'error',
+					'coluna' => 'NCM',
+					'message' => 'Por favor, digite um NCM válido.'
+				];
 			}
 			return [
 				'status' => 'error',
-				'coluna' => 'NCM',
-				'message' => 'Por favor, digite um NCM válido.'
+				'coluna' => 'CEST',
+				'message' => 'Erro, os campos Código (NCM, CSTPC, ST, CFOP e CEST) devem conter apenas números.'
 			];
 		}
 

@@ -15,6 +15,7 @@ $(document).ready(function(){
             dataType: 'json'
         };
 
+        $('.select-ncscc').removeClass('consulting');
         $DOM.modal.find('.modal-title').text('Consultar ' + tipoConsulta.toUpperCase());
         $DOM.botao.closest('.select-ncscc').addClass('consulting');
         $DOM.modal.find('.search-content').val('');
@@ -28,6 +29,78 @@ $(document).ready(function(){
             case 'cest': $busca.url = '/Cest/find'; break;
         }
     });
+
+    var $promocao = (function() {
+        var descricao = inicio = final = preco = null;
+
+        return {
+            setDescricao: function(descricaoValor) {
+                if (descricao === null) {
+                    descricao = descricaoValor;
+                }
+            },
+            getDescricao: function() { return descricao; },
+
+            setInicio: function(inicioValor) {
+                if (inicio === null) {
+                    inicio = inicioValor;
+                }
+            },
+            getInicio: function() { return inicio; },
+
+            setFinal: function(finalValor) {
+                if (final === null) {
+                    final = finalValor;
+                }
+            },
+            getFinal: function() { return final; },
+
+            setPreco: function(precoValor) {
+                if (preco === null) {
+                    preco = precoValor;
+                }
+            },
+            getPreco: function() { return preco; }
+        };
+    })();
+    $('input[name=qtd_vol]').on('change keyup', function() {
+        var $DOM = {
+            descricaoProm: $('input[name=descricao_promocao]'),
+            inicioProm: $('input[name=data_inicio_prom]'),
+            finalProm: $('input[name=data_final_prom]'),
+            precoProm: $('input[name=preco_prom]')
+        };
+        var $properties = null;
+
+        if ($(this).val() > 1) {
+            if ($promocao.getDescricao() && $promocao.getInicio() && 
+                $promocao.getFinal() && $promocao.getPreco()
+            ) {
+                $DOM.descricaoProm.val($promocao.getDescricao());
+                $DOM.inicioProm.val($promocao.getInicio());
+                $DOM.finalProm.val($promocao.getFinal());
+                $DOM.precoProm.val($promocao.getPreco());
+            }
+            $properties = { readonly: false, required: true};
+            $DOM.descricaoProm.prop($properties);
+            $DOM.inicioProm.prop($properties);
+            $DOM.finalProm.prop($properties);
+            $DOM.precoProm.prop($properties);
+
+        }
+        else {
+            $properties = { readonly: true, required: false};
+            $promocao.setDescricao($DOM.descricaoProm.val());
+            $promocao.setInicio($DOM.inicioProm.val());
+            $promocao.setFinal($DOM.finalProm.val());
+            $promocao.setPreco($DOM.precoProm.val());
+
+            $DOM.descricaoProm.prop($properties).val('');
+            $DOM.inicioProm.prop($properties).val('');
+            $DOM.finalProm.prop($properties).val('');
+            $DOM.precoProm.prop($properties).val('0,00');
+        }
+    }).change();
 
     $('#find-ncscc .find').on('click', function() {
         var $DOM = {
@@ -56,7 +129,7 @@ $(document).ready(function(){
                                 html: [
                                     $('<th></th>', { text: (indice + 1) }),
                                     $('<td></td>', { 
-                                        text: valor.ncm,
+                                        text: valor.codigo,
                                         class: 'cod'
                                     }),
                                     $('<td></td>', { 
@@ -82,7 +155,7 @@ $(document).ready(function(){
                 }
                 else {
                     $DOM.mensagem.bootstrapAlert('warning', 
-                        'Desculpe, ocorreu um problema, verifique sua conexão com à internet.'
+                        'Desculpe, nada foi encontrado, verifique se tudo foi digitado corretamente.'
                     );
                 }
             });
@@ -119,7 +192,7 @@ $(document).ready(function(){
             $DOM.tabelaConteudo.length > 0 && codigo !== '' && descricao !== ''
         ) {
             $DOM.mensagem.empty();
-            $DOM.consultando.find('input:nth-child(1)').val(codigo);
+            $DOM.consultando.find('input:nth-child(1)').val(codigo).change();
             $DOM.consultando.find('input:nth-child(2)').val(descricao);
             $('#find-ncscc.modal').modal('toggle');
         }
@@ -182,7 +255,7 @@ $(document).ready(function(){
         }
     });
 
-    $('input[name=st]').on('keyup', function() {
+    $('input[name=st]').on('change', function() {
         var $stCodigos = {
                 normal: ['0010', '0030', '0060'],
                 simples: ['0201', '0202', '0500']
@@ -198,16 +271,16 @@ $(document).ready(function(){
             $stCodigos.simples.indexOf($(this).val()) !== -1 &&
             $DOM.inputRegimeTrib.val() === '1'
         ) {
-            $DOM.divCest.removeClass('hidden');
-
             if ($DOM.inputCestCodigo.val() === '0000000') {
                 $DOM.inputCestCodigo.val('');
             }
+
+            $DOM.divCest.removeClass('hidden');
             $DOM.inputCestCodigo.prop('required', true);
         }
         else {
             $DOM.divCest.addClass('hidden');
             $DOM.inputCestCodigo.val('0000000').prop('required', false);
         }
-    }).keyup();
+    }).change();
 });

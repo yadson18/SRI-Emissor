@@ -199,6 +199,10 @@ $(document).ready(function(){
         return ($(this).find('div.has-error').length === 0) ? true : false;
     });
 
+    $('.disabled').on('keydown', function(event){
+        event.preventDefault();
+    });
+
     $('input').not('#login input').on('change', function() { 
         $(this).val($(this).val().toUpperCase()); 
     });

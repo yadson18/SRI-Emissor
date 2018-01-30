@@ -209,16 +209,16 @@
 							<label>Código NCM</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
+						      			'class' => 'form-control input-sm text-uppercase disabled',
 										'placeholder' => 'EX: 01051200',
 										'value' => $produto->cod_ncm,
 										'name' => 'cod_ncm',
-										'readonly' => true,
 										'maxlength' => 8
 									]) 
 								?>
 						      	<span class='input-group-btn'>
 						      		<?= $this->Form->button(
-						      				"Consultar <i class='fas fa-search'></i>", [
+						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
 						      					'data-target' => '#find-ncscc',
 						      					'data-toggle' => 'modal',
@@ -247,16 +247,16 @@
 							<label>Código CSTPC</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
+						      			'class' => 'form-control input-sm text-uppercase disabled',
 										'value' => $produto->cstpc,
 										'placeholder' => 'EX: 1',
-										'readonly' => true,
 										'name' => 'cstpc',
 										'maxlength' => 1
 									]) 
 								?> 
 						      	<span class='input-group-btn'>
 						        	<?= $this->Form->button(
-						      				"Consultar <i class='fas fa-search'></i>", [
+						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
 						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
@@ -308,16 +308,16 @@
 							<label>Código CST</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
+						      			'class' => 'form-control input-sm text-uppercase disabled',
 										'placeholder' => 'EX: 0000',
 										'value' => $produto->st,
-										'readonly' => true,
 										'maxlength' => 4,
 										'name' => 'st'
 									]) 
 								?>
 						      	<span class='input-group-btn'>
 						        	<?= $this->Form->button(
-						      				"Consultar <i class='fas fa-search'></i>", [
+						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
 						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
@@ -346,16 +346,16 @@
 							<label>Código CFOP</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
+						      			'class' => 'form-control input-sm text-uppercase disabled',
 										'value' => $produto->cfop_in,
 										'placeholder' => 'EX: 0000',
 										'name' => 'cfop_in',
-										'readonly' => true,
 										'maxlength' => 4
 									]) 
 								?>
 						      	<span class='input-group-btn'>
 						        	<?= $this->Form->button(
-						      				"Consultar <i class='fas fa-search'></i>", [
+						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
 						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',
@@ -393,16 +393,16 @@
 							<label>Código CEST</label>
 							<div class='input-group'>
 						      	<?= $this->Form->input('', [
+										'class' => 'form-control input-sm text-uppercase disabled',
 										'placeholder' => 'EX: 2000400',
 										'value' => $produto->cest,
-										'readonly' => true,
 										'maxlength' => 7,
 										'name' => 'cest'
 									]) 
 								?>
 						      	<span class='input-group-btn'>
 						        	<?= $this->Form->button(
-						      				"Consultar <i class='fas fa-search'></i>", [
+						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
 						      					'data-toggle' => 'modal',
 						      					'data-target' => '#find-ncscc',

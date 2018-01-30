@@ -17,6 +17,35 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function buscaCest(int $filtro, $valor)
+		{	
+			$cest = $this->find(['descricao'])
+				->distinct('cest')->as('codigo')
+				->limit(60);
+
+			switch ($filtro) {
+				case 1:
+					if (is_numeric($valor)) {
+						if (strlen($valor) < 7) {
+							$cest->where(['cest like ' => $valor.'%']);
+						}
+						else {
+							$cest->where(['cest like ' => $valor]);
+						}
+						return $cest->orderBy(['cest'])->fetch('all');
+					}
+					break;
+				case 2:
+					if (is_string($valor)) {
+						return $cest->where(['descricao like ' => $valor.'%'])
+							->orderBy(['descricao'])
+							->fetch('all');
+					}
+					break;
+			}
+			return false;
+		}
+
 		public function getCestDescricao(string $cest)
 		{
 			return $this->find(['descricao'])

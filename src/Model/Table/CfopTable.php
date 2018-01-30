@@ -17,6 +17,35 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function buscaCfop(int $filtro, $valor)
+		{	
+			$cfop = $this->find(['descricao'])
+				->distinct('cfop')->as('codigo')
+				->limit(60);
+
+			switch ($filtro) {
+				case 1:
+					if (is_numeric($valor)) {
+						if (strlen($valor) < 4) {
+							$cfop->where(['cfop like ' => $valor.'%']);
+						}
+						else {
+							$cfop->where(['cfop like ' => $valor]);
+						}
+						return $cfop->orderBy(['cfop'])->fetch('all');
+					}
+					break;
+				case 2:
+					if (is_string($valor)) {
+						return $cfop->where(['descricao like ' => $valor.'%'])
+							->orderBy(['descricao'])
+							->fetch('all');
+					}
+					break;
+			}
+			return false;
+		}
+
 		public function getCfopDescricao(string $cfop)
 		{
 			return $this->find(['descricao'])

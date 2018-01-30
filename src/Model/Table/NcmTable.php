@@ -20,20 +20,25 @@
 		public function buscaNcm(int $filtro, $valor)
 		{	
 			$ncm = $this->find(['descricao'])
-					->distinct('ncm')->as('ncm')
-					->orderBy(['descricao'])
-					->limit(60);
+				->distinct('ncm')->as('codigo')
+				->limit(60);
 
 			switch ($filtro) {
 				case 1:
 					if (is_numeric($valor)) {
-						return $ncm->where(['ncm like' => $valor . '%'])
-							->fetch('all');
+						if (strlen($valor) < 8) {
+							$ncm->where(['ncm like ' => $valor.'%']);
+						}
+						else {
+							$ncm->where(['ncm like ' => $valor]);
+						}
+						return $ncm->orderBy(['ncm'])->fetch('all');
 					}
 					break;
 				case 2:
 					if (is_string($valor)) {
-						return $ncm->where(['descricao like' => $valor . '%'])
+						return $ncm->where(['descricao like ' => $valor.'%'])
+							->orderBy(['descricao'])
 							->fetch('all');
 					}
 					break;

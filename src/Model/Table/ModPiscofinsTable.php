@@ -17,6 +17,35 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function buscaCstpc(int $filtro, $valor)
+		{	
+			$cstpc = $this->find(['descricao'])
+				->distinct('codigo')->as('codigo')
+				->limit(60);
+
+			switch ($filtro) {
+				case 1:
+					if (is_numeric($valor)) {
+						if (strlen($valor) < 4) {
+							$cstpc->where(['codigo like ' => $valor.'%']);
+						}
+						else {
+							$cstpc->where(['codigo like ' => $valor]);
+						}
+						return $cstpc->orderBy(['codigo'])->fetch('all');
+					}
+					break;
+				case 2:
+					if (is_string($valor)) {
+						return $cstpc->where(['descricao like ' => $valor.'%'])
+							->orderBy(['descricao'])
+							->fetch('all');
+					}
+					break;
+			}
+			return false;
+		}
+
 		public function getCstpcDescricao(string $codigo)
 		{
 			return $this->find(['descricao'])

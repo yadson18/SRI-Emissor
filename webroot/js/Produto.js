@@ -3,6 +3,84 @@ $(document).ready(function(){
         return parseFloat(money.replace(/[.]/g, '').replace(/[,]/g, '.'));
     }
 
+    $('.enviar-carga').on('click', function() {
+        var $DOM = {
+            caixas: $('input[name=caixa-selecionado]:checked'),
+            mensagem: $('#carga #message-box')
+        };
+        var caixas = [];
+
+        if ($DOM.caixas.length > 0) {
+            $DOM.caixas.each(function() { caixas.push($(this).val()); });
+
+            $.ajax({
+                url: '/Produto/enviarCarga',
+                dataType: 'json',
+                method: 'POST',
+                data: { cargaTipo: $(this).val(), caixas: caixas }
+            })
+            .always(function(dados, status) {
+                if (status === 'success') {
+                    if (dados.status === 'success') {
+                        var $caixa = null;
+                        var divClasse = '';
+                        var iClasse = '';
+
+                        if (dados.data) {
+                            $.each(dados.data, function(caixa, statusEnvio) {
+                                $caixa = $('#' + caixa + ' .status-envio');
+
+                                switch (statusEnvio.status) {
+                                    case 'success':
+                                        divClasse = 'status-envio alert-success';
+                                        iClasse = 'fas fa-check';
+                                        break;
+                                    case 'error':
+                                        divClasse = 'status-envio alert-danger';
+                                        iClasse = 'fas fa-times';
+                                        break;
+                                }
+
+                                $caixa.removeAttr('class').addClass(divClasse);
+                                $caixa.find('p').text(statusEnvio.message);
+                                $caixa.find('i').removeAttr('class').addClass(iClasse);
+                            });
+                        }
+                        else {
+                            $DOM.mensagem.bootstrapAlert('error', dados.message);
+                        }
+                    }
+                }
+                else {
+                    $DOM.mensagem.bootstrapAlert(
+                        'warning', 'Não foi possível enviar a carga, verifique sua conexão com a internet.'
+                    );
+                }
+            });
+        }
+        else {
+            $DOM.mensagem.bootstrapAlert('error', 'Selecione no mínimo um caixa para enviar a carga.');
+        }
+    });
+
+    $('input[name=selecionar-caixas]').on('click', function() {
+        var $DOM = {
+            caixas: $('input[name=caixa-selecionado]')
+        };
+
+        if ($(this).attr('id') === 'select') {
+            $DOM.caixas.prop('checked', true);
+        }
+        else if ($(this).attr('id') === 'invert') {
+            var selecionados = $DOM.caixas.filter(':checked');
+            $DOM.caixas.prop('checked', true);
+            selecionados.prop('checked', false);
+        }
+        else if ($(this).attr('id') === 'deselect') {
+            $DOM.caixas.prop('checked', false);
+        }
+    });
+
     var $busca;
     $('#find-ncscc').on('show.bs.modal', function (evento) {
         var $DOM = {
@@ -199,6 +277,45 @@ $(document).ready(function(){
         else {
             $DOM.mensagem.bootstrapAlert('error', 'Desculpe, nenhum item foi selecionado.');
         }
+    });
+
+    var $trToDelete = null;
+
+    $('#product table .delete').on('click', function() {
+        $('#product #delete .remove').attr({ value: $(this).val() });
+        $trToDelete = $(this).closest('tr');
+    });
+    $('#product #delete .remove').on('click', function() {
+        var $DOM = {
+            mensagem: $('#product #message-box')
+        };
+
+        $.ajax({
+            url: '/Produto/delete',
+            data: { cod_interno: $(this).val() },
+            dataType: 'json',
+            method: 'POST'
+        })
+        .always(function(dados, status) {
+            if (status === 'success') {
+                if (dados['status'] === 'success') {
+                    if ($trToDelete && $trToDelete.length > 0) { 
+                        $trToDelete.remove(); 
+
+                        $('#product table tbody tr th').each(function(index) { 
+                            console.log($(this));
+                            $(this).text(++index); 
+                        });
+                    }
+                }
+                $DOM.mensagem.bootstrapAlert(dados['status'], dados['message']);
+            }
+            else { 
+                $DOM.mensagem.bootstrapAlert(
+                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                );
+            }
+        });
     });
 
     $('select[name=cod_grupo]').on('change', function() {

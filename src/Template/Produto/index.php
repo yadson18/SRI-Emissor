@@ -1,4 +1,4 @@
-<div class='col-sm-12' id='destinatarie'>
+<div class='col-sm-12' id='product'>
 	<h2 class='page-header'>
 		Produtos 
 		<a href='/Produto/add' class='btn btn-success'>

@@ -128,6 +128,7 @@
 					if ($validador['status'] === 'success') {
 						$referencia = $cstpc->getCstpcRef($produto->cstpc)->referencia;
 						$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
+						$produto->data_alteracao = date('d.m.Y');
 						$produto->cstpc_entrada = $referencia;
 						$produto->cod_interno = $cod_interno;
 
@@ -172,8 +173,138 @@
 			$this->setTitle('Modificar Produto');
 		}
 
+		public function delete()
+		{
+			$produto = $this->Produto->newEntity();
+			$usuario = $this->Auth->getUser();
+
+			if ($this->request->is('POST')) {
+				$dados = $this->Produto->normalizarDados($this->request->getData());
+
+				if (isset($dados['cod_interno']) && is_numeric($dados['cod_interno'])) {
+					$paraApagar = $this->Produto->get($dados['cod_interno']);
+
+					if ($paraApagar) {
+						$produto = $this->Produto->patchEntity($produto, $dados);
+						$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
+						$produto->data_alteracao = date('d.m.Y');
+						$produto->inativo = 'I';
+
+						if ($this->Produto->save($produto)) {
+							$this->Ajax->response('produtoDeletado', [
+								'status' => 'success',
+								'message' => 'Produto (' . $paraApagar->descricao . ') removido com sucesso.'
+							]);
+						}
+						else {
+							$this->Ajax->response('produtoDeletado', [
+								'status' => 'error',
+								'message' => 'Não foi possível remover o produto (' . $paraApagar->descricao . ').'
+							]);
+						}
+					}
+				}
+				else {
+					$this->Ajax->response('produtoDeletado', [
+						'status' => 'error',
+						'message' => 'Não foi possível remover, o produto não existe.'
+					]);
+				}
+			}
+			else {
+				return $this->redirect('default');
+			}
+		}
+
+		public function enviarCarga()
+		{
+			$cargaProduto = TableRegistry::get('CargaProduto');
+
+			if ($this->request->is('POST')) {
+				$dados = $this->request->getData();
+				array_walk_recursive($dados, 'removeSpecialChars');
+				$conteudoCarga = null;
+
+				if ($dados['cargaTipo'] === 'Geral') {
+					$conteudoCarga = $this->Produto->cargaGeral();
+				}
+				else {
+					$conteudoCarga = $cargaProduto->cargaParcial();
+				}
+
+				if ($conteudoCarga) {
+					$conteudoCarga = $cargaProduto->normalizarCarga($conteudoCarga);
+			 		$arquivoCarga = $cargaProduto->criarArquivoDeCarga($conteudoCarga);
+					$arquivoCargaInfo = stream_get_meta_data($arquivoCarga);
+					$nomeArquivoCarga = $cargaProduto->getNomeArquivoDeCarga($dados['cargaTipo']);
+					$nomeArquivoOrigem = $arquivoCargaInfo['uri'];
+					$diretorioCargas = ROOT . DS . 'CARGAS' . DS . 'carga' . DS;
+
+					$resultado = [];
+					foreach ($dados['caixas'] as $caixa) {
+						$diretorioCaixa = $diretorioCargas . $caixa;
+
+						if (is_dir($diretorioCaixa) || mkdir($diretorioCaixa)) {
+							if (copy($nomeArquivoOrigem, $diretorioCaixa . DS . $nomeArquivoCarga)) {
+								$resultado[$caixa] = [
+									'status' => 'success',
+									'message' => 'Carga enviada com sucesso.'
+								];
+							}
+							else {
+								$resultado[$caixa] = [
+									'status' => 'error',
+									'message' => 'Não foi possível gerar o arquivo de carga.'
+								];
+							}
+						}
+						else {
+							$resultado[$caixa] = [
+								'status' => 'error',
+								'message' => 'Não foi possível gerar o arquivo de carga.'
+							];
+						}
+					}
+
+					$this->Ajax->response('cargaEnvio', [
+						'status' => 'success',
+						'data' => $resultado
+					]);
+				}
+				else {
+					if ($dados['cargaTipo'] === 'Geral') {
+						$this->Ajax->response('cargaEnvio', [
+							'status' => 'error',
+							'message' => 'Não foi possível enviar a carga, nenhum produto cadastrado.'
+						]);
+					}
+					else {
+						$this->Ajax->response('cargaEnvio', [
+							'status' => 'error',
+							'message' => 'Não foi possível enviar a carga, nenhum produto foi alterado recentemente.'
+						]);
+					}
+				}
+			}
+			else {
+				return $this->redirect('default');
+			}
+		}
+
+		public function carga()
+		{	
+			$usuario = $this->Auth->getUser();
+			$caixas = TableRegistry::get('ConfigCaixa');
+
+			$this->setViewVars([
+				'usuarioNome' => $usuario->nome,
+				'caixas' => $caixas->getCaixas()
+			]);
+			$this->setTitle('Carga de Produtos');
+		}
+
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'add', 'edit']);
+			$this->Auth->isAuthorized(['index', 'add', 'edit', 'delete', 'carga', 'enviarCarga']);
 		}
 	}

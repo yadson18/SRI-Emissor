@@ -71,7 +71,7 @@
 							        	<a href='/Produto/index'>Cadastrados</a>
 							        </li>
 							        <li>
-							        	<a href='#'>Enviar Carga</a>
+							        	<a href='/Produto/carga'>Enviar Carga</a>
 							        </li>
 							        <li>												
 							          	<a href='#'>Grupos</a>

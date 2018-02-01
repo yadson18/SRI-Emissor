@@ -1,0 +1,39 @@
+@import 'default.less';
+
+.default-styles();
+
+.groups-div {
+	.margin(2em 0);
+		
+	.card {
+		.margin-bottom(15px);
+
+		a:hover {
+			.text-decoration(none);
+		}
+		.group-content {
+			.box-shadow(2px 2px 5px gray);
+			.border-radius(3px 3px 3px 3px);
+
+			&:hover {
+				.transition(0.3s);
+				.box-shadow(3px 3px 10px gray);
+			}
+			.group-content-actions {
+				.position(absolute);
+				.right(25px);
+				.top(9px);
+			}
+			.group-content-body {
+				.width(500px); 
+				.height(150px); 
+				.vertical-align(middle); 
+				.display(table-cell); 
+				.padding(10px);
+			}
+		}
+	}
+}
+.loading .loading-content.edit-loading-height {
+	.height(10.5em);
+}

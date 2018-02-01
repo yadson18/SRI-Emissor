@@ -17,6 +17,28 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function listarGrupos(int $quantity = null, int $skipTo = null)
+		{
+			$grupos = $this->find(['cod_grupo', 'descricao']);
+
+			if (!empty($quantity)) {
+				$grupos->limit($quantity);
+			}
+			if (!empty($skipTo)) {
+				$grupos->skip($skipTo);
+			}
+				
+			return $grupos->orderBy(['descricao'])
+				->fetch('all');
+		}
+
+		public function contarAtivos()
+		{
+			return $this->find([])
+				->count('cod_grupo')->as('quantidade')
+				->fetch('class');
+		}
+
 		public function getGrupos()
 		{
 			return $this->find(['cod_grupo', 'descricao'])

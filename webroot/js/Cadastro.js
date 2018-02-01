@@ -43,11 +43,11 @@ $(document).ready(function(){
     var $trToDelete = null;
 
     $('#destinatarie table .delete').on('click', function() {
-        $('#destinatarie #delete .remove').attr({value: $(this).val()});
+        $('#destinatarie #delete .confirm').attr({value: $(this).val()});
         $trToDelete = $(this).closest('tr');
     });
 
-    $('#destinatarie #delete .remove').on('click', function() {
+    $('#destinatarie #delete .confirm').on('click', function() {
         $.ajax({
             url: '/Cadastro/delete',
             data: { cod_cadastro: $(this).val() },
@@ -79,7 +79,7 @@ $(document).ready(function(){
     });
 
     $('#delete .modal-footer .exit').on('click', function() {
-        $(this).closest('div').find('button.remove').removeAttr('value');
+        $(this).closest('div').find('button.confirm').removeAttr('value');
     });
 
     $('#breadcrumb .destinatarie-type a').on('click', function() {

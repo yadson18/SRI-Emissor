@@ -16,10 +16,9 @@
 		        	<th>Código de Barras</th>
 		        	<th>ICMS Dentro</th>
 		        	<th>ICMS Fora</th>
-		        	<th>ST</th>
+		        	<th>CST ICMS</th>
 		        	<th>NCM</th>
 		        	<th>CEST</th>
-		        	<th>Alíquota</th>
 		        	<th>Unidade de Medida</th>
 		        	<th>Preço (R$)</th>
 		        	<th>Ações</th>
@@ -38,7 +37,6 @@
 								<td><?= $produto['st'] ?></td>
 								<td><?= $produto['cod_ncm'] ?></td>
 								<td><?= $produto['cest'] ?></td>
-								<td><?= $produto['aliquota'] ?></td>
 								<td><?= mb_strtolower($produto['unidade']) ?></td>
 								<td class='money millions'><?= unmask($produto['venda']) ?></td>
 								<td class='actions'>
@@ -77,11 +75,11 @@
                         <h4>Deseja realmente excluir este destinatário?</h4>
                     </div>
                     <div class='modal-footer'>
-                    	<button class='btn btn-success remove' data-dismiss='modal'>
-                    		Sim <i class='fas fa-check'></i>
-                    	</button>
                     	<button data-dismiss='modal' class='btn btn-danger exit'>
                     		Não <i class='fas fa-times'></i>
+                    	</button>
+                    	<button class='btn btn-success confirm' data-dismiss='modal'>
+                    		Sim <i class='fas fa-check'></i>
                     	</button>
                     </div>
                 </div>

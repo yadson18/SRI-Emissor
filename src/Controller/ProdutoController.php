@@ -67,6 +67,8 @@
 					$produto->data_alteracao = date('d.m.Y');
 					$produto->data_cadastro = date('d.m.Y');
 					$produto->cstpc_entrada = $referencia;
+					$produto->tipo_venda = 0;
+					$produto->inativo = 'A';
 
 					if ($this->Produto->produtoExistente($produto->cod_produto)) {
 						$this->Flash->error(
@@ -102,6 +104,7 @@
 		public function edit($cod_interno = null)
 		{
 			$produto = $this->Produto->newEntity();
+			$cargaProduto = TableRegistry::get('CargaProduto');
 			$subgrupo = TableRegistry::get('SubgrupoProd');
 			$cstpc = TableRegistry::get('ModPiscofins');
 			$unidade = TableRegistry::get('Unidades');
@@ -132,7 +135,7 @@
 						$produto->cstpc_entrada = $referencia;
 						$produto->cod_interno = $cod_interno;
 
-						if ($this->Produto->save($produto)) {
+						if ($this->Produto->save($produto) && $cargaProduto->save($produto)) {
 							$this->Flash->success(
 								'Os dados do produto (' . $produto->descricao . ') foram atualizados com sucesso.'
 							);
@@ -238,34 +241,34 @@
 					$arquivoCargaInfo = stream_get_meta_data($arquivoCarga);
 					$nomeArquivoCarga = $cargaProduto->getNomeArquivoDeCarga($dados['cargaTipo']);
 					$nomeArquivoOrigem = $arquivoCargaInfo['uri'];
-					$diretorioCargas = ROOT . DS . 'CARGAS' . DS . 'carga' . DS;
+					$diretorioCargas = DS.'var'.DS.'www'.DS.'CARGAS'.DS;
 
 					$resultado = [];
 					foreach ($dados['caixas'] as $caixa) {
 						$diretorioCaixa = $diretorioCargas . $caixa;
+						$destinoArquivo = $diretorioCaixa . DS . $nomeArquivoCarga;
 
-						if (is_dir($diretorioCaixa) || mkdir($diretorioCaixa)) {
-							if (copy($nomeArquivoOrigem, $diretorioCaixa . DS . $nomeArquivoCarga)) {
+						if (is_dir($diretorioCaixa) || mkdir($diretorioCaixa, 0777, true)) {
+							if (copy($nomeArquivoOrigem, $destinoArquivo)) {
 								$resultado[$caixa] = [
 									'status' => 'success',
-									'message' => 'Carga enviada com sucesso.'
+									'message' => 'Enviada com sucesso.'
 								];
 							}
 							else {
 								$resultado[$caixa] = [
 									'status' => 'error',
-									'message' => 'Não foi possível gerar o arquivo de carga.'
+									'message' => 'Erro, A carga foi gerada mas não pôde ser enviado.'
 								];
 							}
 						}
 						else {
 							$resultado[$caixa] = [
 								'status' => 'error',
-								'message' => 'Não foi possível gerar o arquivo de carga.'
+								'message' => 'Não foi possível gerar a carga.'
 							];
 						}
 					}
-
 					$this->Ajax->response('cargaEnvio', [
 						'status' => 'success',
 						'data' => $resultado
@@ -275,13 +278,13 @@
 					if ($dados['cargaTipo'] === 'Geral') {
 						$this->Ajax->response('cargaEnvio', [
 							'status' => 'error',
-							'message' => 'Não foi possível enviar a carga, nenhum produto cadastrado.'
+							'message' => 'Não foi possível gerar a carga, nenhum produto cadastrado.'
 						]);
 					}
 					else {
 						$this->Ajax->response('cargaEnvio', [
 							'status' => 'error',
-							'message' => 'Não foi possível enviar a carga, nenhum produto foi alterado recentemente.'
+							'message' => 'Não foi possível gerar a carga, nenhum produto foi alterado recentemente.'
 						]);
 					}
 				}

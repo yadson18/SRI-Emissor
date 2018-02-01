@@ -17,38 +17,42 @@ $(document).ready(function(){
                 url: '/Produto/enviarCarga',
                 dataType: 'json',
                 method: 'POST',
-                data: { cargaTipo: $(this).val(), caixas: caixas }
+                data: { cargaTipo: $(this).val(), caixas: caixas },
+                beforeSend: function() {
+                    var $linhasSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
+
+                    $linhasSelecionadas.removeAttr('class').addClass('status-envio');
+                    $linhasSelecionadas.find('p').text('Enviando...');
+                    $linhasSelecionadas.find('i').removeAttr('class').addClass('fas fa-circle-notch fa-spin');
+                }
             })
             .always(function(dados, status) {
                 if (status === 'success') {
-                    if (dados.status === 'success') {
+                    if (dados.status === 'success' && dados.data) {
                         var $caixa = null;
                         var divClasse = '';
                         var iClasse = '';
 
-                        if (dados.data) {
-                            $.each(dados.data, function(caixa, statusEnvio) {
-                                $caixa = $('#' + caixa + ' .status-envio');
+                        $.each(dados.data, function(caixa, statusEnvio) {
+                            $caixa = $('#' + caixa + ' .status-envio');
 
-                                switch (statusEnvio.status) {
-                                    case 'success':
-                                        divClasse = 'status-envio alert-success';
-                                        iClasse = 'fas fa-check';
-                                        break;
-                                    case 'error':
-                                        divClasse = 'status-envio alert-danger';
-                                        iClasse = 'fas fa-times';
-                                        break;
-                                }
-
-                                $caixa.removeAttr('class').addClass(divClasse);
-                                $caixa.find('p').text(statusEnvio.message);
-                                $caixa.find('i').removeAttr('class').addClass(iClasse);
-                            });
-                        }
-                        else {
-                            $DOM.mensagem.bootstrapAlert('error', dados.message);
-                        }
+                            switch (statusEnvio.status) {
+                                case 'success':
+                                    divClasse = 'alert-success';
+                                    iClasse = 'fas fa-check';
+                                    break;
+                                case 'error':
+                                    divClasse = 'alert-danger';
+                                    iClasse = 'fas fa-times';
+                                    break;
+                            }
+                            $caixa.addClass(divClasse);
+                            $caixa.find('p').text(statusEnvio.message);
+                            $caixa.find('i').removeAttr('class').addClass(iClasse);
+                        });
+                    }
+                    else {
+                        $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
                     }
                 }
                 else {
@@ -282,10 +286,10 @@ $(document).ready(function(){
     var $trToDelete = null;
 
     $('#product table .delete').on('click', function() {
-        $('#product #delete .remove').attr({ value: $(this).val() });
+        $('#product #delete .confirm').attr({ value: $(this).val() });
         $trToDelete = $(this).closest('tr');
     });
-    $('#product #delete .remove').on('click', function() {
+    $('#product #delete .confirm').on('click', function() {
         var $DOM = {
             mensagem: $('#product #message-box')
         };

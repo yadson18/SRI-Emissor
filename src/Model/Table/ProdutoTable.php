@@ -46,7 +46,7 @@
 			$produtos = $this->find([
 					'cod_interno', 'cod_produto', 'produto.descricao', 
 					'icms_in', 'icms_out', 'st', 'cod_ncm', 'cest', 
-					'aliquota', 'unidades.descricao as unidade', 'venda'
+					'unidades.descricao as unidade', 'venda'
 				])
 				->join(['left join unidades on (unidades.cod = produto.unidade)']);
 

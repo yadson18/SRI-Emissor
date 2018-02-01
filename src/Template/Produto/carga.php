@@ -23,7 +23,7 @@
 		      	</tr>
 		    </thead>
 		    <?php if(!empty($caixas)): ?>
-			    <tbody class='text-capitalize'>
+			    <tbody>
 			    		<?php foreach($caixas as $index => $caixa): ?>
 				    		<tr id=<?=$caixa['caixa']?>>
 				    			<th><?= ($index + 1) ?></th>
@@ -40,7 +40,7 @@
 								<?php endif; ?>
 								<td class='status-carga'>
 									<i class='fas fa-circle-notch fa-spin'></i>
-									<p><strong>Verificando status.</strong></p>
+									<p>Verificando status.</p>
 								</td>
 								<td><input type='checkbox' value=<?=$caixa['caixa']?> name='caixa-selecionado'/></td>
 				      		</tr>

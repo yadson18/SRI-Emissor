@@ -74,7 +74,7 @@
 							        	<a href='/Produto/carga'>Enviar Carga</a>
 							        </li>
 							        <li>												
-							          	<a href='#'>Grupos</a>
+							          	<a href='/GrupoProd/index'>Grupos</a>
 							        </li>
 							    </ul>
 			        		</li>

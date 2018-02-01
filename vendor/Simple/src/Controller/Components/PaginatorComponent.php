@@ -119,8 +119,12 @@
 				<p>
 					Página <strong class="thousand">' . $this->getCurrentPage() . '</strong>
 					de <strong class="thousand">' . $this->getTotalPages() . '</strong>,
-					listando <strong class="thousand">' . $this->getShownQuantity() . '</strong>
-					itens de <strong class="thousand">' . $this->getTotalQuantity() . '</strong>.
+					listando <strong class="thousand shown">' . 
+						$this->getShownQuantity() . 
+					'</strong>
+					itens de <strong class="thousand quantity">' . 
+						$this->getTotalQuantity() . 
+					'</strong>.
 				</p>
 			</div>';
 		}

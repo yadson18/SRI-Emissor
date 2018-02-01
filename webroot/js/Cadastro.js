@@ -40,48 +40,6 @@ $(document).ready(function(){
     cnpj = { mask: '00.000.000/0000-00', size: 14 };
     cpf = { mask: '000.000.000-00', size: 11 };
 
-    var $trToDelete = null;
-
-    $('#destinatarie table .delete').on('click', function() {
-        $('#destinatarie #delete .confirm').attr({value: $(this).val()});
-        $trToDelete = $(this).closest('tr');
-    });
-
-    $('#destinatarie #delete .confirm').on('click', function() {
-        $.ajax({
-            url: '/Cadastro/delete',
-            data: { cod_cadastro: $(this).val() },
-            dataType: 'json',
-            method: 'POST'
-        })
-        .always(function(data, status) {
-            var $div = $('#destinatarie');
-                $messageBox = $div.find('#message-box');
-
-            if (status === 'success') {
-                if (data['status'] === 'success') {
-                    if ($trToDelete && $trToDelete.length > 0) { 
-                        $trToDelete.remove(); 
-
-                        $div.find('table tbody tr th').each(function(index) { 
-                            $(this).text(++index); 
-                        });
-                    }
-                }
-                $messageBox.bootstrapAlert(data['status'], data['message']);
-            }
-            else { 
-                $messageBox.bootstrapAlert(
-                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
-                );
-            }
-        });
-    });
-
-    $('#delete .modal-footer .exit').on('click', function() {
-        $(this).closest('div').find('button.confirm').removeAttr('value');
-    });
-
     $('#breadcrumb .destinatarie-type a').on('click', function() {
         var $inputCnpjCpf = $('input[name=cnpj]');
             $labelCnpjCpf = $inputCnpjCpf.closest('div').find('label');
@@ -127,67 +85,112 @@ $(document).ready(function(){
         }
     });
 
-    $('#find-cep').on('click', function() {
-        var $cep = $('input[name=cep]');
-        
-        if (cep) {
+    $('#destinatarie #delete').on('show.bs.modal', function(evento) {
+        var $DOM = {
+            paginador: $('.list-shown .shown, .list-shown .quantity'),
+            mensagem: $('#destinatarie #message-box'),
+            botao: $(evento.relatedTarget)
+        };
+
+        $(this).find('button.confirm').on('click', function() {
+            $DOM.linhaCadastro = $('#' + $DOM.botao.val());
+
             $.ajax({
-                url: 'https://viacep.com.br/ws/' + $cep.cleanVal() + '/json/',
+                url: '/Cadastro/delete',
+                method: 'POST',
                 dataType: 'json',
-                method: 'GET'
+                data: { cod_cadastro: $DOM.botao.val() }
             })
-            .always(function(data, status) {
-                $DOM = {
-                    estado: $('select[name=estado] option'),
-                    endereco: $('input[name=endereco]'),
-                    cidade: $('select[name=cidade]'),
-                    bairro: $('input[name=bairro]'),
-                    messageBox: $('.message-box'),
-                    cepInputDiv: $cep.closest('div'),
-                    options: [],
-                    option: null
-                };
+            .always(function(dados, status) {
+                if (status === 'success') {
+                    if (dados.status === 'success') {
+                        $DOM.linhaCadastro.remove();
+                        $DOM.paginador.each(function() { 
+                            $(this).text(parseInt($(this).text()) - 1); 
+                        });
+                        $('#destinatarie table tbody th').each(function(indice) {
+                            $(this).text(++indice);
+                        });
+                    }
+                    $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
+                }
+                else {
+                    $DOM.mensagem.bootstrapAlert(
+                        'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                    );
+                }
+            });
+        });
+    })
+    .on('hidden.bs.modal', function(evento) {
+        $(this).find('button.confirm').off('click');
+    });
 
-                if (status === 'success' && !data['erro']) {
-                    var cidade = data.localidade.toUpperCase();
+    $('#find-cep').on('click', function() {
+        $DOM = {
+            estado: $('select[name=estado] option'),
+            cidade: $('select[name=cidade] option'),
+            endereco: $('input[name=endereco]'),
+            bairro: $('input[name=bairro]'),
+            mensagem: $('.message-box'),
+            cep: $('input[name=cep]'),
+            opcoes: []
+        };
+        $DOM.cepDiv = $DOM.cep.closest('div');
 
-                    $DOM.cepInputDiv.removeClass('has-error');
-                    $DOM.cidade.find('option').filter(function() {
-                        return $(this).val() === cidade
-                    }).prop('selected', true);
-                    $DOM.estado.filter(function() {
-                        return $(this).val() === data.uf;
-                    }).prop('selected', true);
-                    $DOM.endereco.val(data.logradouro);
-                    $DOM.bairro.val(data.bairro);
+        if ($DOM.cep.cleanVal().length === 8) {
+            $.ajax({
+                url: 'https://viacep.com.br/ws/' + $DOM.cep.cleanVal() + '/json/',
+                dataType: 'json',
+                method: 'GET',
+                beforeSend: function() {
+                    $DOM.cepDiv.removeClass('has-error');
+                    $DOM.estado.parent().prop('disabled', true);
+                    $DOM.cidade.parent().prop('disabled', true);
+                    $DOM.endereco.prop('disabled', true);
+                    $DOM.bairro.prop('disabled', true);
+                }
+            })
+            .always(function(dados, status) {
+                $DOM.estado.parent().prop('disabled', false);
+                $DOM.cidade.parent().prop('disabled', false);
+                $DOM.endereco.prop('disabled', false);
+                $DOM.bairro.prop('disabled', false);
 
-                    if ($DOM.cidade.find('option:contains('+ cidade +')').length === 0) {
-                        municipiosUF(data.uf).always(function(dataAjax, status) {
-                            if (status === 'success' && dataAjax['municipios']) {
-                                $.each(dataAjax['municipios'], function(index, value) {
-                                    $DOM.option = $('<option></option>', {
-                                        value: value['nome_municipio'], 
-                                        text: value['nome_municipio']
+                if (status === 'success' && !dados.erro) {
+                    var cidade = dados.localidade.toUpperCase();
+                    $DOM.estado.filter('[value='+ dados.uf +']').prop('selected', true);
+                    $DOM.cidade.filter('[value='+ cidade +']').prop('selected', true);
+                    $DOM.endereco.val(dados.logradouro);
+                    $DOM.bairro.val(dados.bairro);
+
+                    if ($DOM.cidade.filter('[value='+ cidade +']').length === 0) {
+                        municipiosUF(dados.uf).always(function(dataAjax, status) {
+                            if (status === 'success' && dataAjax.municipios) {
+                                $.each(dataAjax.municipios, function(indice, valor) {
+                                    $DOM.opcao = $('<option></option>', {
+                                        value: valor.nome_municipio, 
+                                        text: valor.nome_municipio
                                     });
-                                    if (value['nome_municipio'] === cidade) {
-                                        $DOM.option.prop('selected', true);
+                                    if (valor.nome_municipio === cidade) {
+                                        $DOM.opcao.prop('selected', true);
                                     }
-                                    $DOM.options.push($DOM.option);
+                                    $DOM.opcoes.push($DOM.opcao);
                                 });
-                                $DOM.cidade.empty().append($DOM.options);
+                                $DOM.cidade.parent().empty().append($DOM.opcoes);
                             }   
                             else {
-                                console.log('Error: não foi possível completar a requisição.');
+                                $DOM.mensagem.bootstrapAlert(
+                                    'error', 'CEP inválido, tente novamente.'
+                                );
                             }
                         });
                     }
                 }
                 else {
-                    $DOM.cepInputDiv.addClass('has-error');
-                    $DOM.messageBox.bootstrapAlert('error', 'CEP inválido, tente novamente.');
-                    $DOM.estado.filter(function() {
-                        return $(this).val() === 'AC'
-                    }).prop('selected', true).change();
+                    $DOM.cepDiv.addClass('has-error');
+                    $DOM.mensagem.bootstrapAlert('error', 'CEP inválido, tente novamente.');
+                    $DOM.estado.filter('[value=AC]').prop('selected', true).change();
                     $DOM.bairro.val('');
                     $DOM.endereco.val('');
                 }

@@ -26,7 +26,7 @@
 		    <?php if(!empty($cadastros)): ?>
 			    <tbody class='text-capitalize'>
 			    		<?php foreach($cadastros as $index => $cadastro): ?>
-				    		<tr>
+				    		<tr id=<?= $cadastro['cod_cadastro'] ?>>
 				    			<th><?= ($index + 1) ?></th>
 					        	<td><?= $cadastro['cod_cadastro'] ?></td>
 								<td class='cnpjCpfMask'><?= unmask($cadastro['cnpj']) ?></td>
@@ -38,10 +38,10 @@
 								<td><?= mb_strtolower($cadastro['endereco']) ?></td>
 								<td><?= mb_strtolower($cadastro['bairro']) ?></td>
 								<td class='actions'>
-									<a class='btn btn-primary action-btn' href=/Cadastro/edit/<?= $cadastro['cod_cadastro'] ?>>
+									<a href=/Cadastro/edit/<?= $cadastro['cod_cadastro'] ?> class='btn btn-primary btn-xs'>
 										<i class='fas fa-pencil-alt'></i>
 									</a>
-									<button class='btn btn-danger action-btn delete' data-toggle='modal' data-target='#delete' value=<?= $cadastro['cod_cadastro'] ?>>
+									<button value=<?= $cadastro['cod_cadastro'] ?> class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delete'>
 										<i class='fas fa-trash-alt'></i>
 									</button>
 								</td>
@@ -61,7 +61,7 @@
 	</div>
 	<!-- Modal Confirmar Exclusão -->
         <div class='modal fade' id='delete' role='dialog'>
-            <div class='col-sm-4 col-sm-offset-4 modal-top'>
+            <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <button type='button' class='close' data-dismiss='modal'>

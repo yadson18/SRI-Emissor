@@ -27,7 +27,7 @@
 		    <?php if(!empty($produtos)): ?>
 			    <tbody class='text-capitalize'>
 			    		<?php foreach($produtos as $index => $produto): ?>
-				    		<tr>
+				    		<tr id=<?= $produto['cod_interno'] ?>>
 				    			<th><?= ($index + 1) ?></th>
 					        	<td><?= $produto['cod_interno'] ?></td>
 								<td><?= mb_strtolower($produto['descricao']) ?></td>
@@ -40,10 +40,10 @@
 								<td><?= mb_strtolower($produto['unidade']) ?></td>
 								<td class='money millions'><?= unmask($produto['venda']) ?></td>
 								<td class='actions'>
-									<a class='btn btn-primary action-btn' href=/Produto/edit/<?= $produto['cod_interno'] ?>>
+									<a href=/Produto/edit/<?= $produto['cod_interno'] ?> class='btn btn-primary btn-xs'>
 										<i class='fas fa-pencil-alt'></i>
 									</a>
-									<button class='btn btn-danger action-btn delete' data-toggle='modal' data-target='#delete' value=<?= $produto['cod_interno'] ?>>
+									<button value=<?= $produto['cod_interno'] ?> class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delete'>
 										<i class='fas fa-trash-alt'></i>
 									</button>
 								</td>
@@ -63,16 +63,16 @@
 	</div>
 	<!-- Modal Confirmar Exclusão -->
         <div class='modal fade' id='delete' role='dialog'>
-            <div class='col-sm-4 col-sm-offset-4 modal-top'>
+            <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <button type='button' class='close' data-dismiss='modal'>
                             <i class='fas fa-times'></i>
                         </button>
-                        <h4 class='modal-title text-center'>Excluir Destinatário</h4>
+                        <h4 class='modal-title text-center'>Excluir Produto</h4>
                     </div>
                     <div class='modal-body text-center'>
-                        <h4>Deseja realmente excluir este destinatário?</h4>
+                        <h4>Deseja realmente excluir este produto?</h4>
                     </div>
                     <div class='modal-footer'>
                     	<button data-dismiss='modal' class='btn btn-danger exit'>

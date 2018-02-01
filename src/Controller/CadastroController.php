@@ -110,7 +110,7 @@
 
 			if (isset($cadastro->cnpj)) {
 				$this->setViewVars([
-					'cadastroTipo' => (strlen($cadastro->cnpj)) ? 'cnpj' : 'cpf',
+					'cadastroTipo' => (strlen($cadastro->cnpj) === 14) ? 'cnpj' : 'cpf',
 					'municipios' => $ibge->municipiosUF($cadastro->estado),
 					'estados' => $ibge->siglaEstados(),
 					'usuarioNome' => $usuario->nome,
@@ -134,30 +134,36 @@
 				$dados = $this->Cadastro->normalizarDados($this->request->getData());
 
 				if (isset($dados['cod_cadastro']) && is_numeric($dados['cod_cadastro'])) {
-					$paraApagar = $this->Cadastro->get($dados['cod_cadastro']);
+					$cadastroRazao = $this->Cadastro->getRazao($dados['cod_cadastro']);
 
-					if ($paraApagar) {
+					if ($cadastroRazao) {
 						$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
 						$cadastro->ativo = 'F';
 
 						if ($this->Cadastro->save($cadastro)) {
 							$this->Ajax->response('cadastroDeletado', [
 								'status' => 'success',
-								'message' => 'Destinatário (' . $paraApagar->razao . ') removido com sucesso.'
+								'message' => 'Destinatário (' . $cadastroRazao . ') removido com sucesso.'
 							]);
 						}
 						else {
 							$this->Ajax->response('cadastroDeletado', [
 								'status' => 'error',
-								'message' => 'Não foi possível remover o destinatário (' . $paraApagar->razao . ').'
+								'message' => 'Não foi possível remover o destinatário (' . $cadastroRazao . ').'
 							]);
 						}
+					}
+					else {
+						$this->Ajax->response('cadastroDeletado', [
+							'status' => 'error',
+							'message' => 'Não foi possível remover, o destinatário não existe.'
+						]);
 					}
 				}
 				else {
 					$this->Ajax->response('cadastroDeletado', [
-						'status' => 'error',
-						'message' => 'Não foi possível remover, o destinatário não existe.'
+						'status' => 'warning',
+						'message' => 'Não foi possível remover, verifique se o código do cadastro é válido.'
 					]);
 				}
 			}

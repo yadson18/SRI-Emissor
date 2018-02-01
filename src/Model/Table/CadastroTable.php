@@ -17,6 +17,18 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function getRazao(int $cod_cadastro)
+		{
+			$cadastro = $this->find(['razao'])
+				->where(['cod_cadastro =' => $cod_cadastro])
+				->fetch('class');
+
+			if ($cadastro) {
+				return $cadastro->razao;
+			}
+			return false;
+		}
+
 		public function cadastroExistente(string $cnpj)
 		{
 			$cadastro = $this->find(['cnpj'])

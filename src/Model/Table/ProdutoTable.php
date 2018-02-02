@@ -18,6 +18,18 @@
 			$this->setBelongsTo('', []);
 		}
 
+		public function getDescricao(int $cod_interno)
+		{
+			$produto = $this->find(['descricao'])
+				->where(['cod_interno =' => $cod_interno])
+				->fetch('class');
+
+			if ($produto) {
+				return $produto->descricao;
+			}
+			return false;
+		}
+
 		public function quantidadeCadastrados()
 		{
 			$dataDeHoje = date("'". 'd.m.Y' ."'");

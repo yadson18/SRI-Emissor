@@ -19,11 +19,10 @@ $(document).ready(function(){
                 method: 'POST',
                 data: { cargaTipo: $(this).val(), caixas: caixas },
                 beforeSend: function() {
-                    var $linhasSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
-
-                    $linhasSelecionadas.removeAttr('class').addClass('status-envio');
-                    $linhasSelecionadas.find('p').text('Enviando...');
-                    $linhasSelecionadas.find('i').removeAttr('class').addClass('fas fa-circle-notch fa-spin');
+                    $DOM.trSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
+                    $DOM.trSelecionadas.removeAttr('class').addClass('status-envio');
+                    $DOM.trSelecionadas.find('p').text('Enviando...');
+                    $DOM.trSelecionadas.find('i').removeAttr('class').addClass('fas fa-circle-notch fa-spin');
                 }
             })
             .always(function(dados, status) {
@@ -283,43 +282,47 @@ $(document).ready(function(){
         }
     });
 
-    var $trToDelete = null;
-
-    $('#product table .delete').on('click', function() {
-        $('#product #delete .confirm').attr({ value: $(this).val() });
-        $trToDelete = $(this).closest('tr');
-    });
-    $('#product #delete .confirm').on('click', function() {
+    $('#product #delete').on('show.bs.modal', function(evento) {
         var $DOM = {
-            mensagem: $('#product #message-box')
+            paginador: $('.list-shown .shown, .list-shown .quantity'),
+            mensagem: $('#product #message-box'),
+            botao: $(evento.relatedTarget)
         };
 
-        $.ajax({
-            url: '/Produto/delete',
-            data: { cod_interno: $(this).val() },
-            dataType: 'json',
-            method: 'POST'
-        })
-        .always(function(dados, status) {
-            if (status === 'success') {
-                if (dados['status'] === 'success') {
-                    if ($trToDelete && $trToDelete.length > 0) { 
-                        $trToDelete.remove(); 
+        $(this).find('button.confirm').on('click', function() {
+            $DOM.linhaParaRemover = $('#' + $DOM.botao.val());
 
-                        $('#product table tbody tr th').each(function(index) { 
-                            console.log($(this));
-                            $(this).text(++index); 
+            $.ajax({
+                url: '/Produto/delete',
+                method: 'POST',
+                dataType: 'json',
+                data: { cod_interno: $DOM.botao.val() }
+            })
+            .always(function(dados, status) {
+                if (status === 'success') {
+                    if (dados.status === 'success') {
+                        $DOM.linhaParaRemover.remove();
+                        $DOM.paginador.each(function() { 
+                            $(this).text(
+                                parseInt($(this).text().replace(/[.]/g, '')) - 1
+                            ); 
+                        });
+                        $('#destinatarie table tbody th').each(function(indice) {
+                            $(this).text(++indice);
                         });
                     }
+                    $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
                 }
-                $DOM.mensagem.bootstrapAlert(dados['status'], dados['message']);
-            }
-            else { 
-                $DOM.mensagem.bootstrapAlert(
-                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
-                );
-            }
+                else {
+                    $DOM.mensagem.bootstrapAlert(
+                        'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                    );
+                }
+            });
         });
+    })
+    .on('hidden.bs.modal', function(evento) {
+        $(this).find('button.confirm').off('click');
     });
 
     $('select[name=cod_grupo]').on('change', function() {

@@ -178,42 +178,45 @@
 
 		public function delete()
 		{
-			$cadastro = $this->Cadastro->newEntity();
+			$produto = $this->Produto->newEntity();
+			$usuario = $this->Auth->getUser();
 
 			if ($this->request->is('POST')) {
-				$dados = $this->Cadastro->normalizarDados($this->request->getData());
+				$dados = $this->Produto->normalizarDados($this->request->getData());
 
-				if (isset($dados['cod_cadastro']) && is_numeric($dados['cod_cadastro'])) {
-					$cadastroRazao = $this->Cadastro->getRazao($dados['cod_cadastro']);
+				if (isset($dados['cod_interno']) && is_numeric($dados['cod_interno'])) {
+					$produtoDescricao = $this->Produto->getDescricao($dados['cod_interno']);
 
-					if ($cadastroRazao) {
-						$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
-						$cadastro->ativo = 'F';
+					if ($produtoDescricao) {
+						$produto = $this->Produto->patchEntity($produto, $dados);
+						$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
+						$produto->data_alteracao = date('d.m.Y');
+						$produto->inativo = 'I';
 
-						if ($this->Cadastro->save($cadastro)) {
-							$this->Ajax->response('cadastroDeletado', [
+						if ($this->Produto->save($produto)) {
+							$this->Ajax->response('produtoDeletado', [
 								'status' => 'success',
-								'message' => 'Destinatário (' . $cadastroRazao . ') removido com sucesso.'
+								'message' => 'Produto (' . $produtoDescricao . ') removido com sucesso.'
 							]);
 						}
 						else {
-							$this->Ajax->response('cadastroDeletado', [
+							$this->Ajax->response('produtoDeletado', [
 								'status' => 'error',
-								'message' => 'Não foi possível remover o destinatário (' . $cadastroRazao . ').'
+								'message' => 'Não foi possível remover o produto (' . $produtoDescricao . ').'
 							]);
 						}
 					}
 					else {
-						$this->Ajax->response('cadastroDeletado', [
+						$this->Ajax->response('produtoDeletado', [
 							'status' => 'error',
-							'message' => 'Não foi possível remover, o destinatário não existe.'
+							'message' => 'Não foi possível remover, o produto não existe.'
 						]);
 					}
 				}
 				else {
-					$this->Ajax->response('cadastroDeletado', [
+					$this->Ajax->response('produtoDeletado', [
 						'status' => 'warning',
-						'message' => 'Não foi possível remover, verifique se o código do cadastro é válido.'
+						'message' => 'Não foi possível remover, verifique se o código do produto é válido.'
 					]);
 				}
 			}

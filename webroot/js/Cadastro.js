@@ -106,7 +106,9 @@ $(document).ready(function(){
                     if (dados.status === 'success') {
                         $DOM.linhaCadastro.remove();
                         $DOM.paginador.each(function() { 
-                            $(this).text(parseInt($(this).text()) - 1); 
+                            $(this).text(
+                                parseInt($(this).text().replace(/[.]/g, '')) - 1
+                            );  
                         });
                         $('#destinatarie table tbody th').each(function(indice) {
                             $(this).text(++indice);
@@ -159,12 +161,12 @@ $(document).ready(function(){
 
                 if (status === 'success' && !dados.erro) {
                     var cidade = dados.localidade.toUpperCase();
-                    $DOM.estado.filter('[value='+ dados.uf +']').prop('selected', true);
-                    $DOM.cidade.filter('[value='+ cidade +']').prop('selected', true);
+                    $DOM.estado.filter(':contains('+ dados.uf +')').prop('selected', true);
+                    $DOM.cidade.filter(':contains('+ cidade +')').prop('selected', true);
                     $DOM.endereco.val(dados.logradouro);
                     $DOM.bairro.val(dados.bairro);
 
-                    if ($DOM.cidade.filter('[value='+ cidade +']').length === 0) {
+                    if ($DOM.cidade.filter(':contains('+ cidade +')').length === 0) {
                         municipiosUF(dados.uf).always(function(dataAjax, status) {
                             if (status === 'success' && dataAjax.municipios) {
                                 $.each(dataAjax.municipios, function(indice, valor) {
@@ -181,7 +183,7 @@ $(document).ready(function(){
                             }   
                             else {
                                 $DOM.mensagem.bootstrapAlert(
-                                    'error', 'CEP inválido, tente novamente.'
+                                    'error', 'Desculpe, não encontramos nenhum município relacionado a esse CEP.'
                                 );
                             }
                         });
@@ -190,7 +192,7 @@ $(document).ready(function(){
                 else {
                     $DOM.cepDiv.addClass('has-error');
                     $DOM.mensagem.bootstrapAlert('error', 'CEP inválido, tente novamente.');
-                    $DOM.estado.filter('[value=AC]').prop('selected', true).change();
+                    $DOM.estado.filter(':contains(AC)').prop('selected', true).change();
                     $DOM.bairro.val('');
                     $DOM.endereco.val('');
                 }
@@ -199,21 +201,30 @@ $(document).ready(function(){
     });
 
     $('select[name=estado]').on('change', function() {
-        municipiosUF($(this).val()).always(function(data, status) {
-            var $options = [];
+        $DOM = {
+            cidade: $('select[name=cidade]'),
+            mensagem: $('.message-box'),
+            opcoes: []
+        };
+        $DOM.cidade.prop('disabled', true);
 
-            if (status === 'success' && data['municipios']) {
-                $.each(data['municipios'], function(index, value) {
-                    $options.push($('<option></option>', {
-                        value: value['nome_municipio'], 
-                        text: value['nome_municipio']
+        municipiosUF($(this).val()).always(function(dados, status) {
+            if (status === 'success' && dados.municipios) {
+                $DOM.cidade.prop('disabled', false);
+                
+                $.each(dados.municipios, function(indice, valor) {
+                    $DOM.opcoes.push($('<option></option>', {
+                        value: valor.nome_municipio, 
+                        text: valor.nome_municipio
                     }));
                 });
-                
-                $('select[name=cidade]').empty().append($options);
+
+                $DOM.cidade.empty().append($DOM.opcoes);
             }   
             else {
-                console.log('Error: não foi possível completar a requisição.');
+                $DOM.mensagem.bootstrapAlert(
+                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                );
             }
         });
     });

@@ -89,39 +89,41 @@
 
 		public function get($key, array $contain = [])
 		{
-			if (!empty($key) && !empty($this->getTable())) {
-				if ($key === 'all') {
-					return $this->find(['*'])
-						->fetch('all');
-				}
-				else if (!empty($this->getPrimaryKey())) {
-					if (isset($contain['contain']) && !empty($contain['contain'])) {
-						$condition = [
-							$this->getTable() . '.' . $this->getPrimaryKey() . ' = ' => $key
-						];
-						$tables = [$this->getTable()];
-						
-						foreach ($contain['contain'] as $table) {
-							$belongs = $this->getBelongsTo($table);
+			if (is_numeric($key) && $key >= 0 || !empty($key)) {
+				if (!empty($this->getTable())) {
+					if ($key === 'all') {
+						return $this->find(['*'])
+							->fetch('all');
+					}
+					else if (!empty($this->getPrimaryKey())) {
+						if (isset($contain['contain']) && !empty($contain['contain'])) {
+							$condition = [
+								$this->getTable() . '.' . $this->getPrimaryKey() . ' = ' => $key
+							];
+							$tables = [$this->getTable()];
+							
+							foreach ($contain['contain'] as $table) {
+								$belongs = $this->getBelongsTo($table);
 
-							if (!empty($belongs) && isset($belongs['key']) &&
-								isset($belongs['foreignKey'])
-							) {
-								$tables[] = $table;
-								$condition[] = 'and ' . 
-									$this->getTable() . '.' . $belongs['key'] . ' = ' . 
-									$table . '.' . $belongs['foreignKey'];
+								if (!empty($belongs) && isset($belongs['key']) &&
+									isset($belongs['foreignKey'])
+								) {
+									$tables[] = $table;
+									$condition[] = 'and ' . 
+										$this->getTable() . '.' . $belongs['key'] . ' = ' . 
+										$table . '.' . $belongs['foreignKey'];
 
+								}
 							}
+							return $this->select(['*'])
+								->from($tables)
+								->where($condition)
+								->fetch('class');
 						}
-						return $this->select(['*'])
-							->from($tables)
-							->where($condition)
+						return $this->find(['*'])
+							->where([$this->getPrimaryKey() . ' = ' => $key])
 							->fetch('class');
 					}
-					return $this->find(['*'])
-						->where([$this->getPrimaryKey() . ' = ' => $key])
-						->fetch('class');
 				}
 			}
 			return false;

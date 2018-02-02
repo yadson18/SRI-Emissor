@@ -12,7 +12,7 @@
     }
     .btn-lg, .btn, .form-control { .border-radius(2px); }
     .modal-content { .border-radius(4px); }
-    html, body { 
+    .content { 
         .font-family(sans-serif, Helvetica Neue, Helvetica, Arial;); 
         .font-size(13px);
     }
@@ -23,7 +23,10 @@
         .vertical-align(sub); 
         .margin-left(8px);
     }
-    .page-header { .margin-top(25px); }
+    .page-header { 
+        .margin-top(25px); 
+        .font-size(25px);
+    }
     .list-shown { .padding(28px); }
     #debug-screen {
         .background-color(#ffef00);
@@ -31,9 +34,9 @@
         .margin(15px 0);
         .font-size(1em);
     }
-    .form-header h4 { .font-size(1.5em); }
+    .form-header h4 { .font-size(1.8em); }
     div.alert { .text-align(center); }
-    .close { .font-size(1.2em); }
+    .close { .font-size(16px); }
     .data-not-found { .margin-top(12em); }
     .modal .modal-top { .margin-top(30px); }
     .icon-left, .icon-right {
@@ -93,15 +96,14 @@
     .table {
         tbody tr, thead tr {
             th {
-                .background-color(#ddd);
-                .border-color(#ccc);
+                .background-color(#eee);
             }
             td, th {
                 .text-align(center);
                 .vertical-align(middle);
             }
             .actions {
-                .min-width(100px);
+                .min-width(80px);
                 .vertical-align(middle) !important;
 
                 button, a {
@@ -114,9 +116,10 @@
         }
     }
     .loading {
-        .position(absolute); 
+        .position(absolute);  
         .top(4.2em); 
         .background-color(white);
+        .z-index(1000);
 
         .loading-content {
             .width(1000px); 

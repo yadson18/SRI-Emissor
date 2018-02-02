@@ -8,16 +8,16 @@ $(document).ready(function(){
             caixas: $('input[name=caixa-selecionado]:checked'),
             mensagem: $('#carga #message-box')
         };
-        var caixas = [];
+        var caixasNumeros = [];
 
         if ($DOM.caixas.length > 0) {
-            $DOM.caixas.each(function() { caixas.push($(this).val()); });
+            $DOM.caixas.each(function() { caixasNumeros.push($(this).val()); });
 
             $.ajax({
                 url: '/Produto/enviarCarga',
                 dataType: 'json',
                 method: 'POST',
-                data: { cargaTipo: $(this).val(), caixas: caixas },
+                data: { cargaTipo: $(this).val(), caixas: caixasNumeros },
                 beforeSend: function() {
                     $DOM.trSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
                     $DOM.trSelecionadas.removeAttr('class').addClass('status-envio');
@@ -26,11 +26,13 @@ $(document).ready(function(){
                 }
             })
             .always(function(dados, status) {
+                $DOM.mensagem.empty();
+                
                 if (status === 'success') {
                     if (dados.status === 'success' && dados.data) {
                         var $caixa = null;
                         var divClasse = '';
-                        var iClasse = '';
+                        var iconeClasse = '';
 
                         $.each(dados.data, function(caixa, statusEnvio) {
                             $caixa = $('#' + caixa + ' .status-envio');
@@ -38,16 +40,16 @@ $(document).ready(function(){
                             switch (statusEnvio.status) {
                                 case 'success':
                                     divClasse = 'alert-success';
-                                    iClasse = 'fas fa-check';
+                                    iconeClasse = 'fas fa-check';
                                     break;
                                 case 'error':
                                     divClasse = 'alert-danger';
-                                    iClasse = 'fas fa-times';
+                                    iconeClasse = 'fas fa-times';
                                     break;
                             }
                             $caixa.addClass(divClasse);
                             $caixa.find('p').text(statusEnvio.message);
-                            $caixa.find('i').removeAttr('class').addClass(iClasse);
+                            $caixa.find('i').removeAttr('class').addClass(iconeClasse);
                         });
                     }
                     else {
@@ -84,33 +86,6 @@ $(document).ready(function(){
         }
     });
 
-    var $busca;
-    $('#find-ncscc').on('show.bs.modal', function (evento) {
-        var $DOM = {
-            botao: $(evento.relatedTarget),
-            modal: $(this)
-        };
-        var tipoConsulta = $DOM.botao.data('find');
-        $busca = {
-            method: 'POST',
-            dataType: 'json'
-        };
-
-        $('.select-ncscc').removeClass('consulting');
-        $DOM.modal.find('.modal-title').text('Consultar ' + tipoConsulta.toUpperCase());
-        $DOM.botao.closest('.select-ncscc').addClass('consulting');
-        $DOM.modal.find('.search-content').val('');
-        $DOM.modal.find('table tbody').empty();
-
-        switch (tipoConsulta) {
-            case 'ncm': $busca.url = '/Ncm/find'; break;
-            case 'cstpc': $busca.url = '/ModPiscofins/find'; break;
-            case 'st': $busca.url = '/St/find'; break;
-            case 'cfop': $busca.url = '/Cfop/find'; break;
-            case 'cest': $busca.url = '/Cest/find'; break;
-        }
-    });
-
     var $promocao = (function() {
         var descricao = inicio = final = preco = null;
 
@@ -144,6 +119,7 @@ $(document).ready(function(){
             getPreco: function() { return preco; }
         };
     })();
+
     $('input[name=qtd_vol]').on('change keyup', function() {
         var $DOM = {
             descricaoProm: $('input[name=descricao_promocao]'),
@@ -151,9 +127,9 @@ $(document).ready(function(){
             finalProm: $('input[name=data_final_prom]'),
             precoProm: $('input[name=preco_prom]')
         };
-        var $properties = null;
+        var $propriedades = null;
 
-        if ($(this).val() > 1) {
+        if ($(this).val().search(/^[1-9][1-9]*/g) !== -1 && $(this).val() > 1) {
             if ($promocao.getDescricao() && $promocao.getInicio() && 
                 $promocao.getFinal() && $promocao.getPreco()
             ) {
@@ -162,123 +138,164 @@ $(document).ready(function(){
                 $DOM.finalProm.val($promocao.getFinal());
                 $DOM.precoProm.val($promocao.getPreco());
             }
-            $properties = { readonly: false, required: true };
-            $DOM.descricaoProm.prop($properties).removeClass('disabled');
-            $DOM.inicioProm.prop($properties).removeClass('disabled');
-            $DOM.finalProm.prop($properties).removeClass('disabled');
-            $DOM.precoProm.prop($properties).removeClass('disabled');
+            $propriedades = { readonly: false, required: true };
+            $DOM.descricaoProm.prop($propriedades).removeClass('disabled');
+            $DOM.inicioProm.prop($propriedades).removeClass('disabled');
+            $DOM.finalProm.prop($propriedades).removeClass('disabled');
+            $DOM.precoProm.prop($propriedades).removeClass('disabled');
 
         }
         else {
-            $properties = { readonly: true, required: false };
+            $propriedades = { readonly: true, required: false };
             $promocao.setDescricao($DOM.descricaoProm.val());
             $promocao.setInicio($DOM.inicioProm.val());
             $promocao.setFinal($DOM.finalProm.val());
             $promocao.setPreco($DOM.precoProm.val());
 
-            $DOM.descricaoProm.prop($properties).addClass('disabled').val('');
-            $DOM.inicioProm.prop($properties).addClass('disabled').val('');
-            $DOM.finalProm.prop($properties).addClass('disabled').val('');
-            $DOM.precoProm.prop($properties).addClass('disabled').val('0,00');
+            $DOM.descricaoProm.prop($propriedades).addClass('disabled').val('');
+            $DOM.inicioProm.prop($propriedades).addClass('disabled').val('');
+            $DOM.finalProm.prop($propriedades).addClass('disabled').val('');
+            $DOM.precoProm.prop($propriedades).addClass('disabled').val('0,00');
         }
     }).change();
 
-    $('#find-ncscc .find').on('click', function() {
+    var buscaAnterior;
+    $('#finder').on('show.bs.modal', function (evento) {
         var $DOM = {
-            mensagem: $('#find-ncscc .message-box'),
-            tabelaConteudo: $('#find-ncscc table tbody'),
-            filtro: $('#find-ncscc .filter'),
-            buscarPor: $('#find-ncscc .search-content'),
-            opcoes: []
+            tabelaConteudo: $('#finder table tbody'),
+            buscarPor: $('#finder .search-content'),
+            mensagem: $('#finder .message-box'),
+            botao: $(evento.relatedTarget),
+            filtro: $('#finder .filter'),
+            modal: $(this)
         };
-        
-        $DOM.tabelaConteudo.empty();
+        var titulo = $DOM.botao.data('find');
+        var url = '';
 
-        if ($DOM.buscarPor.val().replace(/[ ]/g, '') !== '' &&
-            typeof $busca === 'object'
-        ) {
-            $busca.data = { 
-                filtro: $DOM.filtro.val(),
-                busca: $DOM.buscarPor.val()
-            };
+        switch (titulo) {
+            case 'ncm': url = '/Ncm/find'; break;
+            case 'cstpc': url = '/ModPiscofins/find'; break;
+            case 'st': url = '/St/find'; break;
+            case 'cfop': url = '/Cfop/find'; break;
+            case 'cest': url = '/Cest/find'; break;
+        }
+        $DOM.modal.find('.modal-title').text('Consultar ' + titulo.toUpperCase());
 
-            $.ajax($busca).always(function(dados, status) {
-                if (status === 'success') {
-                    if (dados.status === 'success') {
-                        $.each(dados.data, function(indice, valor) {
-                            $DOM.opcoes.push($('<tr></tr>', {
-                                html: [
-                                    $('<th></th>', { text: (indice + 1) }),
-                                    $('<td></td>', { 
-                                        text: valor.codigo,
-                                        class: 'cod'
-                                    }),
-                                    $('<td></td>', { 
-                                        text: valor.descricao,
-                                        class: 'descricao'
-                                    }),
-                                    $('<td></td>', { 
-                                        html: $('<input/>', {
-                                            class: 'select',
-                                            type: 'checkbox'
+        if (buscaAnterior !== titulo) {
+            $DOM.modal.find('.search-content').val('');
+            $DOM.tabelaConteudo.empty();
+            buscaAnterior = titulo;
+        }
+        $(this).find('.find').on('click', function() {
+            $DOM.tabelaConteudo.empty();
+            $DOM.mensagem.empty();
+
+            if (url && $DOM.filtro.val() && 
+                $DOM.buscarPor.val().replace(/[ ]/g, '') !== ''
+            ) {
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        filtro: $DOM.filtro.val(),
+                        busca: $DOM.buscarPor.val()
+                    },
+                    beforeSend: function() {
+                        $DOM.modal.find('.loading').removeClass('hidden');
+                    }
+                })
+                .always(function(dados, status) {
+                    $DOM.modal.find('.loading').addClass('hidden');
+
+                    if (status === 'success') {
+                        if (dados.status === 'success') {
+                            var $linhas = [];
+
+                            $.each(dados.data, function(indice, valor) {
+                                $linhas.push($('<tr></tr>', {
+                                    html: [
+                                        $('<th></th>', { text: (indice + 1) }),
+                                        $('<td></td>', { 
+                                            text: valor.codigo,
+                                            class: 'cod'
+                                        }),
+                                        $('<td></td>', { 
+                                            text: valor.descricao,
+                                            class: 'descricao'
+                                        }),
+                                        $('<td></td>', { 
+                                            html: $('<input/>', {
+                                                class: 'select',
+                                                type: 'checkbox'
+                                            })
                                         })
-                                    })
-                                ]
-                            }));
-                        });
-                        
-                        $DOM.mensagem.empty();
-                        $DOM.tabelaConteudo.append($DOM.opcoes);
+                                    ]
+                                }));
+                            });
+                            $DOM.tabelaConteudo.append($linhas);
+                        }
+                        else {
+                            $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
+                        }
                     }
                     else {
-                        $DOM.mensagem.bootstrapAlert('error', dados.message);
+                        $DOM.mensagem.bootstrapAlert(
+                            'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                        );
                     }
+                });
+            }
+            else {
+                $DOM.mensagem.bootstrapAlert('error', 'Por favor, preencha o campo de busca e tente novamente.');
+            }
+        });
+    })
+    .on('hidden.bs.modal', function(evento) {
+        $(this).find('.find').off('click');
+    });
+
+    $('.consultar button').on('click', function() {
+        $('.consultar').removeClass('consultando');
+        $(this).closest('div.consultar').addClass('consultando');
+    });
+
+    $(this).on('click', '#finder .select', function(){ 
+        var $DOM = {
+            linhasTabela: $('#finder table tbody tr'),
+            selects: $('#finder .select')
+        };
+
+        $DOM.linhasTabela.removeClass('selected');
+        $(this).closest('tr').addClass('selected');
+        $DOM.selects.prop('checked', false); 
+        $(this).prop('checked', true);  
+    });
+
+    $('#finder .inserir').on('click', function() {
+        var $DOM = {
+            linhaSelecionada: $('#finder .select:checked').closest('tr'),
+            divSetDados: $('div.consultar.consultando .form-group'),
+            mensagem: $('#finder .message-box')
+        };
+
+        if ($DOM.divSetDados.length > 0) {
+            if ($DOM.linhaSelecionada.length > 0) {
+                var codigo = $DOM.linhaSelecionada.find('.cod').text();
+                var descricao = $DOM.linhaSelecionada.find('.descricao').text();
+
+                if (codigo !== '' && descricao !== '') {
+                    $DOM.divSetDados.find('input:nth-child(1)').val(codigo).change();
+                    $DOM.divSetDados.find('input:nth-child(2)').val(descricao);
+                    $(this).closest('.modal').modal('toggle');
                 }
                 else {
-                    $DOM.mensagem.bootstrapAlert('warning', 
-                        'Desculpe, nada foi encontrado, verifique se tudo foi digitado corretamente.'
-                    );
+                    $DOM.mensagem.bootstrapAlert('error', 'Por favor, selecione um item cujo o código e descrição não sejam vazios.');
                 }
-            });
-        }
-        else {
-            $DOM.mensagem.bootstrapAlert('error', 
-                'O campo de busca não foi preenchido, preencha-o e tente novamente.'
-            );
-        }
-    });
-
-    $(this).on('click', '#find-ncscc .select', function(){ 
-        var $DOM = {
-            caixaSelecao: $('#find-ncscc .select'),
-            linhaSelecionada: $(this).closest('tr')
-        };
-
-        $DOM.linhaSelecionada.addClass('selected');
-        $DOM.caixaSelecao.prop('checked', false); 
-        $(this).prop('checked', true); 
-    });
-
-    $('#find-ncscc .inserir').on('click', function() {
-        var $DOM = {
-            tabelaConteudo: $('#find-ncscc table tbody tr'),
-            itemSelecionado: $('#find-ncscc .selected'),
-            consultando: $('.consulting .form-group'),
-            mensagem: $('#find-ncscc .message-box')
-        };
-        var codigo = $DOM.itemSelecionado.find('.cod').text();
-        var descricao = $DOM.itemSelecionado.find('.descricao').text();
-            
-        if ($DOM.itemSelecionado.length > 0 && $DOM.consultando.length > 0 &&
-            $DOM.tabelaConteudo.length > 0 && codigo !== '' && descricao !== ''
-        ) {
-            $DOM.mensagem.empty();
-            $DOM.consultando.find('input:nth-child(1)').val(codigo).change();
-            $DOM.consultando.find('input:nth-child(2)').val(descricao);
-            $('#find-ncscc.modal').modal('toggle');
-        }
-        else {
-            $DOM.mensagem.bootstrapAlert('error', 'Desculpe, nenhum item foi selecionado.');
+            }
+            else {
+                $DOM.mensagem.bootstrapAlert('error', 'Desculpe, nenhum item foi selecionado.');
+            }
         }
     });
 
@@ -303,11 +320,11 @@ $(document).ready(function(){
                     if (dados.status === 'success') {
                         $DOM.linhaParaRemover.remove();
                         $DOM.paginador.each(function() { 
-                            $(this).text(
-                                parseInt($(this).text().replace(/[.]/g, '')) - 1
-                            ); 
+                            $(this).mask('000.000.000.000', { reverse: true }).text(
+                                $(this).masked(parseInt($(this).cleanVal()) - 1)
+                            );
                         });
-                        $('#destinatarie table tbody th').each(function(indice) {
+                        $('#product table tbody th').each(function(indice) {
                             $(this).text(++indice);
                         });
                     }
@@ -326,85 +343,91 @@ $(document).ready(function(){
     });
 
     $('select[name=cod_grupo]').on('change', function() {
+        $DOM = {
+            subgrupo: $('select[name=cod_subgrupo]'),
+            mensagem: $('#form-add #message-box')
+        };
+
         $.ajax({
             url: '/SubgrupoProd/getSubgrupos',
-            data: { codGrupo: $(this).val() },
+            data: { cod_grupo: $(this).val() },
             dataType: 'json',
-            method: 'POST'
+            method: 'POST',
+            beforeSend: function() {
+                $DOM.subgrupo.prop('disabled', true);
+            }
         }).always(function(dados, status) {
-            var $options = [];
+            var $opcoes = [];
             
             if (status === 'success') {
                 if (dados.status === 'success') {
+
                     $.each(dados.data, function(indice, valor) {
-                        $options.push($('<option></option>', {
+                        $opcoes.push($('<option></option>', {
                             value: valor.cod_subgrupo,
                             text: valor.descricao
                         }));
                     });
                 }
                 else {
-                    $DOM.mensagem.bootstrapAlert('error', dados.message);
+                    $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
                 }
             }
             else {
-                $options.push($('<option></option>', {
+                $opcoes.push($('<option></option>', {
                     value: 0,
                     text: '-- SEM SUBGRUPO --'
                 }));
             }
-            $('select[name=cod_subgrupo]').empty().append($options);
+            $DOM.subgrupo.empty().append($opcoes).prop('disabled', false);
         });
     });
 
     $('input[name=compra], input[name=markup]').on('keyup', function(){
         $DOM = {
             compra: $('input[name=compra]'),
-            markup: $('input[name=markup]')
+            markup: $('input[name=markup]'),
+            precoSugerido: $('.preco-sugerido')
         };
 
-        if ($DOM.compra.val().replace(/[0,.]/g, '') !== '' && 
-            $DOM.markup.val().replace(/[0,.]/g, '') !== ''
-        ) {
-            var preco = moneyToFloat($DOM.compra.val());
-                markup = parseFloat($DOM.markup.val());
-                precoSugerido = (
-                    preco + (preco * (markup / 100))
-                ).toFixed(2).replace(/[.]/g, ',');
+        var compra = moneyToFloat($DOM.compra.val());
+        var markup = parseFloat($DOM.markup.val());
+        var sugerido = (compra + (compra * (markup / 100))).toFixed(2);
 
-            $('.preco-sugerido').val(precoSugerido).maskMoney('mask');
+        if (compra !== 0 && markup !== 0) {
+            $DOM.precoSugerido.val(sugerido.replace(/[.]/g, ',')).maskMoney('mask');
         }
         else {
-            $('.preco-sugerido').val('0,00');
+            $DOM.precoSugerido.val('0,00');
         }
     });
 
     $('input[name=st]').on('change', function() {
+        var $DOM = {
+            divCest: $('#cest-block'),
+            cestCodigo: $('#cest-block input[name=cest]'),
+            regimeTributario: $('#cod_reg_trib')
+        };
         var $stCodigos = {
-                normal: ['0010', '0030', '0060'],
-                simples: ['0201', '0202', '0500']
-            };
-            $DOM = {
-                divCest: $('#cest-block'),
-                inputCestCodigo: $('#cest-block input[name=cest]'),
-                inputRegimeTrib: $('#cod_reg_trib')
-            };
+            normal: ['0010', '0030', '0060'],
+            simples: ['0201', '0202', '0500']
+        };
 
         if ($stCodigos.normal.indexOf($(this).val()) !== -1 &&
-            $DOM.inputRegimeTrib.val() === '3' || 
+            $DOM.regimeTributario.val() === '3' || 
             $stCodigos.simples.indexOf($(this).val()) !== -1 &&
-            $DOM.inputRegimeTrib.val() === '1'
+            $DOM.regimeTributario.val() === '1'
         ) {
-            if ($DOM.inputCestCodigo.val() === '0000000') {
-                $DOM.inputCestCodigo.val('');
+            if ($DOM.cestCodigo.val() === '0000000') {
+                $DOM.cestCodigo.val('');
             }
 
             $DOM.divCest.removeClass('hidden');
-            $DOM.inputCestCodigo.prop('required', true);
+            $DOM.cestCodigo.prop('required', true);
         }
         else {
             $DOM.divCest.addClass('hidden');
-            $DOM.inputCestCodigo.val('0000000').prop('required', false);
+            $DOM.cestCodigo.val('0000000').prop('required', false);
         }
     }).change();
 });

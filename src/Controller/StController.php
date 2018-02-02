@@ -13,7 +13,9 @@
 			if ($this->request->is('POST')) {
 				$data = array_map('removeSpecialChars', $this->request->getData());
 
-				if (!empty($data['filtro']) && !empty($data['busca'])) {
+				if (!empty($data['filtro']) && is_numeric($data['busca']) && 
+					$data['busca'] >= 0 || !empty($data['busca'])
+				) {
 					$st = $this->St->buscaSt($data['filtro'], $data['busca']);
 
 					if (!empty($st)) {

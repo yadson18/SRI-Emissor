@@ -25,7 +25,7 @@
 				->fetch('all');
 
 			return array_merge([
-					['cod_subgrupo' => 0, 'descricao' => '-- SEM SUBGRUPO --']
+				['cod_subgrupo' => 0, 'descricao' => '-- SEM SUBGRUPO --']
 			], $subgrupos);
 		}
 

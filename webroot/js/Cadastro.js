@@ -93,7 +93,7 @@ $(document).ready(function(){
         };
 
         $(this).find('button.confirm').on('click', function() {
-            $DOM.linhaCadastro = $('#' + $DOM.botao.val());
+            $DOM.linhaParaRemover = $('#' + $DOM.botao.val());
 
             $.ajax({
                 url: '/Cadastro/delete',
@@ -104,11 +104,11 @@ $(document).ready(function(){
             .always(function(dados, status) {
                 if (status === 'success') {
                     if (dados.status === 'success') {
-                        $DOM.linhaCadastro.remove();
+                        $DOM.linhaParaRemover.remove();
                         $DOM.paginador.each(function() { 
-                            $(this).text(
-                                parseInt($(this).text().replace(/[.]/g, '')) - 1
-                            );  
+                            $(this).mask('000.000.000.000', { reverse: true }).text(
+                                $(this).masked(parseInt($(this).cleanVal()) - 1)
+                            );
                         });
                         $('#destinatarie table tbody th').each(function(indice) {
                             $(this).text(++indice);

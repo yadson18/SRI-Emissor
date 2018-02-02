@@ -8,7 +8,9 @@
 				<?= $this->Flash->showMessage() ?>
 			</div>
 			<fieldset class='col-sm-12'>
-				<legend>Classificação Mercadológica</legend>
+				<legend>
+					<i class='fas fa-angle-double-right text-primary'></i> Classificação Mercadológica
+				</legend>
 				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->select('Grupo', array_column(
 							$grupos, 'cod_grupo', 'descricao'
@@ -29,7 +31,9 @@
 				</div>
 			</fieldset>
 			<fieldset class='col-sm-12'>
-				<legend>Dados Cadastrais</legend>
+				<legend>
+					<i class='fas fa-angle-double-right text-primary'></i> Dados Cadastrais
+				</legend>
 				<div class='form-group col-md-3 col-sm-4'>
 					<?= $this->Form->input('Código de barras', [
 							'placeholder' => 'EX: 58652485620574',
@@ -76,9 +80,13 @@
 				</div>
 			</fieldset>
 			<fieldset class='col-sm-12'>
-				<legend>Preço</legend>
+				<legend>
+					<i class='fas fa-angle-double-right text-primary'></i> Preço
+				</legend>
 				<fieldset class='col-sm-12'>
-					<legend>Varejo</legend>
+					<legend>
+						<i class='fas fa-angle-right text-primary'></i> Varejo
+					</legend>
 					<div class='form-group col-md-3	col-sm-3'>
 						<?= $this->Form->input('Preço Compra (R$)', [
 								'class' => 'form-control input-sm money millions',
@@ -119,7 +127,9 @@
 					</div>	
 				</fieldset>
 				<fieldset class='col-sm-12'>
-					<legend>Atacarejo</legend>
+					<legend>
+						<i class='fas fa-angle-right text-primary'></i> Atacarejo
+					</legend>
 					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->select('Tipo Multiplicador', [
 								'MULTIPLO' => 'M', 'A PARTIR' => 'A'
@@ -152,7 +162,9 @@
 					</div>	
 				</fieldset>
 				<fieldset class='col-sm-12'>
-					<legend>Promoção</legend>
+					<legend>
+						<i class='fas fa-angle-right text-primary'></i> Promoção
+					</legend>
 					<div class='form-group col-md-3 col-sm-4'>
 						<?= $this->Form->input('Início da Promoção', [
 								'placeholder' => 'EX: ' . date('d/m/Y H:i:s'),
@@ -202,9 +214,11 @@
 				</fieldset>
 			</fieldset>
 			<fieldset class='col-sm-12'>
-				<legend>PIS/Cofins</legend>
+				<legend>
+					<i class='fas fa-angle-double-right text-primary'></i> PIS/Cofins
+				</legend>
 				<div class='col-sm-12'>
-					<div class='row select-ncscc'>
+					<div class='row consultar'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código NCM</label>
 							<div class='input-group'>
@@ -220,7 +234,7 @@
 						      		<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-target' => '#find-ncscc',
+						      					'data-target' => '#finder',
 						      					'data-toggle' => 'modal',
 						      					'data-find' => 'ncm',
 						      					'type' => 'button'
@@ -242,7 +256,7 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row select-ncscc'>
+					<div class='row consultar'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CSTPC</label>
 							<div class='input-group'>
@@ -258,7 +272,7 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-target' => '#find-ncscc',
+						      					'data-target' => '#finder',
 						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cstpc',
 						      					'type' => 'button'
@@ -301,9 +315,11 @@
 				</div>
 			</fieldset>
 			<fieldset class='col-sm-12'>
-				<legend>ICMS</legend>
+				<legend>
+					<i class='fas fa-angle-double-right text-primary'></i> ICMS
+				</legend>
 				<div class='col-sm-12'>
-					<div class='row select-ncscc'>
+					<div class='row consultar'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CST</label>
 							<div class='input-group'>
@@ -319,7 +335,7 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-target' => '#find-ncscc',
+						      					'data-target' => '#finder',
 						      					'data-toggle' => 'modal',
 						      					'data-find' => 'st',
 						      					'type' => 'button'
@@ -341,7 +357,7 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row select-ncscc'>
+					<div class='row consultar'>
 						<div class='form-group col-md-3 col-sm-4'>
 							<label>Código CFOP</label>
 							<div class='input-group'>
@@ -357,7 +373,7 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-target' => '#find-ncscc',
+						      					'data-target' => '#finder',
 						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cfop',
 						      					'type' => 'button'
@@ -379,7 +395,7 @@
 					</div>
 				</div>
 				<div class='col-sm-12'>
-					<div class='row select-ncscc' id='cest-block'>
+					<div class='row consultar' id='cest-block'>
 						<?= $this->Form->input('', [
 								'value' => $codRegTrib,
 								'id' => 'cod_reg_trib',
@@ -404,7 +420,7 @@
 						        	<?= $this->Form->button(
 						      				"Alterar <i class='fas fa-search'></i>", [
 						      					'class' => 'btn btn-primary btn-sm',
-						      					'data-target' => '#find-ncscc',
+						      					'data-target' => '#finder',
 						      					'data-toggle' => 'modal',
 						      					'data-find' => 'cest',
 						      					'type' => 'button'
@@ -473,7 +489,7 @@
 	<?php endif; ?>
 </div>
 <!-- Modal de Consultas -->
-<div class='modal fade' id='find-ncscc' tabindex='-1' role='dialog'>
+<div class='modal fade' id='finder' tabindex='-1' role='dialog'>
 	<div class='modal-dialog modal-lg' role='document'>
 		<div class='modal-content'>
 			<div class='modal-header'>
@@ -529,6 +545,12 @@
 	 				Concluir <i class='fas fa-check'></i>
 	 			</button>
 			</div>
+			<div class='text-center loading hidden'>
+				<div class='loading-content change-loading-height'>
+					<i class='fas fa-circle-notch fa-spin fa-3x'></i>
+	                <h5>Carregando os dados...</h5>
+				</div>
+            </div>
 		</div>
 	</div>
 </div>

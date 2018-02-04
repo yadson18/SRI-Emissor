@@ -154,7 +154,7 @@
             }
         }
         ul.navbar-nav > li {
-            .padding(10px 4px 15px 4px);
+            .padding(10px 7.5px 15px 7.5px);
 
             a {
                 .border-bottom(double 3px transparent);
@@ -190,6 +190,7 @@
                 .font-family(Montserrat, sans-serif;);
                 .font-weight(bold);
                 .color(white);
+                .font-size(0.97em);
             }
         }        
     }
@@ -216,13 +217,12 @@
                 &:hover, &:focus { .color(#f1871a); }
                 p {
                     .font-family(Montserrat, sans-serif;);
-                    .font-size(1.1em);
                     .font-weight(bold);
                     .margin(0);
 
                     i {
                         .display(block);
-                        .font-size(1.8em);
+                        .font-size(1.6em);
                         .margin-bottom(5px);
                     }
                 }
@@ -234,5 +234,9 @@
     @keyframes rotate {
         0% { .transform(perspective(0) rotateY(0deg)); } 
         100% { .transform(perspective(400px) rotateY(360deg)); }
+    }
+    @keyframes slideArrow {
+        0% { .transform(translate(0)); } 
+        100% { .transform(translate(2px)); }
     }
 }

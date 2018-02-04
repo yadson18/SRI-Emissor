@@ -1,8 +1,8 @@
 $(document).ready(function(){
-    function municipiosUF(siglaUF) {
+    function municipiosUF(sigla) {
         return $.ajax({
             url: '/Ibge/municipiosUF',
-            data: { sigla: siglaUF },
+            data: { sigla: sigla },
             dataType: 'json',
             method: 'POST'
         });
@@ -154,6 +154,8 @@ $(document).ready(function(){
                 }
             })
             .always(function(dados, status) {
+                var $opcoes = [];
+                var $opcao = null;
                 $DOM.estado.parent().prop('disabled', false);
                 $DOM.cidade.parent().prop('disabled', false);
                 $DOM.endereco.prop('disabled', false);
@@ -170,16 +172,16 @@ $(document).ready(function(){
                         municipiosUF(dados.uf).always(function(dataAjax, status) {
                             if (status === 'success' && dataAjax.municipios) {
                                 $.each(dataAjax.municipios, function(indice, valor) {
-                                    $DOM.opcao = $('<option></option>', {
+                                    $opcao = $('<option></option>', {
                                         value: valor.nome_municipio, 
                                         text: valor.nome_municipio
                                     });
                                     if (valor.nome_municipio === cidade) {
-                                        $DOM.opcao.prop('selected', true);
+                                        $opcao.prop('selected', true);
                                     }
-                                    $DOM.opcoes.push($DOM.opcao);
+                                    $opcoes.push($opcao);
                                 });
-                                $DOM.cidade.parent().empty().append($DOM.opcoes);
+                                $DOM.cidade.parent().empty().append($opcoes);
                             }   
                             else {
                                 $DOM.mensagem.bootstrapAlert(
@@ -198,28 +200,31 @@ $(document).ready(function(){
                 }
             });
         }
+        else {
+            $DOM.mensagem.bootstrapAlert('error', 'Por favor, digite um CEP.');
+        }
     });
 
     $('select[name=estado]').on('change', function() {
         $DOM = {
             cidade: $('select[name=cidade]'),
-            mensagem: $('.message-box'),
-            opcoes: []
+            mensagem: $('.message-box')
         };
         $DOM.cidade.prop('disabled', true);
 
         municipiosUF($(this).val()).always(function(dados, status) {
             if (status === 'success' && dados.municipios) {
+                var $opcoes = [];
                 $DOM.cidade.prop('disabled', false);
                 
                 $.each(dados.municipios, function(indice, valor) {
-                    $DOM.opcoes.push($('<option></option>', {
+                    $opcoes.push($('<option></option>', {
                         value: valor.nome_municipio, 
                         text: valor.nome_municipio
                     }));
                 });
 
-                $DOM.cidade.empty().append($DOM.opcoes);
+                $DOM.cidade.empty().append($opcoes);
             }   
             else {
                 $DOM.mensagem.bootstrapAlert(

@@ -16,11 +16,18 @@
         }
         .card-header {
             .padding(5px 15px 10px 15px);
-            .background-color(#333);
+            .background-color(#444);
             .opacity(0.8);
             .color(white);
             .border-radius(3px 3px 0 0);
         }
-        .card-body { .padding(15px); }
+        .card-body { 
+            .padding(15px); 
+
+            a:hover i {
+                .animation-name(slideArrow);
+                .animation-duration(0.2s); 
+            }
+        }
     }
 }

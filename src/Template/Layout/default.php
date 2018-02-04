@@ -57,45 +57,58 @@
 		        	<?php else: ?>
 			        	<ul class='nav navbar-nav'>
 			        		<li>
-			        			<a href='/Page/home'>Home</a>
+			        			<a href='/Page/home'><i class='fas fa-home'></i> Início</a>
 			        		</li>
 			        		<li>
-			        			<a href='/Cadastro/index'>Destinatários</a>
+			        			<a href='/Cadastro/index'>
+			        				<i class='fas fa-users'></i> Destinatários
+			        			</a>
 			        		</li>
 			        		<li class='dropdown'>
 							    <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+							    	<i class='fas fa-archive'></i> 
 							    	Produtos <span class='caret'></span>
 							    </a>
 							    <ul class='dropdown-menu'>
 							    	<li>
-							        	<a href='/Produto/index'>Cadastrados</a>
+							        	<a href='/Produto/index'>
+							        		<i class='fas fa-save'></i> Cadastrados
+							        	</a>
 							        </li>
 							        <li>
-							        	<a href='/Produto/carga'>Enviar Carga</a>
+							        	<a href='/Produto/carga'>
+							        		<i class='fas fa-truck'></i> Enviar Carga
+							        	</a>
 							        </li>
 							        <li>												
-							          	<a href='/GrupoProd/index'>Grupos</a>
+							          	<a href='/GrupoProd/index'>
+							          		<i class='fas fa-th-large'></i> Grupos
+							          	</a>
 							        </li>
 							    </ul>
 			        		</li>
-			        		<li><a href='#'>NF-e</a></li>
-			        		<li><a href='#'>Gerencial</a></li>
+			        		<li>
+			        			<a href='#'><i class='fas fa-sticky-note'></i> NF-e</a>
+			        		</li>
+			        		<li>
+			        			<a href='#'><i class='fas fa-clipboard'></i> Gerencial</a>
+			        		</li>
 			        	</ul>
 			        	<ul class='nav navbar-nav navbar-right'>
 		        			<li class='dropdown'>
 						        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
 						        	<i class='fas fa-user'></i>
-		            				Bem-vindo <?= $usuarioNome ?> <span class='caret'></span>
+		            				<?= $usuarioNome ?> <span class='caret'></span>
 						        </a>
 						        <ul class='dropdown-menu'>
 						          	<li>
 						          		<a href='#'>
-						          			Modificar Senha <i class='fas fa-key'></i>
+						          			<i class='fas fa-key'></i> Modificar Senha
 						          		</a>
 						          	</li>
-						          	<li>															
+						          	<li>
 						          		<a href='/Colaborador/logout'>
-						          			Sair <i class='fas fa-sign-out-alt'></i> 
+						          			<i class='fas fa-sign-out-alt'></i> Sair
 						          		</a>
 						          	</li>
 						        </ul>
@@ -118,7 +131,7 @@
 					<div class='col-sm-3'>
 					    <a href='#' target='blank'>
 					        <p>
-					            <i class='fas fa-map-marker-alt' aria-hidden='true'></i> 
+					            <i class='fas fa-map-marker-alt'></i> 
 					            Find Us
 					        </p> 
 					    </a>
@@ -126,7 +139,7 @@
 					<div class='col-sm-3'>
 					    <a href='https://www.facebook.com/' target='blank'>
 					        <p>
-					            <i class='fab fa-facebook-square' aria-hidden='true'></i> 
+					            <i class='fab fa-facebook-f facebook'></i> 
 					            Facebook
 					        </p> 
 					    </a>
@@ -134,7 +147,7 @@
 					<div class='col-sm-3'>
 					 	<a>
 					    	<p>
-					    		<i class='fas fa-envelope' aria-hidden='true'></i>
+					    		<i class='fas fa-envelope'></i>
 					    		email@email.com
 					    	</p>
 					    </a>
@@ -142,7 +155,7 @@
 					<div class='col-sm-3'>
 					   	<a>
 					    	<p>
-					    		<i class='fas fa-phone-square' aria-hidden='true'></i>
+					    		<i class='fas fa-phone'></i>
 					            (81) 99999-9999
 					    	</p>
 					    </a>

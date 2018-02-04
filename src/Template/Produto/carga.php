@@ -54,15 +54,18 @@
 			</div>		    	
 		<?php endif; ?>
 	</div>
-	<div class='col-sm-8 col-sm-offset-2 text-center'>
+	<div class='col-sm-8 col-sm-offset-2 text-center carga-seletores'>
 		<div class='col-sm-4 col-xs-4'>
-			<input type='radio' id='select' name='selecionar-caixas'/> Selecionar Todos.
+			<input type='radio' id='select' name='selecionar-caixas'/> 
+			<strong>Selecionar Todos.</strong>
 		</div>
 		<div class='col-sm-4 col-xs-4'>
-			<input type='radio' id='invert' name='selecionar-caixas'/> Inverter Seleção.
+			<input type='radio' id='invert' name='selecionar-caixas'/> 
+			<strong>Inverter Seleção.</strong>
 		</div>
 		<div class='col-sm-4 col-xs-4'>
-			<input type='radio' id='deselect' name='selecionar-caixas' checked/> Desmarcar Todos.
+			<input type='radio' id='deselect' name='selecionar-caixas' checked/> 
+			<strong>Desmarcar Todos.</strong>
 		</div>
 	</div>
 </div>

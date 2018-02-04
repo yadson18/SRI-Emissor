@@ -52,7 +52,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning form-control'>
+	    				<a href='#' class='btn btn-info form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>
@@ -77,7 +77,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='#' class='btn btn-warning form-control'>
+	    				<a href='#' class='btn btn-danger form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>
@@ -108,7 +108,7 @@
 	    				</li>
 	    			</ul>
 	    			<div class='text-center'>
-	    				<a href='/Produto/index' class='btn btn-warning form-control'>
+	    				<a href='/Produto/index' class='btn btn-success form-control'>
 	    					Detalhado <i class='fas fa-angle-double-right'></i>
 	    				</a>
 	    			</div>

@@ -11,10 +11,10 @@
 			<div id=<?= $grupo['cod_grupo'] ?> class='col-sm-3 text-center card'>
 				<div class='group-content'>
 					<div class='group-content-actions'>
-						<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit'>
+						<button class='btn btn-primary btn-xs' data-toggle='modal' data-target='#edit'>
 							<i class='fas fa-pencil-alt'></i>
 						</button>
-						<button class='btn btn-danger btn-sm delete' value=<?= $grupo['cod_grupo'] ?> data-toggle='modal' data-target='#delete'>
+						<button class='btn btn-danger btn-xs delete' value=<?= $grupo['cod_grupo'] ?> data-toggle='modal' data-target='#delete'>
 							<i class='fas fa-trash-alt'></i>
 						</button>
 					</div>

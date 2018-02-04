@@ -66,7 +66,7 @@
 			        		</li>
 			        		<li class='dropdown'>
 							    <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-							    	<i class='fas fa-archive'></i> 
+							    	<i class='fas fa-cubes'></i>
 							    	Produtos <span class='caret'></span>
 							    </a>
 							    <ul class='dropdown-menu'>
@@ -88,10 +88,10 @@
 							    </ul>
 			        		</li>
 			        		<li>
-			        			<a href='#'><i class='fas fa-sticky-note'></i> NF-e</a>
+			        			<a href='#'><i class='fas fa-file-alt'></i> NF-e</a>
 			        		</li>
 			        		<li>
-			        			<a href='#'><i class='fas fa-clipboard'></i> Gerencial</a>
+			        			<a href='#'><i class='fas fa-chart-line'></i> Gerencial</a>
 			        		</li>
 			        	</ul>
 			        	<ul class='nav navbar-nav navbar-right'>
@@ -106,6 +106,11 @@
 						          			<i class='fas fa-key'></i> Modificar Senha
 						          		</a>
 						          	</li>
+						          	<li>
+					        			<a href='#'>
+					        				<i class='fas fa-cogs'></i> Configurações
+					        			</a>
+					        		</li>
 						          	<li>
 						          		<a href='/Colaborador/logout'>
 						          			<i class='fas fa-sign-out-alt'></i> Sair
@@ -131,35 +136,34 @@
 					<div class='col-sm-3'>
 					    <a href='#' target='blank'>
 					        <p>
-					            <i class='fas fa-map-marker-alt'></i> 
-					            Find Us
+					            <i class='fas fa-map-marker-alt'></i> Find Us
 					        </p> 
 					    </a>
 					</div>
 					<div class='col-sm-3'>
 					    <a href='https://www.facebook.com/' target='blank'>
 					        <p>
-					            <i class='fab fa-facebook-f facebook'></i> 
-					            Facebook
+					            <i class='fab fa-facebook-f'></i> Facebook
 					        </p> 
 					    </a>
 					</div>
 					<div class='col-sm-3'>
 					 	<a>
 					    	<p>
-					    		<i class='fas fa-envelope'></i>
-					    		email@email.com
+					    		<i class='fas fa-envelope'></i> email@email.com
 					    	</p>
 					    </a>
 					</div>
 					<div class='col-sm-3'>
 					   	<a>
 					    	<p>
-					    		<i class='fas fa-phone'></i>
-					            (81) 99999-9999
+					    		<i class='fas fa-phone'></i> (81) 99999-9999
 					    	</p>
 					    </a>
 					</div>
+				</div>
+				<div class='copy'>
+					<strong><i class='far fa-copyright'></i></strong> SRI Automação
 				</div>
 			</footer>
 		<?php endif ?>

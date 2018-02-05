@@ -1,6 +1,8 @@
 <?php 
 	namespace App\Controller;
 
+	use Simple\ORM\TableRegistry;
+
 	class GrupoProdController extends AppController
 	{
 		public function isAuthorized()
@@ -40,80 +42,73 @@
 			]);
 		}
 
-		/*public function edit()
+		public function edit($cod_grupo = null, $subidentificador = null, $identificador = null, $pagina = 1)
 		{
-			if ($this->request->is('POST')) {
-				
-			}
+			$produto = TableRegistry::get('Produto');
+			$grupo = $this->GrupoProd->newEntity();
+			$usuario = $this->Auth->getUser();
 
-			$cadastro = $this->Cadastro->newEntity();
 
-			if (is_numeric($cod_cadastro)) {
+			if (is_numeric($cod_grupo)) {
 				if ($this->request->is('GET')) {
-					$cadastro = $this->Cadastro->get($cod_cadastro);
+					$grupo = $this->GrupoProd->get($cod_grupo);
 				}
 				else if ($this->request->is('POST')) {
-					$dados = $this->Cadastro->normalizarDados($this->request->getData());
-					$cadastro = $this->Cadastro->patchEntity($cadastro, $dados);
-					$cadastro->cod_cadastro = $cod_cadastro;
+					$dados = array_map('removeSpecialChars', $this->request->getData());
+					$grupo = $this->GrupoProd->patchEntity($grupo, $dados);
+					$grupo->cod_grupo = $cod_grupo;
 					
-					if ($this->Cadastro->save($cadastro)) {
+					if ($this->GrupoProd->save($grupo)) {
 						$this->Flash->success(
-							'Os dados do destinatário (' . $cadastro->razao . ') foram modificados com sucesso.'
+							'Os dados do grupo (' . $grupo->descricao . ') foram modificados com sucesso.'
 						);
 					}
 					else {
 						$this->Flash->error(
-							'Não foi possível modificar os dados do destinatário (' . $cadastro->razao . ').'
+							'Não foi possível modificar os dados do grupo (' . $grupo->descricao . ').'
 						);
 					}
 				}
 			}
 
-			if (isset($cadastro->cnpj)) {
-				$this->setViewVars([
-					'cadastroTipo' => (strlen($cadastro->cnpj)) ? 'cnpj' : 'cpf',
-					'municipios' => $ibge->municipiosUF($cadastro->estado),
-					'estados' => $ibge->siglaEstados(),
-					'usuarioNome' => $usuario->nome,
-					'cadastro' => $cadastro
-				]);
-			}
-			else {
-				$this->setViewVars([
-					'usuarioNome' => $usuario->nome,
-					'cadastro' => null
-				]);
-			}
-			$this->setTitle('Modificar Destinatário');
-		}*/
+			if (isset($grupo->descricao)) {
+				$pagina = (is_numeric($pagina) && $pagina > 0) ? $pagina : 1;
+				$produtos = null;
 
-		public function getGrupoPorCod()
-		{
-			if ($this->request->is('POST')) {
-				$dados = array_map('removeSpecialChars', $this->request->getData());
-
-				if (isset($dados['cod_grupo']) && is_numeric($dados['cod_grupo'])) {
-					$grupo = $this->GrupoProd->get($dados['cod_grupo']);
-
-					if ($grupo) {
-						$this->Ajax->response('dadosGrupo', [
-							'status' => 'success',
-							'data' => $grupo
-						]);
-					}
+				$this->Paginator->showPage($pagina)
+					->buttonsLink('/GrupoProd/edit/' . $cod_grupo . '/produtos/pagina/')
+					->itensTotalQuantity(
+						$produto->contarProdutosGrupo($cod_grupo)->quantidade
+					)
+					->limit(100);
+				
+				if ($subidentificador === 'produtos' && $identificador === 'pagina') {
+					$produtos = $produto->getProdutosPorGrupo(
+						$cod_grupo,
+						$this->Paginator->getListQuantity(), 
+						$this->Paginator->getStartPosition()
+					);
 				}
 				else {
-					$this->Ajax->response('dadosGrupo', [
-						'status' => 'error',
-						'message' => 'Não foi possível carregar, o grupo não existe.'
-					]);
-
+					$produtos = $produto->getProdutosPorGrupo(
+						$cod_grupo,
+						$this->Paginator->getListQuantity()
+					);
 				}
+				
+				$this->setViewVars([
+					'usuarioNome' => $usuario->nome,
+					'grupo' => $grupo,
+					'produtos' => $produtos
+				]);
 			}
 			else {
-				return $this->redirect('default');
+				$this->setViewVars([
+					'usuarioNome' => $usuario->nome,
+					'grupo' => null
+				]);
 			}
+			$this->setTitle('Modificar Grupo');
 		}
 
 		public function delete()
@@ -153,6 +148,6 @@
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'delete', 'edit', 'getGrupoPorCod']);
+			$this->Auth->isAuthorized(['index', 'delete', 'edit']);
 		}
 	}

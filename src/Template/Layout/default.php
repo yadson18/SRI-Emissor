@@ -15,6 +15,7 @@
 		
 		<?= $this->Html->script('jquery.min.js') ?>
 		<?= $this->Html->script('bootstrap.min.js') ?>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.6/chroma.min.js'></script>
 		<?= $this->Html->script('jquery-mask.min.js') ?>
 		<?= $this->Html->script('jquery-mask-money.min.js') ?>
 		<?= $this->Html->script('jquery.cpfcnpj.min.js') ?>

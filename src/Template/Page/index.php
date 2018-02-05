@@ -79,7 +79,6 @@
                                         'placeholder' => 'Digite seu CNPJ',
                                         'class' => 'cnpjMask form-control',
                                         'autofocus' => true,
-                                        'required' => true,
                                         'name' => 'cnpj',
                                         'id' => false 
                                     ]) 
@@ -90,7 +89,6 @@
                                 <?= $this->Form->input('', [
                                         'placeholder' => 'Digite seu usuário',
                                         'class' => 'form-control',
-                                        'required' => true,
                                         'name' => 'login',
                                         'id' => false
                                     ]) 
@@ -102,7 +100,6 @@
                                         'placeholder' => 'Digite sua senha',
                                         'class' => 'form-control',
                                         'type' => 'password',
-                                        'required' => true,
                                         'name' => 'senha',
                                         'id' => false
                                     ]) 
@@ -110,23 +107,13 @@
                                 <i class='fas fa-key icon'></i>
                             </div>
                             <div class='form-group'>
-                                <?= $this->Form->button(
-                                    "<span>Entrar</span> <i class='fas fa-sign-in-alt'></i>", [
-                                        'class' => 'btn btn-success btn-block',
-                                        'type' => 'button',
-                                        'id' => 'enter'
-                                    ]) 
-                                ?>
+                                <button class='btn btn-success btn-block' type='button' id='enter'>
+                                    <span>Entrar</span> <i class='fas fa-sign-in-alt'></i>
+                                </button>
                             </div>
-                            <div class='form-group'>
-                                <?= $this->Form->button(
-                                    "Fechar <i class='fas fa-times'></i>", [
-                                        'class' => 'btn btn-danger btn-block',
-                                        'data-dismiss' => 'modal',
-                                        'type' => 'button'
-                                    ]) 
-                                ?>
-                            </div>
+                            <button class='btn btn-danger btn-block' type='button' data-dismiss='modal'>
+                                <span>Fechar</span> <i class='fas fa-times'></i>
+                            </button>
                         <?= $this->Form->end() ?>
                     </div>
                 </div>

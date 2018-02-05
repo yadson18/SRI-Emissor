@@ -19,7 +19,7 @@
 
 		public function listarGrupos(int $quantity = null, int $skipTo = null)
 		{
-			$grupos = $this->find(['cod_grupo', 'descricao']);
+			$grupos = $this->find(['cod_grupo', 'descricao', 'cor']);
 
 			if (!empty($quantity)) {
 				$grupos->limit($quantity);
@@ -51,6 +51,7 @@
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);
 			$validator->addRule('cod_grupo')->notEmpty()->int()->size(4);
 			$validator->addRule('descricao')->empty()->string()->size(20);
+			$validator->addRule('cor')->notEmpty()->string()->size(6);
 
 			return $validator;
 		}

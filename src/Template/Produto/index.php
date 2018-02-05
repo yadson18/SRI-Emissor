@@ -26,29 +26,29 @@
 		    </thead>
 		    <?php if(!empty($produtos)): ?>
 			    <tbody class='text-capitalize'>
-			    		<?php foreach($produtos as $index => $produto): ?>
-				    		<tr id=<?= $produto['cod_interno'] ?>>
-				    			<th><?= ($index + 1) ?></th>
-					        	<td><?= $produto['cod_interno'] ?></td>
-								<td><?= mb_strtolower($produto['descricao']) ?></td>
-								<td><?= $produto['cod_produto'] ?></td>
-								<td><?= $produto['icms_in'] ?></td>
-								<td><?= $produto['icms_out'] ?></td>
-								<td><?= $produto['st'] ?></td>
-								<td><?= $produto['cod_ncm'] ?></td>
-								<td><?= $produto['cest'] ?></td>
-								<td><?= mb_strtolower($produto['unidade']) ?></td>
-								<td class='money millions'><?= unmask($produto['venda']) ?></td>
-								<td class='actions'>
-									<a href=/Produto/edit/<?= $produto['cod_interno'] ?> class='btn btn-primary btn-xs'>
-										<i class='fas fa-pencil-alt'></i>
-									</a>
-									<button value=<?= $produto['cod_interno'] ?> class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delete'>
-										<i class='fas fa-trash-alt'></i>
-									</button>
-								</td>
-				      		</tr>
-				      	<?php endforeach; ?>
+			    	<?php foreach($produtos as $index => $produto): ?>
+				    	<tr id=<?= $produto['cod_interno'] ?>>
+				    		<th><?= ($index + 1) ?></th>
+					        <td><?= $produto['cod_interno'] ?></td>
+							<td><?= mb_strtolower($produto['descricao']) ?></td>
+							<td><?= $produto['cod_produto'] ?></td>
+							<td><?= $produto['icms_in'] ?></td>
+							<td><?= $produto['icms_out'] ?></td>
+							<td><?= $produto['st'] ?></td>
+							<td><?= $produto['cod_ncm'] ?></td>
+							<td><?= $produto['cest'] ?></td>
+							<td><?= mb_strtolower($produto['unidade']) ?></td>
+							<td class='money millions'><?= unmask($produto['venda']) ?></td>
+							<td class='actions'>
+								<a href=/Produto/edit/<?= $produto['cod_interno'] ?> class='btn btn-primary btn-xs'>
+									<i class='fas fa-pencil-alt'></i>
+								</a>
+								<button value=<?= $produto['cod_interno'] ?> class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delete'>
+									<i class='fas fa-trash-alt'></i>
+								</button>
+							</td>
+				      	</tr>
+				    <?php endforeach; ?>
 			    </tbody>
 			<?php endif; ?>
 		</table>

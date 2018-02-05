@@ -12,11 +12,11 @@
 		}
 		.thumbnail {
 			.border(solid 1px #bbb);
-			.box-shadow(2px 2px 5px 0 gray);
+			.box-shadow(2px 2px 6px 0 gray);
 
 			&:hover {
 				.transition(0.4s);
-				.box-shadow(3px 3px 10px 0 gray);
+				.box-shadow(3px 3px 12px 0 gray);
 
 				.icon i{
 					.animation-name(rotate);
@@ -39,12 +39,22 @@
 			}
 		}
 	}
-	#login {
-		.border-radius(4px);
-
+	#login .modal-content {
+		.border-radius(6px);
+			
 		.modal-header {
-			.border-radius(4px 4px 0 0);
-			.background-color(#eee);
+			.border-radius(3px 3px 0 0);
+			.color(white);
+			.background-color(#444);
+
+			.close {
+				.color(white);
+				.opacity(0.5);
+
+				&:hover {
+					.opacity(0.8);
+				}
+			}
 		}
 	}
 }

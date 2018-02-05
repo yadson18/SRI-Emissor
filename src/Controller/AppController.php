@@ -5,6 +5,9 @@
 	use Simple\Http\Request;
 	use Simple\View\View;
 
+
+	use Simple\Configurator\Configurator;
+
 	abstract class AppController extends Controller
 	{
 		/**
@@ -56,25 +59,4 @@
         }
 		
 		public abstract function beforeFilter();
-
-		public function getUserId()
-		{
-			$id = $this->Auth->getUser('cadastro')->cod_cadastro;
-
-			return ($id) ? $id : false;
-		}
-
-		public function getUserName()
-		{
-			$name = $this->Auth->getUser('nome');
-
-			return ($name) ? $name : false;
-		}
-
-		public function getUserRegTrib()
-		{
-			$cadastro = $this->Auth->getUser('cadastro');
-
-			return (isset($cadastro->cod_reg_trib)) ? $cadastro->cod_reg_trib : false;
-		}
 	}

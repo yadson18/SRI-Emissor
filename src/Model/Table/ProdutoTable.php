@@ -30,6 +30,44 @@
 			return false;
 		}
 
+		public function getProdutosPorGrupo(int $cod_grupo, int $quantity = null, int $skipTo = null)
+		{
+			$produtos = $this->find([
+					'cod_interno', 'cod_produto', 'produto.descricao', 
+					'icms_in', 'icms_out', 'st', 'cod_ncm', 'cest', 
+					'unidades.descricao as unidade', 'venda'
+				])
+				->join(['left join unidades on (unidades.cod = produto.unidade)']);
+
+				if (!empty($quantity)) {
+					$produtos->limit($quantity);
+				}
+				if (!empty($skipTo)) {
+					$produtos->skip($skipTo);
+				}
+				
+			return $produtos->where([
+					'cod_grupo =' => $cod_grupo, 'and',
+					'cod_subgrupo =' => 0, 'or', 
+					'cod_grupo is null'
+				])
+				->orderBy(['produto.descricao'])
+				->fetch('all');
+		}
+
+		public function contarProdutosGrupo(int $cod_grupo)
+		{
+			return $this->find([])
+				->count('cod_interno')->as('quantidade')
+				->where([
+					'cod_grupo =' => $cod_grupo, 'and',
+					'cod_subgrupo =' => 0, 'or', 
+					'cod_subgrupo is null'
+				])
+				->fetch('class');
+		}
+
+
 		public function quantidadeCadastrados()
 		{
 			$dataDeHoje = date("'". 'd.m.Y' ."'");
@@ -74,6 +112,14 @@
 				->fetch('all');
 		}
 
+		public function contarAtivos()
+		{
+			return $this->find([])
+				->count('cod_interno')->as('quantidade')
+				->where(['inativo =' => 'A'])
+				->fetch('class');
+		}
+
 		public function normalizarDados(array $dadosProduto)
 		{
 			foreach ($dadosProduto as $coluna => $valor) {
@@ -89,14 +135,6 @@
 				}
 			}
 			return array_map('removeSpecialChars', $dadosProduto);
-		}
-
-		public function contarAtivos()
-		{
-			return $this->find([])
-				->count('cod_interno')->as('quantidade')
-				->where(['inativo =' => 'A'])
-				->fetch('class');
 		}
 
 		public function cargaGeral()

@@ -29,6 +29,14 @@
 			], $subgrupos);
 		}
 
+		public function getSubgruposPorGrupo(int $cod_grupo)
+		{
+			return $this->find(['cod_subgrupo', 'descricao'])
+				->where(['cod_grupo =' => $cod_grupo])
+				->orderBy(['descricao'])
+				->fetch('all');
+		}
+
 		protected function defaultValidator(Validator $validator)
 		{
 			$validator->addRule('empresa')->notEmpty()->int()->size(4);

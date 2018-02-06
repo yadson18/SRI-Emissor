@@ -2,21 +2,36 @@
 
 .default-styles();
 
-.content #presentation {
-	.features {	
-		.padding(20px);
+#page-index {
+	.company {
+		.margin-top(2em);
+		.margin-bottom(2em);
+	}
+	#login .modal-content {
+		.border-radius(6px);
+			
+		.modal-header {
+			.font-family(Montserrat, sans-serif;);
+			.border-radius(3px 3px 0 0);
+			.color(#444);
 
+			.modal-title {
+				.font-weight(bold);
+			}
+		}
+	}
+	.features-content {
 		.title {
-			.text-align(center);
 			.padding(0 0 25px 0);
 		}
 		.thumbnail {
+			.padding(15px);
 			.border(solid 1px #bbb);
 			.box-shadow(2px 2px 6px 0 gray);
 
 			&:hover {
-				.transition(0.4s);
-				.box-shadow(3px 3px 12px 0 gray);
+				.transition(0.2s);
+				.box-shadow(5px 5px 20px 0 gray);
 
 				.icon i{
 					.animation-name(rotate);
@@ -39,22 +54,7 @@
 			}
 		}
 	}
-	#login .modal-content {
-		.border-radius(6px);
-			
-		.modal-header {
-			.border-radius(3px 3px 0 0);
-			.color(white);
-			.background-color(#444);
-
-			.close {
-				.color(white);
-				.opacity(0.5);
-
-				&:hover {
-					.opacity(0.8);
-				}
-			}
-		}
-	}
+}
+#page-home {
+	
 }

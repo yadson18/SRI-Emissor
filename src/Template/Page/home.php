@@ -1,4 +1,4 @@
-<div id='home' class='col-sm-12'>
+<div id='page-home'>
 	<h2 class='page-header text-capitalize'>
 		Dashboard:
 	    <small>
@@ -6,8 +6,8 @@
 	       	<?= mask('##.###.###/####-##', $usuarioCnpj) ?>
 	    </small>
     </h2>
-    <div id='cards'>
-	    <div class='card col-md-3'>
+    <div class='cards-informacoes'>
+    	<div class='card col-md-3'>
 	    	<div class='card-content'>
 	    		<div class='card-header text-center'>
 	    			<h4>NF-e</h4>

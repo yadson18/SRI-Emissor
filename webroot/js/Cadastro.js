@@ -8,88 +8,94 @@ $(document).ready(function(){
         });
     }
 
-    var destinatarie = (function() {
+    var $destinatarie = (function() {
         var cpf, cnpj, inscricaoEstadual;
 
         return {
             setCpf: function(cpfValue) {
-                if (cpfValue.length === 14) { cpf = cpfValue; }
+                if (!cpf && cpfValue.length === 14) {
+                    cpf = cpfValue;
+                }
             },
-
-            getCpf: function() { return cpf; },
-
+            getCpf: function() { 
+                return cpf; 
+            },
             setCnpj: function(cnpjValue) {
-                if (cnpjValue.length === 18) { cnpj = cnpjValue; }
+                if (!cnpj && cnpjValue.length === 18) {
+                    cnpj = cnpjValue;
+                }
             },
-
-            getCnpj: function() { return cnpj; },
-
+            getCnpj: function() { 
+                return cnpj; 
+            },
             setInscEstadual: function(inscEstadual) {
-                inscricaoEstadual = inscEstadual;
+                if (!inscricaoEstadual) {
+                    inscricaoEstadual = inscEstadual;
+                }
             },
-            getInscEstadual: function() { return inscricaoEstadual; }
+            getInscEstadual: function() { 
+                return inscricaoEstadual; 
+            }
         };
     })();
 
-    var defaultMaskConfigs = {
+    var $defaultMaskConfigs = {
         clearIfNotMatch: true,
         reverse: true,
         optional: false,
         translation: { '0': { pattern: /[0-9]/ } }
     };
-    cnpj = { mask: '00.000.000/0000-00', size: 14 };
-    cpf = { mask: '000.000.000-00', size: 11 };
 
     $('#breadcrumb .destinatarie-type a').on('click', function() {
-        var $inputCnpjCpf = $('input[name=cnpj]');
-            $labelCnpjCpf = $inputCnpjCpf.closest('div').find('label');
-            $estadualDiv = $('div.estadual');
-            $estadualInput = $estadualDiv.find('input');
+        var $DOM = {
+            inputCnpj: $('input[name=cnpj]'),
+            divEstadual: $('div.estadual')
+        };
 
-        $('.destinatarie-type li').removeClass('active');
+        $('#breadcrumb .destinatarie-type li').removeClass('active');
         $(this).parent().addClass('active');
+        
+        switch ($(this).attr('id')) {
+            case 'CPF':
+                $destinatarie.setInscEstadual($DOM.divEstadual.find('input').val());
+                $destinatarie.setCnpj($DOM.inputCnpj.val());
 
-        if ($(this).attr('id') === 'CPF') {
-            if (!destinatarie.getInscEstadual()) {
-                destinatarie.setInscEstadual($estadualInput.val());
-            }
-            if (!destinatarie.getCnpj()) {
-                destinatarie.setCnpj($inputCnpjCpf.val());
-            }
-
-            $inputCnpjCpf.removeClass('cnpjMask').addClass('cpfMask').attr({ 
+                $DOM.inputCnpj.removeClass('cnpjMask').addClass('cpfMask').attr({ 
                     maxlength: 14, placeholder: 'EX: 095.726.241-80' 
                 })
-                .val(destinatarie.getCpf())
-                .mask(cpf.mask, defaultMaskConfigs).focusout();
+                .val($destinatarie.getCpf())
+                .mask('000.000.000-00', $defaultMaskConfigs).focusout();
 
-            $labelCnpjCpf.text('CPF');
-            $estadualDiv.addClass('hidden');
-            $estadualInput.removeAttr('name').attr({ required: false }).val('');
-        }
-        else {
-            if (!destinatarie.getCpf()) {
-                destinatarie.setCpf($inputCnpjCpf.val());
-            }
+                $DOM.inputCnpj.closest('div').find('label').text('CPF');
+                $DOM.divEstadual.addClass('hidden');
+                $DOM.divEstadual.find('input').removeAttr('name').attr({ required: false }).val('');
+                break;
+            case 'CNPJ':
+                $destinatarie.setInscEstadual($DOM.divEstadual.find('input').val());
+                $destinatarie.setCpf($DOM.inputCnpj.val());
 
-            $inputCnpjCpf.removeClass('cpfMask').addClass('cnpjMask').attr({ 
-                    maxlength: 18, placeholder: 'EX: 53.965.649/0001-03' 
+                $DOM.inputCnpj.removeClass('cpfMask').addClass('cnpjMask').attr({ 
+                    maxlength: 18, 
+                    placeholder: 'EX: 53.965.649/0001-03' 
                 })
-                .val(destinatarie.getCnpj())
-                .mask(cnpj.mask, defaultMaskConfigs).focusout();
+                .val($destinatarie.getCnpj())
+                .mask('00.000.000/0000-00', $defaultMaskConfigs).focusout();
 
-            $labelCnpjCpf.text('CNPJ');
-            $estadualDiv.removeClass('hidden')
-            $estadualInput.attr({ name: 'estadual', required: true })
-                .val(destinatarie.getInscEstadual());
+                $DOM.inputCnpj.closest('div').find('label').text('CNPJ');
+                $DOM.divEstadual.removeClass('hidden');
+                $DOM.divEstadual.find('input').attr({ 
+                    name: 'estadual', required: true 
+                })
+                .val($destinatarie.getInscEstadual());
+                break;
         }
     });
 
-    $('#destinatarie #delete').on('show.bs.modal', function(evento) {
+    $('#cadastro-index #delete').on('show.bs.modal', function(evento) {
         var $DOM = {
-            paginador: $('.list-shown .shown, .list-shown .quantity'),
-            mensagem: $('#destinatarie #message-box'),
-            botao: $(evento.relatedTarget)
+            mensagem: $('#cadastro-index .cadastro-lista .message-box'),
+            botao: $(evento.relatedTarget),
+            paginador: $('#cadastro-index .list-shown')
         };
 
         $(this).find('button.confirm').on('click', function() {
@@ -105,12 +111,12 @@ $(document).ready(function(){
                 if (status === 'success') {
                     if (dados.status === 'success') {
                         $DOM.linhaParaRemover.remove();
-                        $DOM.paginador.each(function() { 
+                        $DOM.paginador.find('.shown, .quantity').each(function() {
                             $(this).mask('000.000.000.000', { reverse: true }).text(
                                 $(this).masked(parseInt($(this).cleanVal()) - 1)
                             );
                         });
-                        $('#destinatarie table tbody th').each(function(indice) {
+                        $('#cadastro-index table tbody th').each(function(indice) {
                             $(this).text(++indice);
                         });
                     }
@@ -128,6 +134,35 @@ $(document).ready(function(){
         $(this).find('button.confirm').off('click');
     });
 
+    $('select[name=estado]').on('change', function() {
+        var $DOM = {
+            cidade: $('select[name=cidade]'),
+            mensagem: $('.message-box')
+        };
+        $DOM.cidade.prop('disabled', true);
+
+        municipiosUF($(this).val()).always(function(dados, status) {
+            if (status === 'success' && dados.municipios) {
+                var $opcoes = [];
+                $DOM.cidade.prop('disabled', false);
+                
+                $.each(dados.municipios, function(indice, valor) {
+                    $opcoes.push($('<option></option>', {
+                        value: valor.nome_municipio, 
+                        text: valor.nome_municipio
+                    }));
+                });
+
+                $DOM.cidade.empty().append($opcoes);
+            }   
+            else {
+                $DOM.mensagem.bootstrapAlert(
+                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+                );
+            }
+        });
+    });
+
     $('#find-cep').on('click', function() {
         $DOM = {
             estado: $('select[name=estado] option'),
@@ -135,10 +170,10 @@ $(document).ready(function(){
             endereco: $('input[name=endereco]'),
             bairro: $('input[name=bairro]'),
             mensagem: $('.message-box'),
-            cep: $('input[name=cep]'),
-            opcoes: []
+            cep: $('input[name=cep]')
         };
         $DOM.cepDiv = $DOM.cep.closest('div');
+        $DOM.mensagem.empty();
 
         if ($DOM.cep.cleanVal().length === 8) {
             $.ajax({
@@ -203,34 +238,5 @@ $(document).ready(function(){
         else {
             $DOM.mensagem.bootstrapAlert('error', 'Por favor, digite um CEP.');
         }
-    });
-
-    $('select[name=estado]').on('change', function() {
-        $DOM = {
-            cidade: $('select[name=cidade]'),
-            mensagem: $('.message-box')
-        };
-        $DOM.cidade.prop('disabled', true);
-
-        municipiosUF($(this).val()).always(function(dados, status) {
-            if (status === 'success' && dados.municipios) {
-                var $opcoes = [];
-                $DOM.cidade.prop('disabled', false);
-                
-                $.each(dados.municipios, function(indice, valor) {
-                    $opcoes.push($('<option></option>', {
-                        value: valor.nome_municipio, 
-                        text: valor.nome_municipio
-                    }));
-                });
-
-                $DOM.cidade.empty().append($opcoes);
-            }   
-            else {
-                $DOM.mensagem.bootstrapAlert(
-                    'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
-                );
-            }
-        });
     });
 });

@@ -44,6 +44,7 @@
 
 		public function edit($cod_grupo = null, $subidentificador = null, $identificador = null, $pagina = 1)
 		{
+			$subgrupo = TableRegistry::get('SubgrupoProd');
 			$produto = TableRegistry::get('Produto');
 			$grupo = $this->GrupoProd->newEntity();
 			$usuario = $this->Auth->getUser();
@@ -91,15 +92,16 @@
 				}
 				else {
 					$produtos = $produto->getProdutosPorGrupo(
-						$cod_grupo,
-						$this->Paginator->getListQuantity()
+						$cod_grupo, $this->Paginator->getListQuantity()
 					);
 				}
 				
 				$this->setViewVars([
+					'subgrupos' => $subgrupo->getSubgruposPorGrupo($cod_grupo),
 					'usuarioNome' => $usuario->nome,
-					'grupo' => $grupo,
-					'produtos' => $produtos
+					'codGrupo' => (int) $cod_grupo,
+					'produtos' => $produtos,
+					'grupo' => $grupo
 				]);
 			}
 			else {

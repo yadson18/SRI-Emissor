@@ -18,7 +18,7 @@ $(document).ready(function(){
 	    return $object.darken(0.5);	
 	}
 
-	$('#group div.group-content').each(function() {
+	$('#grupo-prod-index .group-content').each(function() {
 		var $cor = calcularCor(this);
 		var r = Math.round($cor._rgb.shift());
 		var g = Math.round($cor._rgb.shift());
@@ -36,11 +36,10 @@ $(document).ready(function(){
 		$(this).find('p').css($estilo);
 	});
 
-	$('#group #delete').on('show.bs.modal', function(evento) {
+	$('#grupo-prod-index #delete').on('show.bs.modal', function(evento) {
 		var $DOM = {
-            mensagem: $('#group #message-box'),
-            botao: $(evento.relatedTarget),
-            modal: $(this)
+            mensagem: $('#grupo-prod-index .groups-list .message-box'),
+            botao: $(evento.relatedTarget)
         };
 
         $(this).find('.confirm').on('click', function() {
@@ -69,5 +68,27 @@ $(document).ready(function(){
 	})
 	.on('hidden.bs.modal', function(evento) {
 		$(this).find('.confirm').off('click');
+	});
+
+	$('#grupo-prod-edit #breadcrumb a').on('click', function() {
+		$DOM = {
+			abas: $('#grupo-prod-edit #breadcrumb li'),
+			divProdutos: $('#grupo-prod-edit .produtos'),
+			divSubgrupos: $('#grupo-prod-edit .subgrupos')
+		};
+
+		$DOM.abas.removeClass('active');
+		$(this).parent().addClass('active');
+
+		switch ($(this).attr('id')) {
+			case 'PRODUTOS':
+				$DOM.divProdutos.removeClass('hidden');
+				$DOM.divSubgrupos.addClass('hidden');
+				break;
+			case 'SUBGRUPOS':
+				$DOM.divSubgrupos.removeClass('hidden');
+				$DOM.divProdutos.addClass('hidden');
+				break;
+		}
 	});
 });

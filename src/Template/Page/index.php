@@ -1,13 +1,13 @@
-<div id='presentation' class='col-sm-12'>
-    <div class='text-center col-sm-12' style='margin-bottom: 5em; margin-top: 2em'>
+<div id='page-index'>
+    <div class='company text-center col-sm-12'>
         <h1 class='title'>SRI Emissor</h1>
         <p class='col-sm-8 col-sm-offset-2'>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate rhoncus mauris, vel hendrerit nunc commodo ut. Suspendisse quis tortor sem. Vestibulum blandit ipsum vel lacus egestas gravida. Curabitur nisl tortor, elementum non dolor vitae, lobortis maximus elit.
         </p>
     </div>
-    <div class='features row' id='features'>
-        <h3 class='title'>Funcionalidades</h3>
-        <div>
+    <div class='features-content'> 
+        <h3 class='title text-center'>Funcionalidades</h3>
+        <div class='features'>
             <div class='col-sm-4'>
                 <div class='thumbnail'>
                     <div class='icon'>

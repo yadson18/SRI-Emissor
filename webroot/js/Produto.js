@@ -3,87 +3,48 @@ $(document).ready(function(){
         return parseFloat(money.replace(/[.]/g, '').replace(/[,]/g, '.'));
     }
 
-    $('.enviar-carga').on('click', function() {
+    $('#produto-index #delete').on('show.bs.modal', function(evento) {
+        console.log('hi');
         var $DOM = {
-            caixas: $('input[name=caixa-selecionado]:checked'),
-            mensagem: $('#carga #message-box')
+            mensagem: $('#produto-index .produto-lista .message-box'),
+            botao: $(evento.relatedTarget),
+            paginador: $('#produto-index .list-shown')
         };
-        var caixasNumeros = [];
 
-        if ($DOM.caixas.length > 0) {
-            $DOM.caixas.each(function() { caixasNumeros.push($(this).val()); });
+        $(this).find('button.confirm').on('click', function() {
+            $DOM.linhaParaRemover = $('#' + $DOM.botao.val());
 
             $.ajax({
-                url: '/Produto/enviarCarga',
-                dataType: 'json',
+                url: '/Produto/delete',
                 method: 'POST',
-                data: { cargaTipo: $(this).val(), caixas: caixasNumeros },
-                beforeSend: function() {
-                    $DOM.trSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
-                    $DOM.trSelecionadas.removeAttr('class').addClass('status-envio');
-                    $DOM.trSelecionadas.find('p').text('Enviando...');
-                    $DOM.trSelecionadas.find('i').removeAttr('class').addClass('fas fa-circle-notch fa-spin');
-                }
+                dataType: 'json',
+                data: { cod_interno: $DOM.botao.val() }
             })
             .always(function(dados, status) {
-                $DOM.mensagem.empty();
-                
                 if (status === 'success') {
-                    if (dados.status === 'success' && dados.data) {
-                        var $caixa = null;
-                        var divClasse = '';
-                        var iconeClasse = '';
-
-                        $.each(dados.data, function(caixa, statusEnvio) {
-                            $caixa = $('#' + caixa + ' .status-envio');
-
-                            switch (statusEnvio.status) {
-                                case 'success':
-                                    divClasse = 'alert-success';
-                                    iconeClasse = 'fas fa-check';
-                                    break;
-                                case 'error':
-                                    divClasse = 'alert-danger';
-                                    iconeClasse = 'fas fa-times';
-                                    break;
-                            }
-                            $caixa.addClass(divClasse);
-                            $caixa.find('p').text(statusEnvio.message);
-                            $caixa.find('i').removeAttr('class').addClass(iconeClasse);
+                    if (dados.status === 'success') {
+                        $DOM.linhaParaRemover.remove();
+                        $DOM.paginador.find('.shown, .quantity').each(function() {
+                            $(this).mask('000.000.000.000', { reverse: true }).text(
+                                $(this).masked(parseInt($(this).cleanVal()) - 1)
+                            );
+                        });
+                        $('#produto-index table tbody th').each(function(indice) {
+                            $(this).text(++indice);
                         });
                     }
-                    else {
-                        $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
-                    }
+                    $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
                 }
                 else {
                     $DOM.mensagem.bootstrapAlert(
-                        'warning', 'Não foi possível enviar a carga, verifique sua conexão com a internet.'
+                        'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
                     );
                 }
             });
-        }
-        else {
-            $DOM.mensagem.bootstrapAlert('error', 'Selecione no mínimo um caixa para enviar a carga.');
-        }
-    });
-
-    $('input[name=selecionar-caixas]').on('click', function() {
-        var $DOM = {
-            caixas: $('input[name=caixa-selecionado]')
-        };
-
-        if ($(this).attr('id') === 'select') {
-            $DOM.caixas.prop('checked', true);
-        }
-        else if ($(this).attr('id') === 'invert') {
-            var selecionados = $DOM.caixas.filter(':checked');
-            $DOM.caixas.prop('checked', true);
-            selecionados.prop('checked', false);
-        }
-        else if ($(this).attr('id') === 'deselect') {
-            $DOM.caixas.prop('checked', false);
-        }
+        });
+    })
+    .on('hidden.bs.modal', function(evento) {
+        $(this).find('button.confirm').off('click');
     });
 
     var $promocao = (function() {
@@ -95,28 +56,33 @@ $(document).ready(function(){
                     descricao = descricaoValor;
                 }
             },
-            getDescricao: function() { return descricao; },
-
+            getDescricao: function() { 
+                return descricao; 
+            },
             setInicio: function(inicioValor) {
                 if (inicio === null) {
                     inicio = inicioValor;
                 }
             },
-            getInicio: function() { return inicio; },
-
+            getInicio: function() { 
+                return inicio; 
+            },
             setFinal: function(finalValor) {
                 if (final === null) {
                     final = finalValor;
                 }
             },
-            getFinal: function() { return final; },
-
+            getFinal: function() { 
+                return final; 
+            },
             setPreco: function(precoValor) {
                 if (preco === null) {
                     preco = precoValor;
                 }
             },
-            getPreco: function() { return preco; }
+            getPreco: function() { 
+                return preco; 
+            }
         };
     })();
 
@@ -160,13 +126,15 @@ $(document).ready(function(){
     }).change();
 
     var buscaAnterior;
+    
     $('#finder').on('show.bs.modal', function (evento) {
         var $DOM = {
-            tabelaConteudo: $('#finder table tbody'),
-            buscarPor: $('#finder .search-content'),
-            mensagem: $('#finder .message-box'),
+            tabelaConteudo: $(this).find('table tbody'),
+            buscarPor: $(this).find('.search-content'),
+            divCarregando: $(this).find('.loading'),
+            mensagem: $(this).find('.message-box'),
+            filtro: $(this).find('.filter'),
             botao: $(evento.relatedTarget),
-            filtro: $('#finder .filter'),
             modal: $(this)
         };
         var titulo = $DOM.botao.data('find');
@@ -182,8 +150,8 @@ $(document).ready(function(){
         $DOM.modal.find('.modal-title').text('Consultar ' + titulo.toUpperCase());
 
         if (buscaAnterior !== titulo) {
-            $DOM.modal.find('.search-content').val('');
             $DOM.tabelaConteudo.empty();
+            $DOM.buscarPor.val('');
             buscaAnterior = titulo;
         }
         $(this).find('.find').on('click', function() {
@@ -202,11 +170,11 @@ $(document).ready(function(){
                         busca: $DOM.buscarPor.val()
                     },
                     beforeSend: function() {
-                        $DOM.modal.find('.loading').removeClass('hidden');
+                        $DOM.divCarregando.removeClass('hidden');
                     }
                 })
                 .always(function(dados, status) {
-                    $DOM.modal.find('.loading').addClass('hidden');
+                    $DOM.divCarregando.addClass('hidden');
 
                     if (status === 'success') {
                         if (dados.status === 'success') {
@@ -299,53 +267,10 @@ $(document).ready(function(){
         }
     });
 
-    $('#product #delete').on('show.bs.modal', function(evento) {
-        var $DOM = {
-            paginador: $('.list-shown .shown, .list-shown .quantity'),
-            mensagem: $('#product #message-box'),
-            botao: $(evento.relatedTarget)
-        };
-
-        $(this).find('button.confirm').on('click', function() {
-            $DOM.linhaParaRemover = $('#' + $DOM.botao.val());
-
-            $.ajax({
-                url: '/Produto/delete',
-                method: 'POST',
-                dataType: 'json',
-                data: { cod_interno: $DOM.botao.val() }
-            })
-            .always(function(dados, status) {
-                if (status === 'success') {
-                    if (dados.status === 'success') {
-                        $DOM.linhaParaRemover.remove();
-                        $DOM.paginador.each(function() { 
-                            $(this).mask('000.000.000.000', { reverse: true }).text(
-                                $(this).masked(parseInt($(this).cleanVal()) - 1)
-                            );
-                        });
-                        $('#product table tbody th').each(function(indice) {
-                            $(this).text(++indice);
-                        });
-                    }
-                    $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
-                }
-                else {
-                    $DOM.mensagem.bootstrapAlert(
-                        'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
-                    );
-                }
-            });
-        });
-    })
-    .on('hidden.bs.modal', function(evento) {
-        $(this).find('button.confirm').off('click');
-    });
-
     $('select[name=cod_grupo]').on('change', function() {
         $DOM = {
             subgrupo: $('select[name=cod_subgrupo]'),
-            mensagem: $('#form-add #message-box')
+            mensagem: $('.message-box')
         };
 
         $.ajax({
@@ -430,4 +355,87 @@ $(document).ready(function(){
             $DOM.cestCodigo.val('0000000').prop('required', false);
         }
     }).change();
+
+    $('.enviar-carga').on('click', function() {
+        var $DOM = {
+            mensagem: $('#produto-carga .caixa-lista .message-box'),
+            caixas: $('input[name=caixa-selecionado]:checked')
+        };
+        var caixasNumeros = [];
+
+        if ($DOM.caixas.length > 0) {
+            $DOM.caixas.each(function() { caixasNumeros.push($(this).val()); });
+
+            $.ajax({
+                url: '/Produto/enviarCarga',
+                dataType: 'json',
+                method: 'POST',
+                data: { cargaTipo: $(this).val(), caixas: caixasNumeros },
+                beforeSend: function() {
+                    $DOM.trSelecionadas = $DOM.caixas.closest('tr').find('.status-envio');
+                    $DOM.trSelecionadas.removeAttr('class').addClass('status-envio');
+                    $DOM.trSelecionadas.find('p').text('Enviando...');
+                    $DOM.trSelecionadas.find('i').removeAttr('class').addClass('fas fa-circle-notch fa-spin');
+                }
+            })
+            .always(function(dados, status) {
+                $DOM.mensagem.empty();
+                
+                if (status === 'success') {
+                    if (dados.status === 'success' && dados.data) {
+                        var $caixa = null;
+                        var divClasse = '';
+                        var iconeClasse = '';
+
+                        $.each(dados.data, function(caixa, statusEnvio) {
+                            $caixa = $('#' + caixa + ' .status-envio');
+
+                            switch (statusEnvio.status) {
+                                case 'success':
+                                    divClasse = 'alert-success';
+                                    iconeClasse = 'fas fa-check';
+                                    break;
+                                case 'error':
+                                    divClasse = 'alert-danger';
+                                    iconeClasse = 'fas fa-times';
+                                    break;
+                            }
+                            $caixa.addClass(divClasse);
+                            $caixa.find('p').text(statusEnvio.message);
+                            $caixa.find('i').removeAttr('class').addClass(iconeClasse);
+                        });
+                    }
+                    else {
+                        $DOM.mensagem.bootstrapAlert(dados.status, dados.message);
+                    }
+                }
+                else {
+                    $DOM.mensagem.bootstrapAlert(
+                        'warning', 'Não foi possível enviar a carga, verifique sua conexão com a internet.'
+                    );
+                }
+            });
+        }
+        else {
+            $DOM.mensagem.bootstrapAlert('error', 'Selecione no mínimo um caixa para enviar a carga.');
+        }
+    });
+
+    $('input[name=selecionar-caixas]').on('click', function() {
+        var $DOM = {
+            caixas: $('input[name=caixa-selecionado]')
+        };
+
+        if ($(this).attr('id') === 'select') {
+            $DOM.caixas.prop('checked', true);
+        }
+        else if ($(this).attr('id') === 'invert') {
+            var selecionados = $DOM.caixas.filter(':checked');
+            $DOM.caixas.prop('checked', true);
+            selecionados.prop('checked', false);
+        }
+        else if ($(this).attr('id') === 'deselect') {
+            $DOM.caixas.prop('checked', false);
+        }
+    });
 });

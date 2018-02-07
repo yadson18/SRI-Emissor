@@ -15,7 +15,7 @@
 			$cadastro = TableRegistry::get('Cadastro');
 
 			if ($this->request->is('POST')) {
-				$dados = $this->request->getData();
+				$dados = array_map('removeSpecialChars', $this->request->getData());
 				
 				if (!empty($dados['cnpj']) && !empty($dados['login']) &&
 					!empty($dados['senha']) 
@@ -69,6 +69,34 @@
 			}
 		}
 
+		public function mudarSenha()
+		{
+			$colaborador = $this->Colaborador->newEntity();
+			$usuario = $this->Auth->getUser();
+
+			if ($this->request->is('POST')) {
+				$dados = array_map('removeSpecialChars', $this->request->getData());
+				$colaborador = $this->Colaborador->patchEntity($colaborador, $dados);
+				$colaborador->cod_colaborador = $usuario->cod_colaborador;
+
+				if ($this->Colaborador->save($colaborador)) {
+					$this->Flash->success(
+						'A senha do colaborador (' . $usuario->nome . ') foi alterada com sucesso.'
+					);
+				}
+				else {
+					$this->Flash->error(
+						'Não foi possível alterar a senha do colaborador (' . $usuario->nome . ').'
+					);
+				}
+			}
+
+			$this->setTitle('Modificar Senha');
+			$this->setViewVars([
+				'usuarioNome' => $usuario->nome
+			]);
+		}
+
 		public function logout()
 		{
 			$this->Auth->destroy();
@@ -78,6 +106,6 @@
 
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['logout']);
+			$this->Auth->isAuthorized(['logout', 'mudarSenha']);
 		}
 	}

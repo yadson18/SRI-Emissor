@@ -12,7 +12,7 @@
 
 			$this->setTable('COLABORADOR');
 
-			$this->setPrimaryKey('login');
+			$this->setPrimaryKey('cod_colaborador');
 
 			$this->setBelongsTo('', []);
 		}

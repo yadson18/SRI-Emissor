@@ -60,7 +60,7 @@ $(document).ready(function(){
 	        	}
 	        	else {
 	        		$DOM.mensagem.bootstrapAlert(
-	        			'warning', 'Não foi possível enviar a carga, verifique sua conexão com a internet.'
+	        			'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
 	        		);
 	        	}
 	        });
@@ -90,5 +90,48 @@ $(document).ready(function(){
 				$DOM.divProdutos.addClass('hidden');
 				break;
 		}
+	});
+
+	$('#grupo-prod-edit #delete').on('show.bs.modal', function(evento) {
+		var $DOM = {
+            mensagem: $('#grupo-prod-edit .form-body .message-box'),
+            paginador: $('#grupo-prod-edit .list-shown'),
+            botao: $(evento.relatedTarget)
+        };
+
+        $(this).find('.confirm').on('click', function() {
+        	$DOM.linhaParaRemover = $('#' + $DOM.botao.val());
+
+	        $.ajax({
+	        	url: '/Produto/removerGrupo',
+	        	method: 'POST',
+	        	dataType: 'json',
+	        	data: { cod_interno: $DOM.botao.val() }
+	        })
+	        .always(function(dados, status) {
+	        	if (status === 'success') {
+	        		if (dados.status === 'success') {
+	        			$DOM.linhaParaRemover.remove();
+	        			$DOM.paginador.find('.shown, .quantity').each(function() {
+                            $(this).mask('000.000.000.000', { reverse: true }).text(
+                                $(this).masked(parseInt($(this).cleanVal()) - 1)
+                            );
+                        });
+                        $('#grupo-prod-edit table tbody th').each(function(indice) {
+                            $(this).text(++indice);
+                        });
+	        		}
+	        		$DOM.mensagem.bootstrapAlert(dados.status, dados.message);
+	        	}
+	        	else {
+	        		$DOM.mensagem.bootstrapAlert(
+	        			'warning', 'Não foi possível completar a operação, verifique sua conexão com a internet.'
+	        		);
+	        	}
+	        });
+        });
+	})
+	.on('hidden.bs.modal', function(evento) {
+		$(this).find('.confirm').off('click');
 	});
 });

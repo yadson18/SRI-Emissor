@@ -312,8 +312,60 @@
 			$this->setTitle('Carga de Produtos');
 		}
 
+		public function removerGrupo()
+		{
+			$produto = $this->Produto->newEntity();
+			$usuario = $this->Auth->getUser();
+
+			if ($this->request->is('POST')) {
+				$dados = $this->Produto->normalizarDados($this->request->getData());
+
+				if (isset($dados['cod_interno']) && is_numeric($dados['cod_interno'])) {
+					$produtoDescricao = $this->Produto->getDescricao($dados['cod_interno']);
+
+					if ($produtoDescricao) {
+						$produto = $this->Produto->patchEntity($produto, $dados);
+						$produto->cod_colaboradoralteracao = $usuario->cadastro->cod_cadastro;
+						$produto->data_alteracao = date('d.m.Y');
+						$produto->cod_grupo = 0;
+						$produto->cod_subgrupo = 0;
+
+						if ($this->Produto->save($produto)) {
+							$this->Ajax->response('grupoRemovido', [
+								'status' => 'success',
+								'message' => 'O produto (' . $produtoDescricao . ') foi removido do grupo com sucesso.'
+							]);
+						}
+						else {
+							$this->Ajax->response('grupoRemovido', [
+								'status' => 'error',
+								'message' => 'Não foi possível remover o produto (' . $produtoDescricao . ') do grupo.'
+							]);
+						}
+					}
+					else {
+						$this->Ajax->response('grupoRemovido', [
+							'status' => 'error',
+							'message' => 'Não foi possível remover, o produto não existe.'
+						]);
+					}
+				}
+				else {
+					$this->Ajax->response('grupoRemovido', [
+						'status' => 'warning',
+						'message' => 'Não foi possível remover, verifique se o código do produto é válido.'
+					]);
+				}
+			}
+			else {
+				return $this->redirect('default');
+			}
+		}
+
 		public function beforeFilter()
 		{
-			$this->Auth->isAuthorized(['index', 'add', 'edit', 'delete', 'carga', 'enviarCarga']);
+			$this->Auth->isAuthorized([
+				'index', 'add', 'edit', 'delete', 'carga', 'enviarCarga', 'removerGrupo'
+			]);
 		}
 	}

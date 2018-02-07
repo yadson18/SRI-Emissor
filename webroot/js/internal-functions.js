@@ -207,7 +207,7 @@ $(document).ready(function(){
         event.preventDefault();
     });
 
-    $('input').not('#login input').on('change', function() { 
+    $('input').not('#login input, #colaborador-mudar-senha input').on('change', function() { 
         $(this).val($(this).val().toUpperCase()); 
     });
 });

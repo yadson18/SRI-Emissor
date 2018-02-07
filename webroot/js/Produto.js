@@ -4,7 +4,6 @@ $(document).ready(function(){
     }
 
     $('#produto-index #delete').on('show.bs.modal', function(evento) {
-        console.log('hi');
         var $DOM = {
             mensagem: $('#produto-index .produto-lista .message-box'),
             botao: $(evento.relatedTarget),

@@ -99,7 +99,7 @@
 						        </a>
 						        <ul class='dropdown-menu'>
 						          	<li>
-						          		<a href='#'>
+						          		<a href='/Colaborador/mudarSenha'>
 						          			<i class='fas fa-key'></i> Modificar Senha
 						          		</a>
 						          	</li>

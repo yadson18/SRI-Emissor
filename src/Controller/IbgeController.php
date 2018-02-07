@@ -11,11 +11,11 @@
 		public function municipiosUF()
 		{
 			if ($this->request->is('POST')) {
-				$data = array_map('removeSpecialChars', $this->request->getData());
+				$dados = array_map('removeSpecialChars', $this->request->getData());
 
-				if (isset($data['sigla'])) {
+				if (isset($dados['sigla'])) {
 					$this->Ajax->response('municipios', [
-						'municipios' => $this->Ibge->municipiosUF($data['sigla'])
+						'municipios' => $this->Ibge->municipiosUF($dados['sigla'])
 					]);
 				}
 			}

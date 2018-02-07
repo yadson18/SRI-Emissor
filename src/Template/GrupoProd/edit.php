@@ -77,7 +77,7 @@
 													<?php if ($codGrupo !== 0): ?>
 														<td class='actions'>
 															<button value=<?= $produto['cod_interno'] ?> class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delete' type='button'>
-																<i class='fas fa-trash-alt'></i>
+																Remover do Grupo <i class='fas fa-times'></i>
 															</button>
 														</td>
 													<?php endif ?>
@@ -151,4 +151,29 @@
 			</div>
 		</div>
 	<?php endif; ?>
+	<!-- Modal Confirmar Exclusão -->
+        <div class='modal fade' id='delete' role='dialog'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal'>
+                            <i class='fas fa-times'></i>
+                        </button>
+                        <h4 class='modal-title text-center'>Remover Produto</h4>
+                    </div>
+                    <div class='modal-body text-center'>
+                        <h4>Deseja realmente remover este produto do grupo?</h4>
+                    </div>
+                    <div class='modal-footer'>
+                    	<button data-dismiss='modal' class='btn btn-danger exit'>
+                    		Não <i class='fas fa-times'></i>
+                    	</button>
+                    	<button class='btn btn-success confirm' data-dismiss='modal'>
+                    		Sim <i class='fas fa-check'></i>
+                    	</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Modal End -->
 </div>

@@ -508,5 +508,3 @@
 		</div>
 	<!-- Fim do Modal -->
 </div>
-
-

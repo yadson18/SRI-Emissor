@@ -11,12 +11,12 @@
 		public function find()
 		{
 			if ($this->request->is('POST')) {
-				$data = array_map('removeSpecialChars', $this->request->getData());
+				$dados = array_map('removeSpecialChars', $this->request->getData());
 
-				if (!empty($data['filtro']) && is_numeric($data['busca']) && 
-					$data['busca'] >= 0 || !empty($data['busca'])
+				if (!empty($dados['filtro']) && is_numeric($dados['busca']) && 
+					$dados['busca'] >= 0 || !empty($dados['busca'])
 				) {
-					$cfop = $this->Cfop->buscaCfop($data['filtro'], $data['busca']);
+					$cfop = $this->Cfop->buscaCfop($dados['filtro'], $dados['busca']);
 
 					if (!empty($cfop)) {
 						$this->Ajax->response('cfop', [

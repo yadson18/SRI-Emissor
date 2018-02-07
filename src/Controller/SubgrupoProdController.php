@@ -11,12 +11,12 @@
 		public function getSubgrupos()
 		{
 			if ($this->request->is('POST')) {
-				$data = $this->request->getData();
+				$dados = $this->request->getData();
 
-				if (isset($data['cod_grupo']) && is_numeric($data['cod_grupo'])) {
+				if (isset($dados['cod_grupo']) && is_numeric($dados['cod_grupo'])) {
 					$this->Ajax->response('subgrupos', [
 						'status' => 'success',
-						'data' => $this->SubgrupoProd->getSubgrupos($data['cod_grupo'])
+						'data' => $this->SubgrupoProd->getSubgrupos($dados['cod_grupo'])
 					]);
 				}
 				else {
